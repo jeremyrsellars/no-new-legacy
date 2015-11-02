@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>No New Legacy Software</title>
+    <description>No New Legacy Software</description>
+    <link>https://jeremyrsellars.github.io</link>
+    <pubDate>2015-11-02</pubDate>
+    <item>
+      <title>Archive</title>
+      <link>https://jeremyrsellars.github.io/archive</link>
+      <description>
+  &lt;h2&gt;2015&lt;/h2&gt;
+    &lt;h3&gt;November&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;span&gt;2015-11-01&lt;/span&gt; &amp;raquo; &lt;a href="/posts/2015-11-01-review-of-software-ninja-class-hierarchy"&gt;Review &amp;#39;Software Ninja Class Hierarchy&amp;#39;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>Categories</title>
+      <link>https://jeremyrsellars.github.io/categories</link>
+      <description>
+&lt;ul class="tag_box inline"&gt;
+  &lt;li&gt;
+    &lt;a href="/categories#team-ref"&gt;team &lt;span&gt;1&lt;/span&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a href="/categories#professionalism-ref"&gt;professionalism &lt;span&gt;1&lt;/span&gt;&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+  &lt;h3&gt;team (1)&lt;/h3&gt;
+  &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/posts/2015-11-01-review-of-software-ninja-class-hierarchy"&gt;Review &amp;#39;Software Ninja Class Hierarchy&amp;#39;&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;h3&gt;professionalism (1)&lt;/h3&gt;
+  &lt;ul&gt;
+      &lt;li&gt;&lt;a href="/posts/2015-11-01-review-of-software-ninja-class-hierarchy"&gt;Review &amp;#39;Software Ninja Class Hierarchy&amp;#39;&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>Pages</title>
+      <link>https://jeremyrsellars.github.io/pages</link>
+      <description>
+&lt;ul&gt;
+  
+    &lt;li&gt;&lt;a href="/archive"&gt;Archive&lt;/a&gt;&lt;/li&gt;
+  
+  
+    &lt;li&gt;&lt;a href="/categories"&gt;Categories&lt;/a&gt;&lt;/li&gt;
+  
+    &lt;li class="active"&gt;&lt;a href="/pages" class="active"&gt;Pages&lt;/a&gt;&lt;/li&gt;
+  
+  
+  
+    &lt;li&gt;&lt;a href="/tags"&gt;Tags&lt;/a&gt;&lt;/li&gt;
+  
+  
+    &lt;li&gt;&lt;a href="/"&gt;The &amp;quot;No New Legacy Code&amp;quot; Blog&lt;/a&gt;&lt;/li&gt;
+  
+&lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>Tags</title>
+      <link>https://jeremyrsellars.github.io/tags</link>
+      <description>
+&lt;ul class="tag_box inline"&gt;
+  &lt;li&gt;
+    &lt;a href="/tags#review-ref"&gt;review &lt;span&gt;1&lt;/span&gt;&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+  &lt;h3 id="review-ref"&gt;review&lt;/h3&gt;
+    &lt;li&gt;&lt;a href="/posts/2015-11-01-review-of-software-ninja-class-hierarchy"&gt;Review &amp;#39;Software Ninja Class Hierarchy&amp;#39;&lt;/a&gt;&lt;/li&gt;
+ 
+</description>
+    </item>
+    <item>
+      <title>The "No New Legacy Code" Blog</title>
+      <link>https://jeremyrsellars.github.io/</link>
+      <description>Software craftsmanship, development, mostly</description>
+    </item>
+  </channel>
+</rss>
