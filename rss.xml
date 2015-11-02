@@ -3,11 +3,11 @@
   <channel>
     <title>No New Legacy Software</title>
     <description>No New Legacy Software</description>
-    <link>http://jeremyrsellars.github.io</link>
+    <link>http://jeremyrsellars.github.io/no-new-legacy</link>
     <pubDate>2015-11-02</pubDate>
     <item>
       <title>Archive</title>
-      <link>http://jeremyrsellars.github.io/archive</link>
+      <link>http://jeremyrsellars.github.io/no-new-legacy/archive</link>
       <description>
   &lt;h2&gt;2015&lt;/h2&gt;
     &lt;h3&gt;November&lt;/h3&gt;
@@ -18,7 +18,7 @@
     </item>
     <item>
       <title>Categories</title>
-      <link>http://jeremyrsellars.github.io/categories</link>
+      <link>http://jeremyrsellars.github.io/no-new-legacy/categories</link>
       <description>
 &lt;ul class="tag_box inline"&gt;
   &lt;li&gt;
@@ -41,7 +41,7 @@
     </item>
     <item>
       <title>Pages</title>
-      <link>http://jeremyrsellars.github.io/pages</link>
+      <link>http://jeremyrsellars.github.io/no-new-legacy/pages</link>
       <description>
 &lt;ul&gt;
   
@@ -64,7 +64,7 @@
     </item>
     <item>
       <title>Tags</title>
-      <link>http://jeremyrsellars.github.io/tags</link>
+      <link>http://jeremyrsellars.github.io/no-new-legacy/tags</link>
       <description>
 &lt;ul class="tag_box inline"&gt;
   &lt;li&gt;
@@ -79,7 +79,7 @@
     </item>
     <item>
       <title>The "No New Legacy Code" Blog</title>
-      <link>http://jeremyrsellars.github.io/</link>
+      <link>http://jeremyrsellars.github.io/no-new-legacy/</link>
       <description>Software craftsmanship, development, mostly</description>
     </item>
   </channel>
