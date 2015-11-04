@@ -1,0 +1,55 @@
+---
+title: The "No New Legacy Code" Blog
+description: Software craftsmanship, development, mostly
+---
+
+<style>
+  h1,h2,h3,h4,h5 {text-align: center; font-family: Georgia1, Georgia, serif}
+  .span12 h2 {text-align: center; font-family: Georgia1, Georgia, serif; margin-top: 1.8em}
+  .jumbotron h1 {font-size: 50px;}
+</style>
+
+
+<div class="jumbotron hero-unit">
+  <h1>No New Legacy Code</h1>
+  <h3>A journey to write software that is maintainable, flexible, high-quality, and hand-crafted to last</h2>
+  <h4 style="text-align:center">By Jeremy R. Sellars (<a href='https://twitter.com/agentjsellars' target='_blank'>@agentjsellars</a>)</h4>
+</div>
+
+<a id="About"></a>
+<h2>About</h2>
+
+<h4><span style="font-size:1.33em">W</span>hy does no one want to touch that beautiful code I wrote?</h4>
+<h4><span style="font-size:1.33em">W</span>hy does "new code" become disgusting "legacy code" so quickly?</h4>
+<h4><span style="font-size:1.33em">H</span>ow can we stop writing disappointing code?</h4>
+<span style="font-size:1.33em">I asked myself</span> these questions, and the blame fell on the face in the mirror.  So I set out on a journey toward writing *No New Legacy Code.*  I am learning from gurus in the field in an attempt to stop writing code that just makes people want to re-write it.
+<p><span style="font-size:1.33em">As professionals</span>, we want software that is, well, "soft" -- <strong>maintainable, flexible, high-quality, and hand-crafted to last.</strong>  This is possible, but it requires professional practices.  My first decade of writing software created programs that worked, but quickly became legacy - no unit tests, little separation of concerns, and no one really knows what exactly the users wanted it to do in the first place.
+<p><strong><span style="font-size:1.33em">Join me</span> on my journey to "No New Legacy Code."</strong>
+
+<a id="Articles"></a>
+<h2>Articles</h2>
+
+{{# posts.paginator }}
+<div class="post">
+  <h3 class="title"><a href="{{url}}">{{title}}</a> <span class="date">{{ date }}</span></h3>
+
+  {{{ summary }}}
+
+  <div class="more">
+    <a href="{{url}}" class="btn btn-small">read more..</a>
+  </div>
+</div>
+{{/ posts.paginator }}
+
+<div class="pagination">
+  <ul>
+  {{#posts.paginator_navigation}}
+    {{#is_active_page}}
+      <li class="active"><a href="{{url}}">{{name}}</a></li>
+    {{/is_active_page}}
+    {{^is_active_page}}
+      <li><a href="{{url}}">{{name}}</a></li>
+    {{/is_active_page}}
+  {{/posts.paginator_navigation}}
+  </ul>
+</div>

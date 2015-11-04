@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>No New Legacy Software</title>
+    <description>No New Legacy Software</description>
+    <link/>
+    <pubDate>2015-11-03</pubDate>
+    <item>
+      <title>I recommend 'Terence McGhee's Software Ninja Class Hierarchy'</title>
+      <link>/posts/2015-11-01-review-of-software-ninja-class-hierarchy</link>
+      <pubDate>2015-11-01</pubDate>
+      <description>My review of Terence McGhee's Software Ninja Class Hierarchy</description>
+    </item>
+  </channel>
+</rss>
