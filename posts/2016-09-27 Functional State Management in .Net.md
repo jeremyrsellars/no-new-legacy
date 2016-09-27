@@ -1,3 +1,11 @@
+---
+title: "Functional State Management (in .Net)"
+date: "2016-09-27"
+description: Bring some sanity to state management in C# by borrowing functional programming concepts.
+tags: ["fp", "atoms", "actor model", "structural equality", "communicating sequential processes"]
+categories : ["professionalism", "programming"]
+---
+
 # Functional State Management (in .Net)
 
 ## Terms
