@@ -1,15 +1,21 @@
 <?xml version="1.0"?>
 <rss version="2.0">
   <channel>
-    <title>No New Legacy Code</title>
-    <description>No New Legacy Code</description>
-    <link/>
-    <pubDate>2015-11-03</pubDate>
+    <title/>
+    <description/>
+    <link>https://jeremyrsellars.github.io</link>
+    <pubDate>2016-09-27</pubDate>
     <item>
-      <title>I recommend 'Terence McGhee's Software Ninja Class Hierarchy'</title>
-      <link>/no-new-legacy/posts/2015-11-01-review-of-software-ninja-class-hierarchy</link>
+      <title>Functional State Management (in .Net)</title>
+      <link>https://jeremyrsellars.github.io/posts/2016-09-27-functional-state-management-in-net</link>
+      <pubDate>2016-09-27</pubDate>
+      <description>Bring some sanity to state management in C# by borrowing functional programming concepts.</description>
+    </item>
+    <item>
+      <title>Review 'Software Ninja Class Hierarchy'</title>
+      <link>https://jeremyrsellars.github.io/posts/2015-11-01-review-of-software-ninja-class-hierarchy</link>
       <pubDate>2015-11-01</pubDate>
-      <description>My review of Terence McGhee's Software Ninja Class Hierarchy</description>
+      <description>My recommendation of Terence McGhee's Software Ninja Class Hierarchy</description>
     </item>
   </channel>
 </rss>

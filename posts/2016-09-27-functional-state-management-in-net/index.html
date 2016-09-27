@@ -1,0 +1,359 @@
+<h1 id="toc_0">Functional State Management (in .Net)</h1>
+
+<h2 id="toc_1">Terms</h2>
+
+<ul>
+<li>Identity = an entity that has a state.  (In C#, this could be a variable, field, or object)</li>
+<li>State = the value at a point in time. (As of the time of this writing, today&#39;s date is 2016-09-26)</li>
+<li>Value = something that doesn&#39;t change. (42, 2016-07-01)</li>
+</ul>
+
+<p>These definitions are inspired by <a href="http://clojure.org/about/state">http://clojure.org/about/state</a></p>
+
+<h2 id="toc_2">What is state?</h2>
+
+<p>&quot;State&quot; - the implicit parameter(s) to a function (everything it needs in order to calculate the function that isn&#39;t an explicit argument)</p>
+
+<h2 id="toc_3">Status Quo (How is state usually managed in C#)</h2>
+
+<p>Let&#39;s walk through an example of the HR department trying to make team members happy by providing their favorite drinks in the kitchen.  On birthdays and service anniversaries, the team members are invited to the kitchen for a free celebratory beverage.</p>
+
+<p>Over the years, HR introduces new policies, and you never know what they&#39;ll ask for next, so this example goes from easy to hard as more requirements are added.</p>
+
+<h2 id="toc_4">Favorite Drink Project (Initial Scope)</h2>
+
+<p>Surveys are given:</p>
+
+<ul>
+<li>To new hires on their first day.</li>
+<li>Annually (leading up to service anniversaries).</li>
+<li>Following every monthly meeting.</li>
+</ul>
+
+<p>The surveys are processed in batches.</p>
+
+<h3 id="toc_5">Bread and Butter (Assignment)</h3>
+
+<p>The most idiomatic way of managing state in C# is through assignment.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    public Drink FavoriteBeverage =&gt; _favoriteBeverage;
+    public void UpdateFavorites(TeamSurvey survey)
+    {
+        _favoriteBeverage = survey.FavoriteDrink;
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Only one thread may observe or change state at a time, or risk inconsistency.</li>
+<li>The developer must know when it is ok and when it isn&#39;t ok to use/change state.</li>
+</ul>
+
+<h2 id="toc_6">Favorite Drink Project (Phase 2 - support concurrency) -- Interlocked Thread Safe</h2>
+
+<p>Now, let&#39;s say there&#39;s a bunch of autonomous agents in your process all processing the survey results.  Also, let&#39;s say HR didn&#39;t prevent team members from submitting 100 surveys at the same time (to win the X-box drawing).</p>
+
+<p>If you like &quot;lock-free&quot; (and you like to block all your threads at once), you might use Interlocked.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    public Drink FavoriteBeverage
+    {
+        get
+        {
+            Drink d = null;
+            Interlocked.Exchange(ref d, _favoriteBeverage);
+            return d;
+        }    
+    }
+    public void UpdateFavorites(TeamSurvey survey)
+    {
+        Interlocked.Exchange(ref _favoriteBeverage, survey.FavoriteFood);
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Only one piece of state may be changed atomically.  Consistency across multiple values is very difficult.</li>
+<li>Future developers and maintainers must know (and remember) to use <code>Interlocked</code> to use/change state.</li>
+</ul>
+
+<h2 id="toc_7">Favorite Drink Project (Email when in stock) - Lock</h2>
+
+<p>Now, imagine that the requirements change and HR wants to give a complimentary beverage to each team member on birthdays and service anniversaries, but only if the kitchen stocks the beverage.</p>
+
+<p>So now that we need a flag to indicate whether the kitchen keeps the beverage in stock, interlocked may be a bad idea since related variables are not updated atomically.  You can imagine a race condition when a team member submits 50 surveys for Mountain Dew and 50 for some fine Cabernet.  One is usually stocked, and the other isn&#39;t.  The team member might be in for a let-down when the congratulatory email says the wine is available.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    bool _favoriteBeverageIsStocked;
+    public Drink FavoriteBeverage
+    {
+        get
+        {
+            lock(_lock)
+            {
+                return _favoriteFood;
+            }
+        }    
+    }
+    public void UpdateFavorites(TeamSurvey survey, Func&lt;Drink,bool&gt; drinkIsStocked)
+    {
+        lock(_lock)
+        {
+            _favoriteFood = survey.FavoriteFood;
+            _favoriteBeverageIsStocked = drinkIsStocked(_favoriteBeverage);
+        }
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Deadlocks are possible if there are multiple locks.</li>
+<li>Future developers and maintainers must know (and remember) to use <code>lock</code> to use/change state.</li>
+<li>Future developers and maintainers must know (and remember) not to introduce another lock or risk deadlocks.</li>
+</ul>
+
+<h3 id="toc_8">Summary of the idiomatic (C#)</h3>
+
+<p>We observe in the Favorite Beverages example, that the familiar/idiomatic ways of managing state are tricky.  The field being changed needed to be protected by either <code>Interlocked</code> or <code>lock/Monitor</code> and this led to more verbose code, with state-transitions that are more difficult to test.</p>
+
+<p>Once we start needing to &quot;protect&quot; variables, the code starts getting more verbose and complicated.  It becomes difficult to reason about what is happening.  So in a multi-threaded environment, what do we need to protect?  Only variables that change (mutate) - things that are assigned.</p>
+
+<h2 id="toc_9">Constraints</h2>
+
+<p>Let&#39;s take an interlude and think about programming styles for a moment.</p>
+
+<p>Cristina Lopes and Uncle Bob have similar things to say about programming style being about constraints.</p>
+
+<ul>
+<li><a href="http://www.infoq.com/presentations/style-methodology">Cristina Lopes discusses the idea of using constraints to define styles of programming and architecture</a>.  I saw her speak at StrangeLoop and I loved the way she implemented a bunch of different programming styles (but all in Python).  Here&#39;s her book on the subject: <a href="http://www.amazon.com/Exercises-Programming-Style-Cristina-Videira/dp/1482227371">Excercises in Programming Style</a>.</li>
+<li>Uncle Bob describes the constraints that define <a href="https://blog.8thlight.com/uncle-bob/2012/12/19/Three-Paradigms.html">Three Paradigms</a> of programming (Structured, Object-Oriented, Functional). For example, &quot;All functional programs are dominated by one huge constraint. They don’t use assignment.&quot;</li>
+</ul>
+
+<h3 id="toc_10">Constraining Assignment</h3>
+
+<p>Since assignment makes things harder to reason about and harder to test, perhaps we should avoid it.  But without assignment, how can we change state?</p>
+
+<p>So if we can&#39;t eliminate assignment, can we manage it by using a more predictable idiom?</p>
+
+<h2 id="toc_11">Actor Model (Idiomatic F#)</h2>
+
+<p>F# offers the Mailbox implementation of the Actor Model, where an actor process (or &quot;thread of logic&quot;) is sent messages through the mailbox and processes them one at a time with consistent state transitions.  This message passing is an <em>asynchronous</em> object-oriented approach.  The &quot;constraint&quot; is that you can change state, but only by sending messages.  There is a one-to-one relationship between queues and actors.</p>
+
+<p>A great opportunity in the actor model is that each type of state transition can be tested.  The new state (after processing the message) is a function of the old state and the message (<code>newState = F(previousState,message)</code>).</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Direct assignment isn&#39;t possible - the developer may send messages for the actor to process.</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Testable state transitions.</li>
+<li>All state transitions happen in one place in code and are triggered by messages.</li>
+<li>Future developers and maintainers are guided to safe methods of state transition - the compiler enforces this.</li>
+</ul>
+
+<h2 id="toc_12">Communicating Sequential Processes (Go, Clojure CLR)</h2>
+
+<p>Clojure&#39;s <a href="http://clojure.org/news/2013/06/28/clojure-clore-async-channels">core.async</a> library implements Communicating Sequential Processes and channels.  (Go programming language also implements CSP).</p>
+
+<p>Like the actor model, this is a message-passing model, though the CSP model is synchronous.  The &quot;channels&quot; double as a queue and a synchronization constraint.</p>
+
+<p>I read that it has been shown that Actor-like behavior can be implemented with CSP, and vice versa, (though I am having trouble locating the source of this assertion.)</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Similar to actors</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Similar to actors, plus:</li>
+<li>Fewer OS threads are required</li>
+<li>The structure of CSP-based systems coordinates work, maintaining valid sequences.</li>
+</ul>
+
+<p><a href="https://github.com/clojure/core.async#presentations">More on core.async</a></p>
+
+<h2 id="toc_13">Atoms</h2>
+
+<p>Another way to think about state management is Atoms.  There are variants of AtomicReferences in <a href="https://docs.oracle.com/javase/8/docs/api/?java/util/concurrent/atomic/AtomicReference.html">Java8</a>, <a href="http://api.getakka.net/docs/stable/html/A8A879A7.htm">Akka.net</a>, <a href="https://github.com/clojure/clojure-clr/blob/master/Clojure/Clojure/Lib/AtomicReference.cs">Clojure-Clr</a>, <a href="http://en.cppreference.com/w/cpp/atomic">C++11</a>, and many more.</p>
+
+<p>I was first introduced to atoms through Clojure/ClojureScript.</p>
+
+<p>In object-oriented languages, Atoms are objects that hold state and only change it through a specific set of operations.  For example, an atom usually supports these operations:</p>
+
+<ul>
+<li>Reset - ignore the value that was there before and set the atom to a new value.
+
+<ul>
+<li>In C#, <code>myAge.Update(36)</code>.</li>
+</ul></li>
+<li>Update - take the old value and use it in the calculation of a new value for the atom.
+
+<ul>
+<li>In C#, <code>myAge.Update(old =&gt; old + 1)</code>.</li>
+</ul></li>
+<li>GetValue - get the current value thread-safely
+
+<ul>
+<li>In C#, <code>Console.WriteLine(myAge.Value)</code></li>
+</ul></li>
+</ul>
+
+<p>Remember, &quot;value&quot; means something that doesn&#39;t change.</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Direct assignment isn&#39;t possible - the developer must explicitly consider the previous state (or consciously ignore it).</li>
+<li>State transition must be free of side-effects (pure)</li>
+<li>Previous state should not be mutated (which is made explicit by using immutable data types).</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Direct assignment isn&#39;t possible - the developer must explicitly consider the previous state (or consciously ignore it).</li>
+<li>Future developers and maintainers are guided to safe methods of state transition.  Some languages can even enforce this at compile-time.</li>
+<li>All state transitions are managed in the same way.  Combine with CSP/Actors for even more goodness.</li>
+</ul>
+
+<p>More about <a href="http://clojure.org/reference/atoms">atoms</a>.</p>
+
+<h3 id="toc_14">Extra Atom Goodness</h3>
+
+<p>Some atom implementations support validators or guards that prevent the atom from violating an assertion.  Here is clojure-clr&#39;s implementation of Update() (or &quot;<code>swap</code>&quot; in <a href="https://github.com/clojure/clojure-clr/blob/5beaf1162ac853795f88bba977b13ba35c1416c5/Clojure/Clojure/Lib/Atom.cs#L80">clojure-clr</a>).</p>
+
+<p>This method takes in a (Clojure) function used to calculate the new value, validates the value, and then notifies any watchers of the new value.</p>
+
+<pre><code class="csharp">        public object swap(IFn f)
+        {
+            for (; ; )
+            {
+                object v = deref();
+                object newv = f.invoke(v);
+                Validate(newv);
+                if (_state.CompareAndSet(v, newv))
+                {
+                    NotifyWatches(v,newv);
+                    return newv;
+                }
+            }
+        }
+</code></pre>
+
+<p>Since it uses compare and set, if another thread updated the value between <code>deref()</code> and <code>CompareAndSet</code>, it may have to loop and recalculate the replacement value as a function of the atom&#39;s &quot;new&quot; current value.</p>
+
+<h3 id="toc_15">Favorite Drink Survey with Atoms</h3>
+
+<pre><code class="csharp">immutable class TeamMember
+{
+    public Drink FavoriteBeverage;
+    public bool FavoriteBeverageIsStocked;
+}
+
+class SurveyProcessor
+{
+    Func&lt;Drink,bool&gt; drinkIsStocked;
+    public void UpdateFavorites(Atom&lt;TeamMember&gt; teamMember, TeamSurvey survey)
+    {
+        teamMember.Update(tm =&gt; WithFavoriteDrink(tm, survey.FavoriteDrink));
+    }
+
+    internal static TeamMember WithFavoriteDrink(TeamMember teamMember, Drink favorite, Func&lt;Drink,bool&gt; drinkIsStocked) =&gt;
+        teamMember
+            .WithFavoriteDrink(favorite)
+            .WithFavoriteBeverageIsStocked(drinkIsStocked(favorite));
+}
+</code></pre>
+
+<p>Wait!  What? C# supports Immutable classes?</p>
+
+<p>Nope, sorry, C# isn&#39;t that cool <a href="https://github.com/dotnet/roslyn/blob/master/docs/designNotes/2015-02-04%20C%23%20Design%20Meeting.md#builder-pattern">yet (see proposed Builder Pattern)</a>.  I&#39;m just trying to paint a picture.</p>
+
+<h3 id="toc_16">Immutability</h3>
+
+<p>Today, there isn&#39;t a great story for immutability in C#.  We have to <a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9">roll our own</a> immutable &quot;values,&quot; but I hope that will change soon.</p>
+
+<p>State of immutability in .Net in 2016:</p>
+
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/system.collections.immutable(v=vs.111">System.Collections.Immutable</a>.aspx)</li>
+<li>Structs with <code>MemberwiseClone</code>
+
+<ul>
+<li>In C#, structs implement <a href="https://msdn.microsoft.com/en-us/library/2dts52z7(v=vs.110">shallow structural equality</a>.aspx) (by default, but you can override the implementation), so you can compare them for equality based on their field values.  See next section for more on structural equality and why it can be a beautiful thing.</li>
+</ul></li>
+<li><a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9">Roll your own</a> immutable &quot;values.&quot;</li>
+</ul>
+
+<h2 id="toc_17">Structural Equality</h2>
+
+<p>Structural equality means considering the structure of the things being compared.  For example, two different mathematical sets are equal if their contents are the same, regardless of the order they happen to be stored in.  For example <code>x = new HashSet{3,1,2}; Assert(x == x.ToSortedSet());</code>.  Also, theoretically, two different objects are structurally equal if they have the same fields, however this may be an expensive operation to compare, so .Net hasn&#39;t usually implemented structural equality for objects.</p>
+
+<h3 id="toc_18">Example</h3>
+
+<pre><code class="csharp">var lookup = new Dictionary&lt;string,SomethingAwesome&gt;();
+lookup[&quot;A&quot;] = new SomethingAwesome();
+lookup[&quot;ABC&quot;.Substring(0,1)] // yields that same instance because of value semantics - two different strings instances representing &quot;A&quot;.
+
+// But, most .Net things don&#39;t have value semantics or structural equality.
+var lookup = new Dictionary&lt;HashSet&lt;string&gt;,SomethingAwesome&gt;();
+lookup[new HashSet&lt;string&gt;{&quot;A&quot;}] = new SomethingAwesome();
+lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws not found exception because the reference is different.
+</code></pre>
+
+<p>Clojure&#39;s collections implement structural equality, which is really nice.  This allows sets or dictionaries to be keys in other dictionaries.  Then, whether or not the key is the same reference or a different reference (perhaps from a database), the hash and equality is the same.</p>
+
+<p>In .Net, the situation is not quite as nice, though it can be implemented with <a href="https://msdn.microsoft.com/en-us/library/system.collections.structuralcomparisons(v=vs.110">System.Collections.StructuralComparisons</a>.aspx).</p>
+
+<h2 id="toc_19">Putting it all together</h2>
+
+<p>Functional state transitions where &quot;state&quot; is an immutable &quot;value&quot; offer some nice wins:</p>
+
+<ul>
+<li>No fear of deadlocks as one might expect from multi-lock scenarios like reader/writer locks.</li>
+<li>The &quot;types&quot; guide future maintainers in appropriate ways of transitioning state.  They <em>must</em> follow the established actor/atom approach because otherwise it won&#39;t compile. </li>
+<li>Reduce complexity
+
+<ul>
+<li>By constraining assignment, each state transition is testable - the new state is a function of the old state.</li>
+<li>Only certain state transitions are allowed.  State transitions are constrained so that the new state is a function of the previous state. With imperative mutation, sequence of events is critical.</li>
+<li>Any thread that is using an old copy of the state can continue safely, (no more &quot;InvalidOperationException: An element in the collection has been modified&quot;).  When done, the thread can look up the new state value instantly.</li>
+</ul></li>
+<li>Performance win around critical sections.
+
+<ul>
+<li>As an alternative to reader/writer locks, Atoms allow consistent, non-blocking reads (super-fast).  It doesn&#39;t matter to readers if the writer takes a while to create a new immutable state value because readers are not blocked.</li>
+</ul></li>
+</ul>
+
+<h2 id="toc_20">Conclusion</h2>
+
+<p>Functional approaches to state management, combined with immutable values provide some big wins:</p>
+
+<ul>
+<li>It eliminates whole classes of bugs and maintenance problems</li>
+<li>Reduced complexity - actors and CSP make state transitions explicit.  Fewer things can go wrong with immutable values.</li>
+<li>Easier maintenance - the state is harder to misuse when it is an immutable value stored in an atom.  The type of the state reference (atom, Mailbox, etc.) enforces proper usage.</li>
+</ul>
+
+<p>2016-09-27  By Jeremy Sellars</p>
