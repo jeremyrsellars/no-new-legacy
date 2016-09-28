@@ -284,7 +284,8 @@ lookup["ABC".Substring(0,1)] // yields that same instance because of value seman
 // But, most .Net things don't have value semantics or structural equality.
 var lookup = new Dictionary<HashSet<string>,SomethingAwesome>();
 lookup[new HashSet<string>{"A"}] = new SomethingAwesome();
-lookup[new HashSet<string>{"ABC".Substring(0,1)}] // throws not found exception because the reference is different.
+lookup[new HashSet<string>{"ABC".Substring(0,1)}] // throws exception (not found)
+// because the reference is different and HashSet doesn't check for structural equality.
 ``` 
 
 Clojure's collections implement structural equality, which is really nice.  This allows sets or dictionaries to be keys in other dictionaries.  Then, whether or not the key is the same reference or a different reference (perhaps from a database), the hash and equality is the same.
