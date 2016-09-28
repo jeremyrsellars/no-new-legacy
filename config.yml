@@ -1,3 +1,7 @@
 "theme-bootstrap-2" :
   "use": "theme"
-production_url : 'https://jeremyrsellars.github.io'
+production_url : 'https://jeremyrsellars.github.io/jeremyrsellars'
+
+pages :
+  "sort" : ["date", "desc"]
+  stop_at_header: true
