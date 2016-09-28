@@ -6,7 +6,7 @@ tags: ["fp", "atoms", "actor model", "structural equality", "communicating seque
 categories : ["professionalism", "programming"]
 ---
 
-# Functional State Management (in .Net)
+Bring some sanity to state management in C# by borrowing functional programming concepts.  Some interesting ideas from functional programming, Clojure, etc. put in the context of .net.
 
 ## Terms
 * Identity = an entity that has a state.  (In C#, this could be a variable, field, or object)
@@ -307,5 +307,3 @@ Functional approaches to state management, combined with immutable values provid
   * It eliminates whole classes of bugs and maintenance problems
   * Reduced complexity - actors and CSP make state transitions explicit.  Fewer things can go wrong with immutable values.
   * Easier maintenance - the state is harder to misuse when it is an immutable value stored in an atom.  The type of the state reference (atom, Mailbox, etc.) enforces proper usage.
-
-2016-09-27  By Jeremy Sellars
