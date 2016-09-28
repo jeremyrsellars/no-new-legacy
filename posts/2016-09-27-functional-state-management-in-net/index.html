@@ -63,9 +63,9 @@
       <span>2016-09-27</strong>
     </div>
     <div class="content">
-      <h1 id="toc_0">Functional State Management (in .Net)</h1>
+      <p>Bring some sanity to state management in C# by borrowing functional programming concepts.  Some interesting ideas from functional programming, Clojure, etc. put in the context of .net.</p>
 
-<h2 id="toc_1">Terms</h2>
+<h2 id="toc_0">Terms</h2>
 
 <ul>
 <li>Identity = an entity that has a state.  (In C#, this could be a variable, field, or object)</li>
@@ -75,17 +75,17 @@
 
 <p>These definitions are inspired by <a href="http://clojure.org/about/state">http://clojure.org/about/state</a></p>
 
-<h2 id="toc_2">What is state?</h2>
+<h2 id="toc_1">What is state?</h2>
 
 <p>&quot;State&quot; - the implicit parameter(s) to a function (everything it needs in order to calculate the function that isn&#39;t an explicit argument)</p>
 
-<h2 id="toc_3">Status Quo (How is state usually managed in C#)</h2>
+<h2 id="toc_2">Status Quo (How is state usually managed in C#)</h2>
 
 <p>Let&#39;s walk through an example of the HR department trying to make team members happy by providing their favorite drinks in the kitchen.  On birthdays and service anniversaries, the team members are invited to the kitchen for a free celebratory beverage.</p>
 
 <p>Over the years, HR introduces new policies, and you never know what they&#39;ll ask for next, so this example goes from easy to hard as more requirements are added.</p>
 
-<h2 id="toc_4">Favorite Drink Project (Initial Scope)</h2>
+<h2 id="toc_3">Favorite Drink Project (Initial Scope)</h2>
 
 <p>Surveys are given:</p>
 
@@ -97,7 +97,7 @@
 
 <p>The surveys are processed in batches.</p>
 
-<h3 id="toc_5">Bread and Butter (Assignment)</h3>
+<h3 id="toc_4">Bread and Butter (Assignment)</h3>
 
 <p>The most idiomatic way of managing state in C# is through assignment.</p>
 
@@ -119,7 +119,7 @@
 <li>The developer must know when it is ok and when it isn&#39;t ok to use/change state.</li>
 </ul>
 
-<h2 id="toc_6">Favorite Drink Project (Phase 2 - support concurrency) -- Interlocked Thread Safe</h2>
+<h2 id="toc_5">Favorite Drink Project (Phase 2 - support concurrency) -- Interlocked Thread Safe</h2>
 
 <p>Now, let&#39;s say there&#39;s a bunch of autonomous agents in your process all processing the survey results.  Also, let&#39;s say HR didn&#39;t prevent team members from submitting 100 surveys at the same time (to win the X-box drawing).</p>
 
@@ -151,7 +151,7 @@
 <li>Future developers and maintainers must know (and remember) to use <code>Interlocked</code> to use/change state.</li>
 </ul>
 
-<h2 id="toc_7">Favorite Drink Project (Email when in stock) - Lock</h2>
+<h2 id="toc_6">Favorite Drink Project (Email when in stock) - Lock</h2>
 
 <p>Now, imagine that the requirements change and HR wants to give a complimentary beverage to each team member on birthdays and service anniversaries, but only if the kitchen stocks the beverage.</p>
 
@@ -190,13 +190,13 @@
 <li>Future developers and maintainers must know (and remember) not to introduce another lock or risk deadlocks.</li>
 </ul>
 
-<h3 id="toc_8">Summary of the idiomatic (C#)</h3>
+<h3 id="toc_7">Summary of the idiomatic (C#)</h3>
 
 <p>We observe in the Favorite Beverages example, that the familiar/idiomatic ways of managing state are tricky.  The field being changed needed to be protected by either <code>Interlocked</code> or <code>lock/Monitor</code> and this led to more verbose code, with state-transitions that are more difficult to test.</p>
 
 <p>Once we start needing to &quot;protect&quot; variables, the code starts getting more verbose and complicated.  It becomes difficult to reason about what is happening.  So in a multi-threaded environment, what do we need to protect?  Only variables that change (mutate) - things that are assigned.</p>
 
-<h2 id="toc_9">Constraints</h2>
+<h2 id="toc_8">Constraints</h2>
 
 <p>Let&#39;s take an interlude and think about programming styles for a moment.</p>
 
@@ -207,13 +207,13 @@
 <li>Uncle Bob describes the constraints that define <a href="https://blog.8thlight.com/uncle-bob/2012/12/19/Three-Paradigms.html">Three Paradigms</a> of programming (Structured, Object-Oriented, Functional). For example, &quot;All functional programs are dominated by one huge constraint. They don’t use assignment.&quot;</li>
 </ul>
 
-<h3 id="toc_10">Constraining Assignment</h3>
+<h3 id="toc_9">Constraining Assignment</h3>
 
 <p>Since assignment makes things harder to reason about and harder to test, perhaps we should avoid it.  But without assignment, how can we change state?</p>
 
 <p>So if we can&#39;t eliminate assignment, can we manage it by using a more predictable idiom?</p>
 
-<h2 id="toc_11">Actor Model (Idiomatic F#)</h2>
+<h2 id="toc_10">Actor Model (Idiomatic F#)</h2>
 
 <p>F# offers the Mailbox implementation of the Actor Model, where an actor process (or &quot;thread of logic&quot;) is sent messages through the mailbox and processes them one at a time with consistent state transitions.  This message passing is an <em>asynchronous</em> object-oriented approach.  The &quot;constraint&quot; is that you can change state, but only by sending messages.  There is a one-to-one relationship between queues and actors.</p>
 
@@ -233,7 +233,7 @@
 <li>Future developers and maintainers are guided to safe methods of state transition - the compiler enforces this.</li>
 </ul>
 
-<h2 id="toc_12">Communicating Sequential Processes (Go, Clojure CLR)</h2>
+<h2 id="toc_11">Communicating Sequential Processes (Go, Clojure CLR)</h2>
 
 <p>Clojure&#39;s <a href="http://clojure.org/news/2013/06/28/clojure-clore-async-channels">core.async</a> library implements Communicating Sequential Processes and channels.  (Go programming language also implements CSP).</p>
 
@@ -257,7 +257,7 @@
 
 <p><a href="https://github.com/clojure/core.async#presentations">More on core.async</a></p>
 
-<h2 id="toc_13">Atoms</h2>
+<h2 id="toc_12">Atoms</h2>
 
 <p>Another way to think about state management is Atoms.  There are variants of AtomicReferences in <a href="https://docs.oracle.com/javase/8/docs/api/?java/util/concurrent/atomic/AtomicReference.html">Java8</a>, <a href="http://api.getakka.net/docs/stable/html/A8A879A7.htm">Akka.net</a>, <a href="https://github.com/clojure/clojure-clr/blob/master/Clojure/Clojure/Lib/AtomicReference.cs">Clojure-Clr</a>, <a href="http://en.cppreference.com/w/cpp/atomic">C++11</a>, and many more.</p>
 
@@ -303,7 +303,7 @@
 
 <p>More about <a href="http://clojure.org/reference/atoms">atoms</a>.</p>
 
-<h3 id="toc_14">Extra Atom Goodness</h3>
+<h3 id="toc_13">Extra Atom Goodness</h3>
 
 <p>Some atom implementations support validators or guards that prevent the atom from violating an assertion.  Here is clojure-clr&#39;s implementation of Update() (or &quot;<code>swap</code>&quot; in <a href="https://github.com/clojure/clojure-clr/blob/5beaf1162ac853795f88bba977b13ba35c1416c5/Clojure/Clojure/Lib/Atom.cs#L80">clojure-clr</a>).</p>
 
@@ -327,7 +327,7 @@
 
 <p>Since it uses compare and set, if another thread updated the value between <code>deref()</code> and <code>CompareAndSet</code>, it may have to loop and recalculate the replacement value as a function of the atom&#39;s &quot;new&quot; current value.</p>
 
-<h3 id="toc_15">Favorite Drink Survey with Atoms</h3>
+<h3 id="toc_14">Favorite Drink Survey with Atoms</h3>
 
 <pre><code class="csharp">immutable class TeamMember
 {
@@ -354,7 +354,7 @@ class SurveyProcessor
 
 <p>Nope, sorry, C# isn&#39;t that cool <a href="https://github.com/dotnet/roslyn/blob/master/docs/designNotes/2015-02-04%20C%23%20Design%20Meeting.md#builder-pattern">yet (see proposed Builder Pattern)</a>.  I&#39;m just trying to paint a picture.</p>
 
-<h3 id="toc_16">Immutability</h3>
+<h3 id="toc_15">Immutability</h3>
 
 <p>Today, there isn&#39;t a great story for immutability in C#.  We have to <a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9">roll our own</a> immutable &quot;values,&quot; but I hope that will change soon.</p>
 
@@ -370,11 +370,11 @@ class SurveyProcessor
 <li><a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9">Roll your own</a> immutable &quot;values.&quot;</li>
 </ul>
 
-<h2 id="toc_17">Structural Equality</h2>
+<h2 id="toc_16">Structural Equality</h2>
 
 <p>Structural equality means considering the structure of the things being compared.  For example, two different mathematical sets are equal if their contents are the same, regardless of the order they happen to be stored in.  For example <code>x = new HashSet{3,1,2}; Assert(x == x.ToSortedSet());</code>.  Also, theoretically, two different objects are structurally equal if they have the same fields, however this may be an expensive operation to compare, so .Net hasn&#39;t usually implemented structural equality for objects.</p>
 
-<h3 id="toc_18">Example</h3>
+<h3 id="toc_17">Example</h3>
 
 <pre><code class="csharp">var lookup = new Dictionary&lt;string,SomethingAwesome&gt;();
 lookup[&quot;A&quot;] = new SomethingAwesome();
@@ -390,7 +390,7 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws not 
 
 <p>In .Net, the situation is not quite as nice, though it can be implemented with <a href="https://msdn.microsoft.com/en-us/library/system.collections.structuralcomparisons(v=vs.110">System.Collections.StructuralComparisons</a>.aspx).</p>
 
-<h2 id="toc_19">Putting it all together</h2>
+<h2 id="toc_18">Putting it all together</h2>
 
 <p>Functional state transitions where &quot;state&quot; is an immutable &quot;value&quot; offer some nice wins:</p>
 
@@ -411,7 +411,7 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws not 
 </ul></li>
 </ul>
 
-<h2 id="toc_20">Conclusion</h2>
+<h2 id="toc_19">Conclusion</h2>
 
 <p>Functional approaches to state management, combined with immutable values provide some big wins:</p>
 
@@ -420,8 +420,6 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws not 
 <li>Reduced complexity - actors and CSP make state transitions explicit.  Fewer things can go wrong with immutable values.</li>
 <li>Easier maintenance - the state is harder to misuse when it is an immutable value stored in an atom.  The type of the state reference (atom, Mailbox, etc.) enforces proper usage.</li>
 </ul>
-
-<p>2016-09-27  By Jeremy Sellars</p>
 
     </div>
     <ul class="tag_box inline">
@@ -471,7 +469,7 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws not 
 
       <hr>
       <div class="footer">
-        <p>&copy; Jeremy Sellars 2013
+        <p>&copy; Jeremy Sellars 2015-2016
           with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
           and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
         </p>
