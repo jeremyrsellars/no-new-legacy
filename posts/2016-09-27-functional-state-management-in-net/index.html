@@ -213,16 +213,20 @@
 
 <p>So if we can&#39;t eliminate assignment, can we manage it by using a more predictable idiom?</p>
 
-<h2 id="toc_10">Actor Model (Idiomatic F#)</h2>
+<h2 id="toc_10">Actor Model (Asynchronous message passing)</h2>
 
-<p>F# offers the Mailbox implementation of the Actor Model, where an actor process (or &quot;thread of logic&quot;) is sent messages through the mailbox and processes them one at a time with consistent state transitions.  This message passing is an <em>asynchronous</em> object-oriented approach.  The &quot;constraint&quot; is that you can change state, but only by sending messages.  There is a one-to-one relationship between queues and actors.</p>
+<p>F# offers the <a href="https://msdn.microsoft.com/en-us/visualfsharpdocs/conceptual/control.mailboxprocessor%5B%27msg%5D-class-%5Bfsharp%5D?f=255&amp;MSPPError=-2147217396">Mailbox</a> implementation of the <a href="https://en.wikipedia.org/wiki/Actor_model">Actor Model</a>, where an actor process (or &quot;thread of logic&quot;) is sent messages through the mailbox and processes them one at a time with consistent state transitions.  This message passing is an <em>asynchronous</em> object-oriented approach.  The &quot;constraint&quot; is that you can change state, but only by sending messages.  There is a one-to-one relationship between queues (mailboxes) and actors.</p>
 
-<p>A great opportunity in the actor model is that each type of state transition can be tested.  The new state (after processing the message) is a function of the old state and the message (<code>newState = F(previousState,message)</code>).</p>
+<p>A great opportunity in the actor model is that each type of state transition can be tested.  The new state after processing the message can be seen as a function of the old state and the message (<code>newState = F(previousState,message)</code>).</p>
+
+<p>It should be noted that the actor may be written in more or less &quot;functional&quot; ways - using functional state transitions, or even imperative mutation of its local state (assignment above).  Should the developer choose imperative assignment, the processing model should keep the local state safe, assuming that references to mutable state aren&#39;t leaked through through as a message.  On the other hand, choosing functional state transitions may make the state transitions easier to test and understand.  In strongly-typed languages, making the state a single strongly-typed value allows some state constraints to be enforced by the compiler, thus eliminating classes of bugs.</p>
 
 <p>Constraints:</p>
 
 <ul>
-<li>Direct assignment isn&#39;t possible - the developer may send messages for the actor to process.</li>
+<li>The actor manages its own state.</li>
+<li>Direct assignment isn&#39;t possible - another part of the application sends a message for the actor to process.</li>
+<li>Direct reading isn&#39;t possible - another part of the application sends a message to request state information.</li>
 </ul>
 
 <p>Goodness:</p>
@@ -251,7 +255,7 @@
 
 <ul>
 <li>Similar to actors, plus:</li>
-<li>Fewer OS threads are required</li>
+<li>Fewer OS/VM threads are required</li>
 <li>The structure of CSP-based systems coordinates work, maintaining valid sequences.</li>
 </ul>
 
