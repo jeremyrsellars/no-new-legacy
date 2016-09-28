@@ -62,13 +62,13 @@ class Ruhoh
     def set_configuration(config)
       opts = {}
       opts['compile_as_root'] = true
-      opts['base_path'] = "/"
+      #opts['base_path'] = "/"
       
       if project_page?
         if !config['production_url'] || config['production_url'] == "http://sample.com"
-          opts['base_path'] = "/#{ repository_name }/"
+          #opts['base_path'] = "/#{ repository_name }/"
 
-          Ruhoh::Friend.say { plain "base_path set to: #{ opts['base_path'] } for GitHub project page support" }
+          #Ruhoh::Friend.say { plain "base_path set to: #{ opts['base_path'] } for GitHub project page support" }
         else
           Ruhoh::Friend.say { 
             plain "base_path set to: '#{ opts['base_path'] }' because config['production_url'] = '#{ config['production_url'] }'"
