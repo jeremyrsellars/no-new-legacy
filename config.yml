@@ -1,0 +1,9 @@
+#"production_url": "https://jeremyrsellars.github.io/no-new-legacy"
+"base_path": "/no-new-legacy"
+
+"pages":
+  "sort": ["date", "desc"]
+  "stop_at_header": true
+
+"theme-bootstrap-2":
+  "use": "theme"
