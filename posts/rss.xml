@@ -4,7 +4,13 @@
     <title>No New Legacy Code</title>
     <description>No New Legacy Code</description>
     <link>https://jeremyrsellars.github.io/no-new-legacy</link>
-    <pubDate>2016-09-28</pubDate>
+    <pubDate>2016-10-21</pubDate>
+    <item>
+      <title>ConcurrentDictionary and the Pit of Success</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success</link>
+      <pubDate>2016-10-21</pubDate>
+      <description>When a class attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.</description>
+    </item>
     <item>
       <title>Functional State Management (in .Net)</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-09-27-functional-state-management-in-net</link>
