@@ -1,13 +1,31 @@
 "production_url": "https://jeremyrsellars.github.io/no-new-legacy"
 "base_path": "/no-new-legacy"
 
+_root:
+  rss:
+    enable: false
+  paginator:
+    enable: false
+
 "posts":
-  "sort": ["date", "desc"]
+  sort: ["date", "desc"]
   stop_at_header: true
   summary_lines: 1
 
 "pages":
   "sort": ["date", "desc"]
 
+plugins:
+  sitemap:
+    file_name: sitemap.xml #(optional, valid only here)
+    changefreq: weekly
+    priority: 0.7
+
+asset_pipeline:
+  enable: true
+
 "theme-bootstrap-2":
+  "use": "ignore"
+
+"theme-full-strength":
   "use": "theme"

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- {{ page.id}} {{ page.date}} -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>{{ page.title }} - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, {{# page.tags}}{{.}},{{/ page.tags}} {{# page.categories}}{{.}},{{/ page.categories}}">
+    {{# page.description }}
+    <meta name="description" content="{{ . }}">
+    {{/ page.description }}
+    {{# page.date }}
+    <meta name="date" content="{{ . }}">
+    <meta name="datePublished" content="{{ . }}">
+    {{/ page.date }}
+    {{# page.revised }}
+    <meta name="revised" content="{{ . }}">
+    {{/ page.revised }}
+    <meta name="author" content="{{ data.author.name }}">
+    <meta name="geo.region" content="US-MO" />
+
+    {{# stylesheets.load }}
+       bootstrap.min.css
+       style.css
+       google_prettify/sons-of-obsidian.css
+       application.css
+    {{/ stylesheets.load }}
+
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <!--{ { { widgets.analytics }}} -->
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="{{urls.base_path}}">{{ data.title }}</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+        {{# data.navigation?to__root }}
+          {{> pages_list }}
+        {{/ data.navigation?to__root }}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      {{{ content }}}
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">{{ data.author.name }}</a> <span itemprop="copyrightYear">2015 - 2016</span>2015-2016
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    {{{ widgets.google_prettify_https }}}
+    {{{ widgets.analytics }}}
+
+<script>
+  try
+  {
+    window.onload = function() {
+      if(document.getElementById)document.getElementById("header").focus();
+    };
+  }
+  catch(e)
+  {
+  }
+</script>
+</body>
+</html>
