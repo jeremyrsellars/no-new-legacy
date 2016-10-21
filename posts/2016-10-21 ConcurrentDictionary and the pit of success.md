@@ -1,16 +1,16 @@
 ---
 title: "ConcurrentDictionary and the Pit of Success"
 date: "2016-10-21"
-description: Bring some sanity to state management in C# by borrowing functional programming concepts.
+description: When a class attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 tags: ["state-management", "SOLID", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
 categories : ["programming", "professionalism"]
 ---
 
-When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a "small" violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a Liskov-Substitution Principal violation.
+When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a "small" violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 
-# Thread-safety of [ConcurrentDictionary](https://msdn.microsoft.com/en-us/library/dd287191%28v=vs.110%29.aspx)
+# Thread-safety of ConcurrentDictionary
 
-Imagine implementing a cache with a dictionary.  Some threads add dictionary entries, and a maintenance thread selectively removes old entries.  Perhaps you wonder, what about that new namespace `System.Collections.Concurrent`... Would the ConcurrentDictionary let any thread mutate it without having to use explicit locking or having to think of the consequences?
+Imagine implementing a cache with a dictionary.  Some threads add dictionary entries, and a maintenance thread selectively removes old entries.  Perhaps you wonder, what about that new namespace `System.Collections.Concurrent`... Would the [ConcurrentDictionary](https://msdn.microsoft.com/en-us/library/dd287191%28v=vs.110%29.aspx) let any thread mutate it without having to use explicit locking or having to think of the consequences?
 
 ## Research
 I did not know whether the ConcurrentDictionary could be enumerated safely while being modified in another thread.  I set out to answer the question "Is ConcurrentDictionary any more thread-safe than Dictionary?"  `ConcurrentDictionary`'s [thread-safety disclaimer]() does *not* indicate to me that it would be safe to enumerate, but it *has to be* safe, right? (Spoiler!  Answer: not always).
@@ -166,7 +166,7 @@ It is easier to follow the LSP when there are fewer semantic assumptions and/or 
 1. An interface about retrieving existing audit records for display or analysis might be read-only.  `IAuditReader`
 1. An interface about exporting audit records to a different system. `IAuditExporter`
 
-In practice, the implementation of these interfaces may be provided by a single `class AuditRepository : IAuditRecorder, IAuditReader`, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more flexible and easy to change.
+In practice, the implementation of these interfaces may be provided by a single `class AuditRepository : IAuditRecorder, IAuditReader`, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more "soft," flexible, and easy to change.
 
 
 # Concluding remarks
