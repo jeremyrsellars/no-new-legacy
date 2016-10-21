@@ -1,0 +1,1 @@
+start /i "%~dp0restart.cmd"
