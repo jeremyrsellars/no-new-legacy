@@ -3,7 +3,7 @@ title: "Review 'Software Ninja Class Hierarchy'"
 date: "2015-11-01"
 description: My recommendation of Terence McGhee's Software Ninja Class Hierarchy
 tags: ["review"]
-categories : ["team", "professionalism"]
+categories : ["Professionalism", "Team"]
 ---
 
 I came by this blog post, [Software Ninja Class Hierarchy](http://terencemcghee.com/FileStore/Tech/1D0C454A70AC3AEF01BB1BAAD94C8753.html), via a tweet by [Corey House (@housecor)](https://twitter.com/housecor).  I started reading this on Friday, re-reading it on Saturday, and again today.  I guess you could say *it captured my attention*.  I found myself agreeing with the author (Terence McGhee).  This is the first I've known of the man and I like what I've read so far.

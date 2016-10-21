@@ -3,7 +3,7 @@ title: "ConcurrentDictionary and the Pit of Success"
 date: "2016-10-21"
 description: When a class attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 tags: ["state-management", "SOLID", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
-categories : ["programming", "professionalism"]
+categories : ["Programming", "Professionalism"]
 ---
 
 When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a "small" violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
