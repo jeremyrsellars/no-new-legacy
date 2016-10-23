@@ -2,7 +2,7 @@
 title: "ConcurrentDictionary and the Pit of Success"
 date: "2016-10-21"
 revised: "2016-10-23"
-description: When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
+description: When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 tags: ["state-management", "SOLID-principals", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
 categories : ["Programming", "Professionalism"]
 ---
@@ -14,7 +14,7 @@ When it comes to managing state in .NET, ConcurrentDictionary is not a silver bu
 Imagine implementing a cache with a dictionary.  Some threads add dictionary entries, and a maintenance thread selectively removes old entries.  Perhaps you wonder, what about that new namespace `System.Collections.Concurrent`... Would the [ConcurrentDictionary](https://msdn.microsoft.com/en-us/library/dd287191%28v=vs.110%29.aspx) let any thread mutate it without having to use explicit locking or having to think of the consequences?
 
 ## Research
-I did not know whether the ConcurrentDictionary could be enumerated safely while being modified in another thread.  I set out to answer the question "Is ConcurrentDictionary any more thread-safe than Dictionary?"  `ConcurrentDictionary`'s [thread-safety disclaimer]() does *not* indicate to me that it would be safe to enumerate, but it *has to be* safe, right? (Spoiler!  Answer: not always).
+I did not know whether the ConcurrentDictionary could be enumerated safely while being modified in another thread.  I set out to answer the question "Is ConcurrentDictionary any more thread-safe than Dictionary?"  `ConcurrentDictionary`'s [thread-safety disclaimer](https://msdn.microsoft.com/en-us/library/dd287191%28v=vs.110%29.aspx) does *not* indicate to me that it would be safe to enumerate, but it *has to be* safe, right? (Spoiler!  Answer: not always).
 
 > All public and protected members of ConcurrentDictionary&lt;TKey, TValue&gt; are thread-safe and may be used concurrently from multiple threads. However, **members accessed through one of the interfaces the ConcurrentDictionary&lt;TKey, TValue&gt; implements, including extension methods, are not guaranteed to be thread safe** and may need to be synchronized by the caller.
 
@@ -141,46 +141,9 @@ There is an implicit, semantic assumption (effectively a requirement of how to u
 
 This is where Barbara Liskov's notion of "behavioral" subtyping, commonly known as the Liskov Substitution Principal, shines as a principal that helps us avoid this kind of design flaw.
 
-> Liskov's notion of a behavioral subtype defines a notion of substitutability for objects; that is, if S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program (e.g. correctness).
-
-From [Wikipedia](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
-
-Here is my rephrasing of the LSP, which trades a bit of fidelity for ease of remembering:
+This is explored in [Part 2 - Liskov Substitution Principal and the Pit of Success]({{urls.base_path}}posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success).
 
 > If you call something a (subtype of) duck, it had better look like a duck and quack like one.
-
-In other words to follow the Liskov Substitution Principal:
-
-* If you implement an interface, implementations (sub-types) of that interface must honor the semantic assumptions in the interface.
-* The same applies for many similar abstractions:
-  * Derived classes
-  * Action delegates, lambda functions, etc..
-  * Implementations of [protocols](http://clojure.org/reference/protocols)
-* Consider required usage patterns (semantic assumptions), including:
-  * Required sequence of operations
-  * Synchronized access and assumed/implicit critical section
-  * The types of exceptions thrown or caught
-  * Out-of-band resources (implicit connections and transactions, configuration).
-    * There may be value in making these implicit, but where should these come from? (This sounds like a good follow-up blog post.)
-  * The availability of libraries, nuget packages, etc..
-
-### Related SOLID principals
-
-#### Interface Segregation Principal and Single Responsibility Principal
-
-It is easier to follow the LSP when there are fewer semantic assumptions and/or fewer members in the interface.  This brings up the Interface Segregation Principal, which leads to more interfaces with fewer members.  The interfaces aren't so much about the "thing" (entity or noun) as they are the usage patterns.  For example, instead of having a single `IAuditRepository`, it can be helpful to break it further into:
-
-1. An interface about recording (inserting) audit records might have a single method.  `IAuditRecorder`
-1. An interface about retrieving existing audit records for display or analysis might be read-only.  `IAuditReader`
-1. An interface about exporting audit records to a different system. `IAuditExporter`
-
-In practice, the implementation of these interfaces may be provided by a single `class AuditRepository : IAuditRecorder, IAuditReader`, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more "soft," flexible, and easy to change.
-
-#### Open-Closed Principal
-
-The LSP encourages alternative implementations to support the original usage pattern(s).  This allows the dependent parts of the application to be open to extension with out requiring modification.  
-
-For out-of-band resources like implicit database connections and transactions, and configuration, it is often okay to support these in the main module (the module on which nothing else depends).  Another common way to support these is with a dependency injection framework or extensibility framework.
 
 # Concluding Remarks
 
@@ -190,14 +153,17 @@ For out-of-band resources like implicit database connections and transactions, a
 * This is not meant to be a rant.  Many .Net collection types have LSP violations, but that was a necessary evil given the historical context.  They are more versatile that way.  They are tools - tools that can be used well or used poorly.  They have evolved over the years and their maintainers valiantly strive to maintain backwards-compatibility so we developers can get the most from the .Net Framework.  These are not easy tasks and I want to applaud their efforts and thank them for a job well done.  I am confident that these LSP violations would be better-addressed if they had it to do over again.
 * From my perspective, [`System.Collections.Immutable.ImmutableDictionary`](https://msdn.microsoft.com/en-us/library/dn467181%28v=vs.111%29.aspx?f=255&MSPPError=-2147217396) is much easier to wrap my head around because it is thread safe, end of story.  I like options that are easier to understand and easier to implement (code is written once and read often).
 
+<a id="pit-of-success"></a>
+
+
 I briefly mentioned the "Pit of Success".  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don't just dig a bear trap, post a sign at the trailhead, and walk away.  We don't rely on our peers to read the documentation and assume they will avoid the troublesome spots we've created. Professionals follow the principal of least surprise.
 
 Legacy Software is scary to change because even the smallest change carries the fear of breaking something.  By using SOLID principals, professionals make it easier to use the APIs correctly and take away the opportunities for surprise.
 
+## Next
+
+In [Part 2 - Liskov Substitution Principal and the Pit of Success]({{urls.base_path}}posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success), we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.
+
 Thanks for reading.  Cheers,
-- Jeremy
 
-## More On These Subjects
-
-* [Liskov Substitution Principal](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle) - if you call something a duck, it had better look like a duck and quack like one.
-* [SOLID Principals of Object-Oriented Design](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29#Overview)
+Jeremy
