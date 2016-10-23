@@ -29,3 +29,8 @@ asset_pipeline:
 
 "theme-full-strength":
   "use": "theme"
+
+widgets :
+  analytics :
+    use : google
+    tracking_id : 'UA-85077174-2'
