@@ -6,10 +6,11 @@
   <meta charset="utf-8">
   <title>ConcurrentDictionary and the Pit of Success - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;, #&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068f87b0&gt;,">
-    <meta name="description" content="When a class attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;, #&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,">
+    <meta name="description" content="When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.">
     <meta name="date" content="2016-10-21">
     <meta name="datePublished" content="2016-10-21">
+    <meta name="revised" content="2016-10-23">
     <meta name="author" content="Jeremy Sellars">
     <meta name="geo.region" content="US-MO" />
 
@@ -97,7 +98,7 @@
       <span>2016-10-21</strong>
     </div>
     <div class="content">
-      <p>When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a &quot;small&quot; violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.</p>
+      <p>When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This post explores how a &quot;small&quot; violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.</p>
 
 <h1 id="toc_0">Thread-safety of ConcurrentDictionary</h1>
 
@@ -105,7 +106,7 @@
 
 <h2 id="toc_1">Research</h2>
 
-<p>I did not know whether the ConcurrentDictionary could be enumerated safely while being modified in another thread.  I set out to answer the question &quot;Is ConcurrentDictionary any more thread-safe than Dictionary?&quot;  <code>ConcurrentDictionary</code>&#39;s <a href="" target="_blank" title="">thread-safety disclaimer</a> does <em>not</em> indicate to me that it would be safe to enumerate, but it <em>has to be</em> safe, right? (Spoiler!  Answer: not always).</p>
+<p>I did not know whether the ConcurrentDictionary could be enumerated safely while being modified in another thread.  I set out to answer the question &quot;Is ConcurrentDictionary any more thread-safe than Dictionary?&quot;  <code>ConcurrentDictionary</code>&#39;s <a href="https://msdn.microsoft.com/en-us/library/dd287191%28v=vs.110%29.aspx"  target="_blank" title="" rel="noopener" class="external">thread-safety disclaimer</a> does <em>not</em> indicate to me that it would be safe to enumerate, but it <em>has to be</em> safe, right? (Spoiler!  Answer: not always).</p>
 
 <blockquote>
 <p>All public and protected members of ConcurrentDictionary&lt;TKey, TValue&gt; are thread-safe and may be used concurrently from multiple threads. However, <strong>members accessed through one of the interfaces the ConcurrentDictionary&lt;TKey, TValue&gt; implements, including extension methods, are not guaranteed to be thread safe</strong> and may need to be synchronized by the caller.</p>
@@ -241,52 +242,19 @@ static void MainRemove()
 
 <p>The problem is not a documentation problem, and not a implementation problem - the implementation of the interface is correct.  <strong>The problem is a semantic conflict.</strong></p>
 
-<p>There is an implicit, semantic assumption (effectively a requirement) in <code>ICollection&lt;T&gt;</code> - that the collection won&#39;t shrink or grow between asking its count and copying its contents.  This concurrent data structure also attempts to implement the thread-safe-mutation semantic, but it fails to deliver on <code>ICollection&lt;T&gt;</code>&#39;s semantic assumption.</p>
+<p>There is an implicit, semantic assumption (effectively a requirement of how to use the class correctly) in <code>ICollection&lt;T&gt;</code> - that the collection won&#39;t shrink or grow between asking its count and copying its contents.  This concurrent data structure also attempts to implement the thread-safe-mutation semantic, but it fails to deliver on <code>ICollection&lt;T&gt;</code>&#39;s semantic assumption.</p>
 
 <h2 id="toc_9">Liskov Substitution Principal</h2>
 
 <p>This is where Barbara Liskov&#39;s notion of &quot;behavioral&quot; subtyping, commonly known as the Liskov Substitution Principal, shines as a principal that helps us avoid this kind of design flaw.</p>
 
-<blockquote>
-<p>Liskov&#39;s notion of a behavioral subtype defines a notion of substitutability for objects; that is, if S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program (e.g. correctness).</p>
-</blockquote>
-
-<p>From <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"  target="_blank" title="" rel="noopener" class="external">Wikipedia</a></p>
-
-<p>Here is my rephrasing of the LSP, which trades a bit of fidelity for ease of remembering:</p>
+<p>This is explored in <a href="/no-new-legacy/posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success" title="">Part 2 - Liskov Substitution Principal and the Pit of Success</a>.</p>
 
 <blockquote>
 <p>If you call something a (subtype of) duck, it had better look like a duck and quack like one.</p>
 </blockquote>
 
-<p>In other words to follow the Liskov Substitution Principal:</p>
-
-<ul>
-<li>If you implement an interface, implementations (sub-types) of that interface must honor the semantic assumptions in the interface.</li>
-<li>The same applies for many similar abstractions:
-
-<ul>
-<li>Derived classes</li>
-<li>Action delegates, lambda functions, etc..</li>
-<li>Implementations of <a href="http://clojure.org/reference/protocols"  target="_blank" title="" rel="noopener" class="external">protocols</a></li>
-</ul></li>
-</ul>
-
-<h3 id="toc_10">Related SOLID principals</h3>
-
-<h4 id="toc_11">Interface Segregation Principal and Single Responsibility Principal</h4>
-
-<p>It is easier to follow the LSP when there are fewer semantic assumptions and/or fewer members in the interface.  This brings up the Interface Segregation Principal, which leads to more interfaces with fewer members.  The interfaces aren&#39;t so much about the &quot;thing&quot; (entity or noun) as they are the usage patterns.  For example, instead of having a single <code>IAuditRepository</code>, it can be helpful to break it further into:</p>
-
-<ol>
-<li>An interface about recording (inserting) audit records might have a single method.  <code>IAuditRecorder</code></li>
-<li>An interface about retrieving existing audit records for display or analysis might be read-only.  <code>IAuditReader</code></li>
-<li>An interface about exporting audit records to a different system. <code>IAuditExporter</code></li>
-</ol>
-
-<p>In practice, the implementation of these interfaces may be provided by a single <code>class AuditRepository : IAuditRecorder, IAuditReader</code>, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more &quot;soft,&quot; flexible, and easy to change.</p>
-
-<h1 id="toc_12">Concluding remarks</h1>
+<h1 id="toc_10">Concluding Remarks</h1>
 
 <ul>
 <li>We ended up determining that ConcurrentDictionary was safe to use in this case and was prettier than the alternatives (in this case <em>rewriting</em> with immutability or using explicit locking).  So, we used it.</li>
@@ -296,43 +264,40 @@ static void MainRemove()
 <li>From my perspective, <a href="https://msdn.microsoft.com/en-us/library/dn467181%28v=vs.111%29.aspx?f=255&MSPPError=-2147217396"  target="_blank" title="" rel="noopener" class="external"><code>System.Collections.Immutable.ImmutableDictionary</code></a> is much easier to wrap my head around because it is thread safe, end of story.  I like options that are easier to understand and easier to implement (code is written once and read often).</li>
 </ul>
 
+<p><a id="pit-of-success"></a></p>
+
 <p>I briefly mentioned the &quot;Pit of Success&quot;.  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don&#39;t just dig a bear trap, post a sign at the trailhead, and walk away.  We don&#39;t rely on our peers to read the documentation and assume they will avoid the troublesome spots we&#39;ve created. Professionals follow the principal of least surprise.</p>
 
 <p>Legacy Software is scary to change because even the smallest change carries the fear of breaking something.  By using SOLID principals, professionals make it easier to use the APIs correctly and take away the opportunities for surprise.</p>
 
+<h2 id="toc_11">Next</h2>
+
+<p>In <a href="/no-new-legacy/posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success" title="">Part 2 - Liskov Substitution Principal and the Pit of Success</a>, we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.</p>
+
 <p>Thanks for reading.  Cheers,</p>
 
-<ul>
-<li>Jeremy</li>
-</ul>
-
-<h2 id="toc_13">More On These Subjects</h2>
-
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle"  target="_blank" title="" rel="noopener" class="external">Liskov Substitution Principal</a> - if you call something a duck, it had better look like a duck and quack like one.</li>
-<li><a href="https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29#Overview"  target="_blank" title="" rel="noopener" class="external">SOLID Principals of Object-Oriented Design</a></li>
-</ul>
+<p>Jeremy</p>
 
     </div>
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>2</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>3</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>3</span></a>
+        <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>4</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
       <li><i class="icon-tags"></i></li>
       <li>
-        <a href="/no-new-legacy/tags#state-management-ref">state-management <span>2</span></a>
+        <a href="/no-new-legacy/tags#state-management-ref">state-management <span>3</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#SOLID-ref">SOLID <span>1</span></a>
+        <a href="/no-new-legacy/tags#SOLID-principals-ref">SOLID-principals <span>2</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#Liskov-substitution-principal-ref">Liskov-substitution-principal <span>1</span></a>
+        <a href="/no-new-legacy/tags#Liskov-substitution-principal-ref">Liskov-substitution-principal <span>2</span></a>
       </li>
       <li>
         <a href="/no-new-legacy/tags#multi-threaded-code-ref">multi-threaded-code <span>1</span></a>
@@ -344,7 +309,7 @@ static void MainRemove()
         <a href="/no-new-legacy/tags#c#-ref">c# <span>1</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#abstraction-ref">abstraction <span>1</span></a>
+        <a href="/no-new-legacy/tags#abstraction-ref">abstraction <span>2</span></a>
       </li>
     </ul>
     <hr>
@@ -354,7 +319,7 @@ static void MainRemove()
 
           <li><a href="/no-new-legacy/archive">Archive</a></li>
 
-          <li class="next disabled"><a>Next &rarr;</a>
+          <li class="next"><a href="/no-new-legacy/posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success" title="Liskov Substitution Principal and the Pit of Success">Next &rarr;</a></li>
       </ul>
     </div>
     <hr>
@@ -389,33 +354,6 @@ static void MainRemove()
   prettyPrint();
 </script>
 <!-- end Google Prettify -->
-    <script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-85077174-2']);
-  _gaq.push(['_trackPageview']);
-  
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
-
-
-<script>
-  try
-  {
-    window.onload = function() {
-      if(document.getElementById)document.getElementById("header").focus();
-    };
-  }
-  catch(e)
-  {
-  }
-</script>
 </body>
 </html>
