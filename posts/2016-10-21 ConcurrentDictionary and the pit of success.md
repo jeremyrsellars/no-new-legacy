@@ -1,12 +1,13 @@
 ---
 title: "ConcurrentDictionary and the Pit of Success"
 date: "2016-10-21"
-description: When a class attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
-tags: ["state-management", "SOLID", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
+revised: "2016-10-23"
+description: When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This post explores how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
+tags: ["state-management", "SOLID-principals", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
 categories : ["Programming", "Professionalism"]
 ---
 
-When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible semantic behaviors, it can lead to some nasty surprises.  This post explores how a "small" violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
+When it comes to managing state in .NET, ConcurrentDictionary is not a silver bullet.  When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This post explores how a "small" violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 
 # Thread-safety of ConcurrentDictionary
 
@@ -134,7 +135,7 @@ List's `List(IEnumerable<T>)` constructor uses a valid, type-safe transformation
 
 The problem is not a documentation problem, and not a implementation problem - the implementation of the interface is correct.  **The problem is a semantic conflict.**
 
-There is an implicit, semantic assumption (effectively a requirement) in `ICollection<T>` - that the collection won't shrink or grow between asking its count and copying its contents.  This concurrent data structure also attempts to implement the thread-safe-mutation semantic, but it fails to deliver on `ICollection<T>`'s semantic assumption.
+There is an implicit, semantic assumption (effectively a requirement of how to use the class correctly) in `ICollection<T>` - that the collection won't shrink or grow between asking its count and copying its contents.  This concurrent data structure also attempts to implement the thread-safe-mutation semantic, but it fails to deliver on `ICollection<T>`'s semantic assumption.
 
 ## Liskov Substitution Principal
 
@@ -155,6 +156,13 @@ In other words to follow the Liskov Substitution Principal:
   * Derived classes
   * Action delegates, lambda functions, etc..
   * Implementations of [protocols](http://clojure.org/reference/protocols)
+* Consider required usage patterns (semantic assumptions), including:
+  * Required sequence of operations
+  * Synchronized access and assumed/implicit critical section
+  * The types of exceptions thrown or caught
+  * Out-of-band resources (implicit connections and transactions, configuration).
+    * There may be value in making these implicit, but where should these come from? (This sounds like a good follow-up blog post.)
+  * The availability of libraries, nuget packages, etc..
 
 ### Related SOLID principals
 
@@ -168,8 +176,13 @@ It is easier to follow the LSP when there are fewer semantic assumptions and/or 
 
 In practice, the implementation of these interfaces may be provided by a single `class AuditRepository : IAuditRecorder, IAuditReader`, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more "soft," flexible, and easy to change.
 
+#### Open-Closed Principal
 
-# Concluding remarks
+The LSP encourages alternative implementations to support the original usage pattern(s).  This allows the dependent parts of the application to be open to extension with out requiring modification.  
+
+For out-of-band resources like implicit database connections and transactions, and configuration, it is often okay to support these in the main module (the module on which nothing else depends).  Another common way to support these is with a dependency injection framework or extensibility framework.
+
+# Concluding Remarks
 
 * We ended up determining that ConcurrentDictionary was safe to use in this case and was prettier than the alternatives (in this case *rewriting* with immutability or using explicit locking).  So, we used it.
 * ConcurrentDictionary can easily be used incorrectly with idiomatic C# (Linq). So much for making it easy to fall into the "pit of success"!
