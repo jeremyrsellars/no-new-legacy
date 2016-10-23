@@ -6,7 +6,7 @@ class Ruhoh
       if(link =~ /^(?:https?|ftp):/i)
         "<a href=\"#{link}\"  target=\"_blank\" title=\"#{title}\" rel=\"noopener\" class=\"external\">#{alt_text}</a>"
       else
-        "<a href=\"#{link}\" target=\"_blank\" title=\"#{title}\">#{alt_text}</a>"
+        "<a href=\"#{link}\" title=\"#{title}\">#{alt_text}</a>"
       end
     end
     def autolink(link, link_type)
@@ -14,7 +14,7 @@ class Ruhoh
       if(link =~ /^(?:https?|ftp):/i)
         "<a href=\"#{link}\"  target=\"_blank\" rel=\"noopener\" class=\"external\">#{friendly}</a>"
       else
-        "<a href=\"#{link}\" target=\"_blank\">#{friendly}</a>"
+        "<a href=\"#{link}\">#{friendly}</a>"
       end
     end
   end
