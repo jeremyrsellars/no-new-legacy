@@ -1,7 +1,7 @@
 ---
 title: "ConcurrentDictionary and the Pit of Success"
 date: "2016-10-21"
-revised: "2016-10-23"
+revised: "2016-10-24"
 description: When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.
 tags: ["state-management", "SOLID-principals", "Liskov-substitution-principal", "multi-threaded-code", ".net", "c#", "abstraction"]
 categories : ["Programming", "Professionalism"]
@@ -156,7 +156,7 @@ This is explored in [Part 2 - Liskov Substitution Principal and the Pit of Succe
 <a id="pit-of-success"></a>
 
 
-I briefly mentioned the "Pit of Success".  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don't just dig a bear trap, post a sign at the trailhead, and walk away.  We don't rely on our peers to read the documentation and assume they will avoid the troublesome spots we've created. Professionals follow the principal of least surprise.
+I briefly mentioned the "Pit of Success".  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don't just dig a [bear pit/trap](https://en.wikipedia.org/wiki/Trapping_pit), post a sign at the trailhead, and walk away.  We don't rely on our peers to read the documentation and assume they will avoid the troublesome spots we've created.  Professionals follow the principal of least surprise.
 
 Legacy Software is scary to change because even the smallest change carries the fear of breaking something.  By using SOLID principals, professionals make it easier to use the APIs correctly and take away the opportunities for surprise.
 
