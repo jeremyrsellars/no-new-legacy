@@ -6,11 +6,11 @@
   <meta charset="utf-8">
   <title>ConcurrentDictionary and the Pit of Success - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;, #&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005f0a258&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;, #&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000060d04c0&gt;,">
     <meta name="description" content="When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.">
     <meta name="date" content="2016-10-21">
     <meta name="datePublished" content="2016-10-21">
-    <meta name="revised" content="2016-10-23">
+    <meta name="revised" content="2016-10-24">
     <meta name="author" content="Jeremy Sellars">
     <meta name="geo.region" content="US-MO" />
 
@@ -266,7 +266,7 @@ static void MainRemove()
 
 <p><a id="pit-of-success"></a></p>
 
-<p>I briefly mentioned the &quot;Pit of Success&quot;.  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don&#39;t just dig a bear trap, post a sign at the trailhead, and walk away.  We don&#39;t rely on our peers to read the documentation and assume they will avoid the troublesome spots we&#39;ve created. Professionals follow the principal of least surprise.</p>
+<p>I briefly mentioned the &quot;Pit of Success&quot;.  Usually, professional programmers do not labor in isolation.  When professionals design software and interfaces, we don&#39;t just dig a <a href="https://en.wikipedia.org/wiki/Trapping_pit"  target="_blank" title="" rel="noopener" class="external">bear pit/trap</a>, post a sign at the trailhead, and walk away.  We don&#39;t rely on our peers to read the documentation and assume they will avoid the troublesome spots we&#39;ve created.  Professionals follow the principal of least surprise.</p>
 
 <p>Legacy Software is scary to change because even the smallest change carries the fear of breaking something.  By using SOLID principals, professionals make it easier to use the APIs correctly and take away the opportunities for surprise.</p>
 

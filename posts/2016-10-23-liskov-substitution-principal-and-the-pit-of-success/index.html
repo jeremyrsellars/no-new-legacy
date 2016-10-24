@@ -6,11 +6,11 @@
   <meta charset="utf-8">
   <title>Liskov Substitution Principal and the Pit of Success - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;, #&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006836f20&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;, #&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006a369b0&gt;,">
     <meta name="description" content="When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  In part 2 we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.">
     <meta name="date" content="2016-10-23">
     <meta name="datePublished" content="2016-10-23">
-    <meta name="revised" content="2016-10-23">
+    <meta name="revised" content="2016-10-24">
     <meta name="author" content="Jeremy Sellars">
     <meta name="geo.region" content="US-MO" />
 
@@ -120,7 +120,7 @@
 <p>If you call something a (subtype of) duck, it had better look like a duck and quack like one.</p>
 </blockquote>
 
-<p>In other words to follow the Liskov Substitution Principal:</p>
+<p>In other words to make one type substitutable for another - in following the Liskov Substitution Principal:</p>
 
 <ul>
 <li>If you implement an interface, implementations (sub-types) of that interface must honor the semantic assumptions in the interface.</li>
@@ -128,18 +128,28 @@
 
 <ul>
 <li>Derived classes</li>
-<li>Action delegates, lambda functions, etc..</li>
+<li>Action delegates, lambda functions, etc.</li>
 <li>Implementations of <a href="http://clojure.org/reference/protocols"  target="_blank" title="" rel="noopener" class="external">protocols</a></li>
 </ul></li>
-<li>Consider required usage patterns (semantic assumptions), including:
+<li>Consider the required usage patterns (semantic assumptions), including:
 
 <ul>
 <li>Required sequence of operations</li>
 <li>Synchronized access and assumed/implicit critical section</li>
 <li>The types of exceptions thrown or caught</li>
-<li>Out-of-band resources (implicit connections and transactions, configuration).</li>
+<li>Out-of-band resources (implicit connections and transactions, configuration).
+
+<ul>
 <li>There may be value in making these implicit, but where should these come from? (This sounds like a good follow-up blog post.)</li>
-<li>The availability of libraries, nuget packages, etc..</li>
+</ul></li>
+<li>The availability of libraries, Nuget packages, etc.</li>
+<li><a href="https://en.wikipedia.org/wiki/Covariance_and_contravariance_%28computer_science%29"  target="_blank" title="" rel="noopener" class="external">Covariance and contravariance</a>  are checked by the C# compiler, e.g. <code>IEnumerable&lt;out T&gt;</code>, <code>Action&lt;in T&gt;</code>.  In less formal types or dynamic languages, take care to handle these appropriately, e.g. especially around the required keys of a dictionary or the types of the values in a vector, set, or map.</li>
+<li>Pre-conditions and post-conditions should be honored.  In more powerful specification systems, pre-conditions and post-conditions can be tested
+
+<ul>
+<li>Relational specs (like <a href="http://clojure.org/guides/spec#_higher_order_functions"  target="_blank" title="" rel="noopener" class="external">clojure.spec</a> and <a href="https://msdn.microsoft.com/en-us/library/dd264808%28v=vs.110%29.aspx?f=255&MSPPError=-2147217396"  target="_blank" title="" rel="noopener" class="external">.Net Code Contracts</a>) can encode some of these semantic assumptions into run-time/test-time assertions.</li>
+<li><a href="https://en.wikipedia.org/wiki/Dependent_type"  target="_blank" title="" rel="noopener" class="external">Dependent types</a> in languages like <a href="http://www.idris-lang.org/"  target="_blank" title="" rel="noopener" class="external">Idris</a> can encode some of these semantic assumptions into the type definition, thereby enforcing valid usage at compile time, but I imagine this comes with its own set of substitutability constraints.</li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -175,7 +185,7 @@
 
 <p>Jeremy</p>
 
-<h2 id="toc_6">More On These Subjects</h2>
+<h2 id="toc_6">More on these Subjects</h2>
 
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle"  target="_blank" title="" rel="noopener" class="external">Liskov Substitution Principal</a> - if you call something a duck, it had better look like a duck and quack like one.</li>
