@@ -37,3 +37,7 @@ widgets :
   analytics :
     use : google
     tracking_id : 'UA-85077174-2'
+
+  comments :
+    use : disqus
+    short_name : no-new-legacy
