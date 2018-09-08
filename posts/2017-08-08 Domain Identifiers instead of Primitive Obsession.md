@@ -1,9 +1,87 @@
 ---
 title: "Domain Identifiers instead of 'Primitive Obsession'"
 date: "2017-08-08"
-tags: ["domain design"]
+revised: "2018-09-07"
+description: In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.
+tags: ["domain design", "code smell"]
 categories : ["Programming"]
 ---
+
+#### Summary
+
+In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.
+
+### The Problem
+
+> "[Primitive Obsession](http://wiki.c2.com/?PrimitiveObsession)" is using primitive data types to represent domain ideas.
+>
+> – From Ward Cunningham's wiki.
+
+In strongly-typed paradigms, this can be considered a "code smell".  Of course, there are other paradigms and contexts, but in this post, I'll share an Object-Oriented opinion and assume we are discussing how to use a strongly-typed language, like C# or Java, to model the problem domain in "plain old C# objects."
+
+There are some reasons to consider avoiding the use of primitive types, but first, what's a primitive type?
+
+### What is a primitive type?
+
+A "primitive" is one of the building blocks your language provides.  This is mostly just the "language" (C#, Java), not the libraries, or even the standard library.  So primitives are things like `Integer`, `long`, `float`, `string`, etc..  Data structures, like maps and sets from a library might be called "primitives" for the purpose of this discussion if they are used to *represent* a domain object (instead of using a class).
+
+To be clear, these primitives are essential for building software; the issue is using them to describe or model the domain or API.
+
+### Quick Example
+
+    var bodyMassIndex = CalculateBMI(36,   // Is that kg or pounds?
+                                     300); // Inches, feet, centimeters?
+    // and did I get the parameters in the right order?
+
+(Ha ha, don't even get me started on why BMI isn't a good calculation to judge your health by, or that 98.6 F is a "normal" temperature.)
+
+So, here we see some of the problems with using primitives as part of a method signature.  (Also, we see why languages with position-based argument lists can be problematic, but that's an issue for another day.)
+
+So, what are some ways of addressing these problems?
+
+You can create classes that indicate in the type signature what domain concept is being represented, in this case, unit of length.
+
+    public class Length {
+      public static Length FromInches(float inches) => new Length(inches * 2.54);
+      public static Length FromCentimeters(int cm) => new Length(cm);
+      private Length(float cm)// private constructor saves dimension
+    }
+
+This gives a nicer function signature.
+
+    float CalculateBMI(Length height, Weight weight)
+
+If your compiler is equipped with a type checker, you also get some help detecting out-of-order parameters.
+
+    var weight = Weight.FromPounds(100);
+    var height = Length.FromInches(100);
+    var bmi = CalculateBMI(weight, height); // doesn't compile! Yeah!
+
+### Further Up and Further In
+
+So, what if we went further down the road of Object Oriented and make an BMICalculator object instead of a function.
+
+    public class BMICalculator {
+      public int HeightCM;
+      public int WeightKG;
+      public float CalculateBMI() => // do some math.
+    }
+
+Well, it's not pretty, but it works.
+
+### A Common Example: Entity Identifiers
+
+One of the consistent violators that I see quite often is the use of a primitive to identify an entity in the business model.  For example, a string like `Domain.Name="example.com"`.  By using a primitive, you are left with the primitive type's equality semantics, hashcode calculation, and string representation.  So, while internet treats `"example.com" == "EXAMPLE.COM"` as the same, `System.String` does not.
+
+To get around this, we'll often see conversion to a canonical version (e.g. normalized to lower case with `domain.ToLowerCase()`), or, more likely, `string.Compare(domain1, domain2, StringComparison.OrdinalIgnoreCase) == 0`.  Yuck!  
+
+Yeah, I know.  Code reuse lets us "Write it once and use it everywhere."  But really, does that work?  What about when you want to put it in a `Dictionary<string, DomainEntry>`?  Then the hashing system needs an appropriate hash code generator and an equality checker.
+
+Then, assuming you've written all of this, then you probably should train the team so they know which types/comparison/function/type to use.
+
+Now, what if Joe and Sally choose different comparison?  What class of bugs can occur on French computers where lowercase works a bit differently?
+
+So, this is can become a big issue.
 
 ## Identity
 
