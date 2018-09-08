@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Functional State Management (in .Net) - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;, #&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,#&lt;Ruhoh::Views::MasterView:0x000000069033e0&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;, #&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000631a348&gt;,">
     <meta name="description" content="Bring some sanity to state management in C# by borrowing functional programming concepts.">
     <meta name="date" content="2016-09-27">
     <meta name="datePublished" content="2016-09-27">
@@ -35,8 +35,6 @@
   <meta name="msapplication-TileColor" content="#753636">
   <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
   <meta name="theme-color" content="#753636">
-  <link rel="me" href="https://twitter.com/agentjsellars">
-  <link rel="canonical" href="">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
   <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
 
@@ -463,19 +461,13 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws exce
 </ul>
 
     </div>
-    <ul class="inline">
-      <li><a class="twitter-share-button"
-             href="https://twitter.com/intent/tweet?hashtags=no-new-legacy;text=Functional State Management (in .Net);url=">Tweet</a></li>
-      <li><script type="text/javascript" src="//www.redditstatic.com/button/button1.js"></script></li>
-      <li><div class="fb-like" data-href="https://developers.facebook.com/&#123;&#123;url&#125;&#125;" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></li>
-    </ul>
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
         <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>3</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>5</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
@@ -505,55 +497,15 @@ lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws exce
     <hr>
     <div class="pagination">
       <ul>
-          <li class="prev"><a href="/no-new-legacy/posts/2015-11-01-review-of-software-ninja-class-hierarchy" title="Review &#39;Software Ninja Class Hierarchy&#39;">&larr; Previous</a></li>
+          <li class="prev"><a href="/no-new-legacy/posts/2018-09-07-generative-testing-introduction" title="Generative Testing Part 1">&larr; Previous</a></li>
 
           <li><a href="/no-new-legacy/archive">Archive</a></li>
 
-          <li class="next"><a href="/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success" title="ConcurrentDictionary and the Pit of Success">Next &rarr;</a></li>
+          <li class="next"><a href="/no-new-legacy/posts/2017-08-08-domain-identifiers-instead-of-primitive-obsession" title="Domain Identifiers instead of &#39;Primitive Obsession&#39;">Next &rarr;</a></li>
       </ul>
     </div>
     <hr>
-    <div id="fb-root"></div>
-    <div id="disqus_thread"></div>
-<script>
-    var disqus_developer = 1;
-    var disqus_shortname = 'no-new-legacy'; // required: replace example with your forum shortname
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<script>window.twttr = (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0],
-    t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
-
-  t._e = [];
-  t.ready = function(f) {
-    t._e.push(f);
-  };
-
-  return t;
-}(document, "script", "twitter-wjs"));</script>
-
+    
   </div>
 </div>
 
