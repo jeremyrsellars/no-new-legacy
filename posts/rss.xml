@@ -6,10 +6,10 @@
     <link>https://jeremyrsellars.github.io/no-new-legacy</link>
     <pubDate>2018-09-07</pubDate>
     <item>
-      <title>ConcurrentDictionary and the Pit of Success</title>
-      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success</link>
-      <pubDate>2016-10-21</pubDate>
-      <description>When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.</description>
+      <title>Generative Testing Part 1</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-07-generative-testing-introduction</link>
+      <pubDate>2018-09-03</pubDate>
+      <description>Generative testing can help, whether you wish you had 100 monkeys to drive your web application, 10 million example transactions for load testing, or you want to gain confidence in your software without writing hundreds of example scenarios.</description>
     </item>
     <item>
       <title>Domain Identifiers instead of 'Primitive Obsession'</title>
@@ -18,22 +18,22 @@
       <description>In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.</description>
     </item>
     <item>
+      <title>Liskov Substitution Principal and the Pit of Success</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success</link>
+      <pubDate>2016-10-23</pubDate>
+      <description>When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  In part 2 we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.</description>
+    </item>
+    <item>
+      <title>ConcurrentDictionary and the Pit of Success</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success</link>
+      <pubDate>2016-10-21</pubDate>
+      <description>When a class attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  This is part 1 in a series about exploring how a small violation of the Liskov Substitution Principal can lead to unexpected bugs.  ConcurrentDictionary can be accidentally used incorrectly because of a subtle Liskov Substitution Principal violation.</description>
+    </item>
+    <item>
       <title>Functional State Management (in .Net)</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-09-27-functional-state-management-in-net</link>
       <pubDate>2016-09-27</pubDate>
       <description>Bring some sanity to state management in C# by borrowing functional programming concepts.</description>
-    </item>
-    <item>
-      <title>Generative Testing Part 1</title>
-      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-07-generative-testing-introduction</link>
-      <pubDate>2018-09-03</pubDate>
-      <description>Generative testing can help, whether you wish you had 100 monkeys to drive your web application, 10 million example transactions for load testing, or you want to gain confidence in your software without writing hundreds of example scenarios.</description>
-    </item>
-    <item>
-      <title>Liskov Substitution Principal and the Pit of Success</title>
-      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2016-10-23-liskov-substitution-principal-and-the-pit-of-success</link>
-      <pubDate>2016-10-24</pubDate>
-      <description>When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  In part 2 we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.</description>
     </item>
     <item>
       <title>Review 'Software Ninja Class Hierarchy'</title>
