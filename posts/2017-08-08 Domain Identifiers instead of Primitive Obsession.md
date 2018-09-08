@@ -4,7 +4,7 @@ date: "2017-08-08"
 revised: "2018-09-07"
 description: In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.
 tags: ["domain design", "code smell"]
-categories : ["Programming"]
+categories: ["Programming"]
 ---
 
 #### Summary
@@ -13,9 +13,9 @@ In strongly-typed programming paradigms, consider introducing domain identifier 
 
 ### The Problem
 
-> "[Primitive Obsession](http://wiki.c2.com/?PrimitiveObsession)" is using primitive data types to represent domain ideas.
->
-> – From Ward Cunningham's wiki.
+> [Primitive Obsession](http://wiki.c2.com/?PrimitiveObsession) is using primitive data types to represent domain ideas.
+
+ – From Ward Cunningham's wiki.
 
 In strongly-typed paradigms, this can be considered a "code smell".  Of course, there are other paradigms and contexts, but in this post, I'll share an Object-Oriented opinion and assume we are discussing how to use a strongly-typed language, like C# or Java, to model the problem domain in "plain old C# objects."
 
@@ -29,9 +29,11 @@ To be clear, these primitives are essential for building software; the issue is 
 
 ### Quick Example
 
+```c-sharp
     var bodyMassIndex = CalculateBMI(36,   // Is that kg or pounds?
                                      300); // Inches, feet, centimeters?
     // and did I get the parameters in the right order?
+```
 
 (Ha ha, don't even get me started on why BMI isn't a good calculation to judge your health by, or that 98.6 F is a "normal" temperature.)
 
@@ -41,31 +43,39 @@ So, what are some ways of addressing these problems?
 
 You can create classes that indicate in the type signature what domain concept is being represented, in this case, unit of length.
 
+```c-sharp
     public class Length {
       public static Length FromInches(float inches) => new Length(inches * 2.54);
       public static Length FromCentimeters(int cm) => new Length(cm);
       private Length(float cm)// private constructor saves dimension
     }
+```
 
 This gives a nicer function signature.
 
+```c-sharp
     float CalculateBMI(Length height, Weight weight)
+```
 
 If your compiler is equipped with a type checker, you also get some help detecting out-of-order parameters.
 
+```c-sharp
     var weight = Weight.FromPounds(100);
     var height = Length.FromInches(100);
     var bmi = CalculateBMI(weight, height); // doesn't compile! Yeah!
+```
 
 ### Further Up and Further In
 
 So, what if we went further down the road of Object Oriented and make an BMICalculator object instead of a function.
 
+```c-sharp
     public class BMICalculator {
       public int HeightCM;
       public int WeightKG;
       public float CalculateBMI() => // do some math.
     }
+```
 
 Well, it's not pretty, but it works.
 
