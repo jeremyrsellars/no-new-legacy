@@ -1,5 +1,5 @@
 ---
-title: "Generative Testing Part 1"
+title: "Generative Testing Part 1 – Introduction"
 date: "2018-09-03"
 revised: "2018-09-07"
 description: Generative testing can help, whether you wish you had 100 monkeys to drive your web application, 10 million example transactions for load testing, or you want to gain confidence in your software without writing hundreds of example scenarios.
