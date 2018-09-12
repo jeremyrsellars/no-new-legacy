@@ -1,7 +1,7 @@
 ---
 title: "Generative Testing Part 2 – Properties"
 date: "2018-09-11"
-description: 'Properties' are the facts checked by generative testing.  We assert that some properties are true of our programs, and the testing library checks it for us.
+description: "'Properties' are the facts checked by generative testing.  We assert that some properties are true of our programs, and the testing library checks it for us."
 tags: ["testing", "generative testing", "clojure.spec"]
 categories : ["Programming", "Craft"]
 ---
