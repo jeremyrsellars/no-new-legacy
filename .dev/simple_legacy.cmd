@@ -13,6 +13,8 @@ pushd %compiled_path%
 ECHO ===============================
 dir /s /b /a-d|%systemroot%\System32\find.exe /i "faq"
 ECHO ===============================
-call static  "" --port 4000 
+call static  "" --port 4000
+REM --host-address 192.168.2.11
+:: http://127.0.0.1:4000/no-new-legacy/
 popd
 popd
