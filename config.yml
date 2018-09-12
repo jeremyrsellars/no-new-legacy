@@ -24,6 +24,9 @@ plugins:
 asset_pipeline:
   enable: true
 
+src:
+  "use": "ignore"
+
 "theme-bootstrap-2":
   "use": "ignore"
 
