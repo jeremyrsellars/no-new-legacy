@@ -4,9 +4,15 @@
     <title>No New Legacy Code</title>
     <description>No New Legacy Code</description>
     <link>https://jeremyrsellars.github.io/no-new-legacy</link>
-    <pubDate>2018-09-07</pubDate>
+    <pubDate>2018-09-11</pubDate>
     <item>
-      <title>Generative Testing Part 1</title>
+      <title>Generative Testing Part 2 &#x2013; Properties</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-11-generative-testing-properties</link>
+      <pubDate>2018-09-11</pubDate>
+      <description>'Properties' are the facts checked by generative testing.  We assert that some properties are true of our programs, and the testing library checks it for us.</description>
+    </item>
+    <item>
+      <title>Generative Testing Part 1 &#x2013; Introduction</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-07-generative-testing-introduction</link>
       <pubDate>2018-09-03</pubDate>
       <description>Generative testing can help, whether you wish you had 100 monkeys to drive your web application, 10 million example transactions for load testing, or you want to gain confidence in your software without writing hundreds of example scenarios.</description>

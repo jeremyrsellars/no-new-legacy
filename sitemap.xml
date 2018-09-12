@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-11-generative-testing-properties</loc>
+    <lastmod>2018-09-11</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-07-generative-testing-introduction</loc>
-    <lastmod>2018-09-07</lastmod>
+    <lastmod>2018-09-11</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2017-08-08-domain-identifiers-instead-of-primitive-obsession</loc>
-    <lastmod>2018-09-07</lastmod>
+    <lastmod>2018-09-11</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
