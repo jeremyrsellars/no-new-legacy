@@ -20,7 +20,7 @@
   position:relative;
   padding-top:10px;
 }
-.post > h3.title span.date { 
+.post > h3.title span.date {
   position:absolute;
   right:0;
   bottom:50%;
@@ -83,4 +83,9 @@
   margin-left: 3px;
   padding: 0 0 0 33px;
   background: url("../media/feed-icon-28x28.png") no-repeat 0 50%;
+}
+
+.span12 {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
