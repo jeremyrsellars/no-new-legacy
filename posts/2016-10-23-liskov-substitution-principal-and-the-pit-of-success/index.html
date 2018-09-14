@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2016-10-23 Liskov Substitution Principal and the pit of success.md 2016-10-23 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Liskov Substitution Principal and the Pit of Success - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;, #&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064105b8&gt;,">
+    <meta name="description" content="When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  In part 2 we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.">
+    <meta name="date" content="2016-10-23">
+    <meta name="datePublished" content="2016-10-23">
+    <meta name="revised" content="2016-10-24">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-99924503cd6b5260c2e4d13378bed392.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Liskov Substitution Principal and the Pit of Success </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2016-10-23</strong>
+    </div>
+    <div class="content">
+      <p>When a data structure attempts to implement two different, incompatible usage patterns, it can lead to some nasty surprises.  In part 2 we explore how to avoid unexpected integration bugs by following the Liskov Substitution Principal.</p>
+
+<h2 id="toc_0">Recap of Part 1 - ConcurrentDictionary: a Tale of Two Usage Patterns</h2>
+
+<p>In <a href="/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success" title="">part 1</a>, we considered the implicit, semantic assumption (effectively a requirement of how to use the class correctly) in <code>ICollection&lt;T&gt;</code>.  In this case, it assumed that the collection wouldn&#39;t shrink or grow between asking its count and copying its contents.  The ConcurrentDictionary attempted to expose both a thread-safe, mutable Dictionary usage-pattern, but it failed to deliver on <code>ICollection&lt;T&gt;</code>&#39;s semantic assumption.</p>
+
+<p>This is where Barbara Liskov&#39;s notion of &quot;behavioral&quot; subtyping, commonly known as the Liskov Substitution Principal, shines as a principal that helps us avoid this kind of design flaw.</p>
+
+<h1 id="toc_1">Liskov Substitution Principal</h1>
+
+<blockquote>
+<p>Liskov&#39;s notion of a behavioral subtype defines a notion of substitutability for objects; that is, if S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program (e.g. correctness).</p>
+</blockquote>
+
+<p>From <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"  target="_blank" title="" rel="noopener" class="external">Wikipedia</a></p>
+
+<p>Here is my rephrasing of the LSP, which trades a bit of fidelity for ease of remembering:</p>
+
+<blockquote>
+<p>If you call something a (subtype of) duck, it had better look like a duck and quack like one.</p>
+</blockquote>
+
+<p>In other words to make one type substitutable for another - in following the Liskov Substitution Principal:</p>
+
+<ul>
+<li>If you implement an interface, implementations (sub-types) of that interface must honor the semantic assumptions in the interface.</li>
+<li>The same applies for many similar abstractions:
+
+<ul>
+<li>Derived classes</li>
+<li>Action delegates, lambda functions, etc.</li>
+<li>Implementations of <a href="http://clojure.org/reference/protocols"  target="_blank" title="" rel="noopener" class="external">protocols</a></li>
+</ul></li>
+<li>Consider the required usage patterns (semantic assumptions), including:
+
+<ul>
+<li>Required sequence of operations</li>
+<li>Synchronized access and assumed/implicit critical section</li>
+<li>The types of exceptions thrown or caught</li>
+<li>Out-of-band resources (implicit connections and transactions, configuration).
+
+<ul>
+<li>There may be value in making these implicit, but where should these come from? (This sounds like a good follow-up blog post.)</li>
+</ul></li>
+<li>The availability of libraries, Nuget packages, etc.</li>
+<li><a href="https://en.wikipedia.org/wiki/Covariance_and_contravariance_%28computer_science%29"  target="_blank" title="" rel="noopener" class="external">Covariance and contravariance</a>  are checked by the C# compiler, e.g. <code>IEnumerable&lt;out T&gt;</code>, <code>Action&lt;in T&gt;</code>.  In less formal types or dynamic languages, take care to handle these appropriately, e.g. especially around the required keys of a dictionary or the types of the values in a vector, set, or map.</li>
+<li>Pre-conditions and post-conditions should be honored.  In more powerful specification systems, pre-conditions and post-conditions can be tested
+
+<ul>
+<li>Relational specs (like <a href="http://clojure.org/guides/spec#_higher_order_functions"  target="_blank" title="" rel="noopener" class="external">clojure.spec</a> and <a href="https://msdn.microsoft.com/en-us/library/dd264808%28v=vs.110%29.aspx?f=255&MSPPError=-2147217396"  target="_blank" title="" rel="noopener" class="external">.Net Code Contracts</a>) can encode some of these semantic assumptions into run-time/test-time assertions.</li>
+<li><a href="https://en.wikipedia.org/wiki/Dependent_type"  target="_blank" title="" rel="noopener" class="external">Dependent types</a> in languages like <a href="http://www.idris-lang.org/"  target="_blank" title="" rel="noopener" class="external">Idris</a> can encode some of these semantic assumptions into the type definition, thereby enforcing valid usage at compile time, but I imagine this comes with its own set of substitutability constraints.</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h2 id="toc_2">Related SOLID principals</h2>
+
+<h3 id="toc_3">Interface Segregation Principal and Single Responsibility Principal</h3>
+
+<p>It is easier to follow the LSP when there are fewer semantic assumptions and/or fewer members in the interface.  This brings up the Interface Segregation Principal, which leads to more interfaces with fewer members.  The interfaces aren&#39;t so much about the &quot;thing&quot; (entity or noun) as they are the usage patterns.  For example, instead of having a single <code>IAuditRepository</code>, it can be helpful to break it further into:</p>
+
+<ol>
+<li>An interface about recording (inserting) audit records might have a single method.  <code>IAuditRecorder</code></li>
+<li>An interface about retrieving existing audit records for display or analysis might be read-only.  <code>IAuditReader</code></li>
+<li>An interface about exporting audit records to a different system. <code>IAuditExporter</code></li>
+</ol>
+
+<p>In practice, the implementation of these interfaces may be provided by a single <code>class AuditRepository : IAuditRecorder, IAuditReader</code>, but it does not have to be.  By isolating the responsibilities (Single Responsibility Principal) and behavior patterns (Interface Segregation Principal), the system will be more &quot;soft,&quot; flexible, and easy to change.</p>
+
+<h3 id="toc_4">Open-Closed Principal</h3>
+
+<p>The LSP encourages alternative implementations to support the original usage pattern(s).  This allows the dependent parts of the application to be open to extension without requiring modification.  </p>
+
+<p>For out-of-band resources like implicit database connections and transactions, and configuration, it is often okay to support these in the main module (the module on which nothing else depends).  Another common way to support these is with a dependency injection framework or extensibility framework.</p>
+
+<h1 id="toc_5">Concluding Remarks</h1>
+
+<p><a id="pit-of-success"></a></p>
+
+<p>In <a href="/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success#pit-of-success" title="">part 1</a>, I mentioned the &quot;Pit of Success&quot; that endeavors to make it easy to use the api.  Usually, programmers are a part of a team.  Even those who work in a consulting capacity are building something that will eventually be handed off to others for maintenance and possibly extension.  When professionals design software and abstractions, they are making it easy to do &quot;something&quot; - and hopefully that includes &quot;proper usage&quot;.  Professionals follow the principal of least surprise.</p>
+
+<p>Software can become scary to change when it has a history of breaking with a seemingly innocuous change, like substituting one implementation for another.  The Liskov Substitution Principal warns us to consider the implicit requirements, semantic behaviors, and usage patterns.  By using SOLID principals, professionals make it easier to use the abstractions correctly and take away the opportunities for surprise.</p>
+
+<p>Thanks for reading.  Cheers,</p>
+
+<p>Jeremy</p>
+
+<h2 id="toc_6">More on these Subjects</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle"  target="_blank" title="" rel="noopener" class="external">Liskov Substitution Principal</a> - if you call something a duck, it had better look like a duck and quack like one.</li>
+<li><a href="https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29#Overview"  target="_blank" title="" rel="noopener" class="external">SOLID Principals of Object-Oriented Design</a></li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>7</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>4</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#state-management-ref">state-management <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#SOLID-principals-ref">SOLID-principals <span>2</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#Liskov-substitution-principal-ref">Liskov-substitution-principal <span>2</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#abstraction-ref">abstraction <span>2</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success" title="ConcurrentDictionary and the Pit of Success">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next"><a href="/no-new-legacy/posts/2017-08-08-domain-identifiers-instead-of-primitive-obsession" title="Domain Identifiers instead of &#39;Primitive Obsession&#39;">Next &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2016-09-27 Functional State Management in .Net.md 2016-09-27 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Functional State Management (in .Net) - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;, #&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,#&lt;Ruhoh::Views::MasterView:0x0000000643a868&gt;,">
+    <meta name="description" content="Bring some sanity to state management in C# by borrowing functional programming concepts.">
+    <meta name="date" content="2016-09-27">
+    <meta name="datePublished" content="2016-09-27">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-99924503cd6b5260c2e4d13378bed392.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Functional State Management (in .Net) </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2016-09-27</strong>
+    </div>
+    <div class="content">
+      <p>Bring some sanity to state management in C# by borrowing functional programming concepts.  Some interesting ideas from functional programming, Clojure, etc. put in the context of .net.</p>
+
+<h2 id="toc_0">Terms</h2>
+
+<ul>
+<li>Identity = an entity that has a state.  (In C#, this could be a variable, field, or object)</li>
+<li>State = the value at a point in time. (As of the time of this writing, today&#39;s date is 2016-09-26)</li>
+<li>Value = something that doesn&#39;t change. (42, 2016-07-01)</li>
+</ul>
+
+<p>These definitions are inspired by <a href="http://clojure.org/about/state"  target="_blank" rel="noopener" class="external">clojure.org/about/state</a></p>
+
+<h2 id="toc_1">What is state?</h2>
+
+<p>&quot;State&quot; - the implicit parameter(s) to a function (everything it needs in order to calculate the function that isn&#39;t an explicit argument)</p>
+
+<h2 id="toc_2">Status Quo (How is state usually managed in C#)</h2>
+
+<p>Let&#39;s walk through an example of the HR department trying to make team members happy by providing their favorite drinks in the kitchen.  On birthdays and service anniversaries, the team members are invited to the kitchen for a free celebratory beverage.</p>
+
+<p>Over the years, HR introduces new policies, and you never know what they&#39;ll ask for next, so this example goes from easy to hard as more requirements are added.</p>
+
+<h2 id="toc_3">Favorite Drink Project (Initial Scope)</h2>
+
+<p>Surveys are given:</p>
+
+<ul>
+<li>To new hires on their first day.</li>
+<li>Annually (leading up to service anniversaries).</li>
+<li>Following every monthly meeting.</li>
+</ul>
+
+<p>The surveys are processed in batches.</p>
+
+<h3 id="toc_4">Bread and Butter (Assignment)</h3>
+
+<p>The most idiomatic way of managing state in C# is through assignment.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    public Drink FavoriteBeverage =&gt; _favoriteBeverage;
+    public void UpdateFavorites(TeamSurvey survey)
+    {
+        _favoriteBeverage = survey.FavoriteDrink;
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Only one thread may observe or change state at a time, or risk inconsistency.</li>
+<li>The developer must know when it is ok and when it isn&#39;t ok to use/change state.</li>
+</ul>
+
+<h2 id="toc_5">Favorite Drink Project (Phase 2 - support concurrency) -- Interlocked Thread Safe</h2>
+
+<p>Now, let&#39;s say there&#39;s a bunch of autonomous agents in your process all processing the survey results.  Also, let&#39;s say HR didn&#39;t prevent team members from submitting 100 surveys at the same time (to win the X-box drawing).</p>
+
+<p>If you like &quot;lock-free&quot; (and you like to block all your threads at once), you might use Interlocked.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    public Drink FavoriteBeverage
+    {
+        get
+        {
+            Drink d = null;
+            Interlocked.Exchange(ref d, _favoriteBeverage);
+            return d;
+        }    
+    }
+    public void UpdateFavorites(TeamSurvey survey)
+    {
+        Interlocked.Exchange(ref _favoriteBeverage, survey.FavoriteFood);
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Only one piece of state may be changed atomically.  Consistency across multiple values is very difficult.</li>
+<li>Future developers and maintainers must know (and remember) to use <code>Interlocked</code> to use/change state.</li>
+</ul>
+
+<h2 id="toc_6">Favorite Drink Project (Email when in stock) - Lock</h2>
+
+<p>Now, imagine that the requirements change and HR wants to give a complimentary beverage to each team member on birthdays and service anniversaries, but only if the kitchen stocks the beverage.</p>
+
+<p>So now that we need a flag to indicate whether the kitchen keeps the beverage in stock, interlocked may be a bad idea since related variables are not updated atomically.  You can imagine a race condition when a team member submits 50 surveys for Mountain Dew and 50 for some fine Cabernet.  One is usually stocked, and the other isn&#39;t.  The team member might be in for a let-down when the congratulatory email says the wine is available.</p>
+
+<pre><code class="csharp">class TeamMember
+{
+    Drink _favoriteBeverage;
+    bool _favoriteBeverageIsStocked;
+    public Drink FavoriteBeverage
+    {
+        get
+        {
+            lock(_lock)
+            {
+                return _favoriteFood;
+            }
+        }    
+    }
+    public void UpdateFavorites(TeamSurvey survey, Func&lt;Drink,bool&gt; drinkIsStocked)
+    {
+        lock(_lock)
+        {
+            _favoriteFood = survey.FavoriteFood;
+            _favoriteBeverageIsStocked = drinkIsStocked(_favoriteBeverage);
+        }
+    }
+}
+</code></pre>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Deadlocks are possible if there are multiple locks.</li>
+<li>Future developers and maintainers must know (and remember) to use <code>lock</code> to use/change state.</li>
+<li>Future developers and maintainers must know (and remember) not to introduce another lock or risk deadlocks.</li>
+</ul>
+
+<h3 id="toc_7">Summary of the idiomatic (C#)</h3>
+
+<p>We observe in the Favorite Beverages example, that the familiar/idiomatic ways of managing state are tricky.  The field being changed needed to be protected by either <code>Interlocked</code> or <code>lock/Monitor</code> and this led to more verbose code, with state-transitions that are more difficult to test.</p>
+
+<p>Once we start needing to &quot;protect&quot; variables, the code starts getting more verbose and complicated.  It becomes difficult to reason about what is happening.  So in a multi-threaded environment, what do we need to protect?  Only variables that change (mutate) - things that are assigned.</p>
+
+<h2 id="toc_8">Constraints</h2>
+
+<p>Let&#39;s take an interlude and think about programming styles for a moment.</p>
+
+<p>Cristina Lopes and Uncle Bob have similar things to say about programming style being about constraints.</p>
+
+<ul>
+<li><a href="http://www.infoq.com/presentations/style-methodology"  target="_blank" title="" rel="noopener" class="external">Cristina Lopes discusses the idea of using constraints to define styles of programming and architecture</a>.  I saw her speak at StrangeLoop and I loved the way she implemented a bunch of different programming styles (but all in Python).  Here&#39;s her book on the subject: <a href="http://www.amazon.com/Exercises-Programming-Style-Cristina-Videira/dp/1482227371"  target="_blank" title="" rel="noopener" class="external">Excercises in Programming Style</a>.</li>
+<li>Uncle Bob describes the constraints that define <a href="https://blog.8thlight.com/uncle-bob/2012/12/19/Three-Paradigms.html"  target="_blank" title="" rel="noopener" class="external">Three Paradigms</a> of programming (Structured, Object-Oriented, Functional). For example, &quot;All functional programs are dominated by one huge constraint. They don’t use assignment.&quot;</li>
+</ul>
+
+<h3 id="toc_9">Constraining Assignment</h3>
+
+<p>Since assignment makes things harder to reason about and harder to test, perhaps we should avoid it.  But without assignment, how can we change state?</p>
+
+<p>So if we can&#39;t eliminate assignment, can we manage it by using a more predictable idiom?</p>
+
+<h2 id="toc_10">Actor Model (Asynchronous message passing)</h2>
+
+<p>F# offers the <a href="https://msdn.microsoft.com/en-us/visualfsharpdocs/conceptual/control.mailboxprocessor%5B%27msg%5D-class-%5Bfsharp%5D?f=255&MSPPError=-2147217396"  target="_blank" title="" rel="noopener" class="external">Mailbox</a> implementation of the <a href="https://en.wikipedia.org/wiki/Actor_model"  target="_blank" title="" rel="noopener" class="external">Actor Model</a>, where an actor process (or &quot;thread of logic&quot;) is sent messages through the mailbox and processes them one at a time with consistent state transitions.  This message passing is an <em>asynchronous</em> object-oriented approach.  The &quot;constraint&quot; is that you can change state, but only by sending messages.  There is a one-to-one relationship between queues (mailboxes) and actors.</p>
+
+<p>A great opportunity in the actor model is that each type of state transition can be tested.  The new state after processing the message can be seen as a function of the old state and the message (<code>newState = F(previousState,message)</code>).</p>
+
+<p>It should be noted that the actor may be written in more or less &quot;functional&quot; ways - using functional state transitions, or even imperative mutation of its local state (assignment above).  Should the developer choose imperative assignment, the processing model should keep the local state safe, assuming that references to mutable state aren&#39;t leaked through through as a message.  On the other hand, choosing functional state transitions may make the state transitions easier to test and understand.  In strongly-typed languages, making the state a single strongly-typed value allows some state constraints to be enforced by the compiler, thus eliminating classes of bugs.</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>The actor manages its own state.</li>
+<li>Direct assignment isn&#39;t possible - another part of the application sends a message for the actor to process.</li>
+<li>Direct reading isn&#39;t possible - another part of the application sends a message to request state information.</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Testable state transitions.</li>
+<li>All state transitions happen in one place in code and are triggered by messages.</li>
+<li>Future developers and maintainers are guided to safe methods of state transition - the compiler enforces this.</li>
+</ul>
+
+<h2 id="toc_11">Communicating Sequential Processes (Go, Clojure CLR)</h2>
+
+<p>Clojure&#39;s <a href="http://clojure.org/news/2013/06/28/clojure-clore-async-channels"  target="_blank" title="" rel="noopener" class="external">core.async</a> library implements Communicating Sequential Processes and channels.  (Go programming language also implements CSP).</p>
+
+<p>Like the actor model, this is a message-passing model, though the CSP model is synchronous.  The &quot;channels&quot; double as a queue and a synchronization constraint.</p>
+
+<p>I read that it has been shown that Actor-like behavior can be implemented with CSP, and vice versa, (though I am having trouble locating the source of this assertion.)</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Similar to actors</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Similar to actors, plus:</li>
+<li>Fewer OS/VM threads are required</li>
+<li>The structure of CSP-based systems coordinates work, maintaining valid sequences.</li>
+</ul>
+
+<p><a href="https://github.com/clojure/core.async#presentations"  target="_blank" title="" rel="noopener" class="external">More on core.async</a></p>
+
+<h2 id="toc_12">Atoms</h2>
+
+<p>Another way to think about state management is Atoms.  There are variants of AtomicReferences in <a href="https://docs.oracle.com/javase/8/docs/api/?java/util/concurrent/atomic/AtomicReference.html"  target="_blank" title="" rel="noopener" class="external">Java8</a>, <a href="http://api.getakka.net/docs/stable/html/A8A879A7.htm"  target="_blank" title="" rel="noopener" class="external">Akka.net</a>, <a href="https://github.com/clojure/clojure-clr/blob/master/Clojure/Clojure/Lib/AtomicReference.cs"  target="_blank" title="" rel="noopener" class="external">Clojure-Clr</a>, <a href="http://en.cppreference.com/w/cpp/atomic"  target="_blank" title="" rel="noopener" class="external">C++11</a>, and many more.</p>
+
+<p>I was first introduced to atoms through Clojure/ClojureScript.</p>
+
+<p>In object-oriented languages, Atoms are objects that hold state and only change it through a specific set of operations.  For example, an atom usually supports these operations:</p>
+
+<ul>
+<li>Reset - ignore the value that was there before and set the atom to a new value.
+
+<ul>
+<li>In C#, <code>myAge.Update(36)</code>.</li>
+</ul></li>
+<li>Update - take the old value and use it in the calculation of a new value for the atom.
+
+<ul>
+<li>In C#, <code>myAge.Update(old =&gt; old + 1)</code>.</li>
+</ul></li>
+<li>GetValue - get the current value thread-safely
+
+<ul>
+<li>In C#, <code>Console.WriteLine(myAge.Value)</code></li>
+</ul></li>
+</ul>
+
+<p>Remember, &quot;value&quot; means something that doesn&#39;t change.</p>
+
+<p>Constraints:</p>
+
+<ul>
+<li>Direct assignment isn&#39;t possible - the developer must explicitly consider the previous state (or consciously ignore it).</li>
+<li>State transition must be free of side-effects (pure)</li>
+<li>Previous state should not be mutated (which is made explicit by using immutable data types).</li>
+</ul>
+
+<p>Goodness:</p>
+
+<ul>
+<li>Direct assignment isn&#39;t possible - the developer must explicitly consider the previous state (or consciously ignore it).</li>
+<li>Future developers and maintainers are guided to safe methods of state transition.  Some languages can even enforce this at compile-time.</li>
+<li>All state transitions are managed in the same way.  Combine with CSP/Actors for even more goodness.</li>
+</ul>
+
+<p>More about <a href="http://clojure.org/reference/atoms"  target="_blank" title="" rel="noopener" class="external">atoms</a>.</p>
+
+<h3 id="toc_13">Extra Atom Goodness</h3>
+
+<p>Some atom implementations support validators or guards that prevent the atom from violating an assertion.  Here is clojure-clr&#39;s implementation of Update() (or &quot;<code>swap</code>&quot; in <a href="https://github.com/clojure/clojure-clr/blob/5beaf1162ac853795f88bba977b13ba35c1416c5/Clojure/Clojure/Lib/Atom.cs#L80"  target="_blank" title="" rel="noopener" class="external">clojure-clr</a>).</p>
+
+<p>This method takes in a (Clojure) function used to calculate the new value, validates the value, and then notifies any watchers of the new value.</p>
+
+<pre><code class="csharp">        public object swap(IFn f)
+        {
+            for (; ; )
+            {
+                object v = deref();
+                object newv = f.invoke(v);
+                Validate(newv);
+                if (_state.CompareAndSet(v, newv))
+                {
+                    NotifyWatches(v,newv);
+                    return newv;
+                }
+            }
+        }
+</code></pre>
+
+<p>Since it uses compare and set, if another thread updated the value between <code>deref()</code> and <code>CompareAndSet</code>, it may have to loop and recalculate the replacement value as a function of the atom&#39;s &quot;new&quot; current value.</p>
+
+<h3 id="toc_14">Favorite Drink Survey with Atoms</h3>
+
+<pre><code class="csharp">immutable class TeamMember
+{
+    public Drink FavoriteBeverage;
+    public bool FavoriteBeverageIsStocked;
+}
+
+class SurveyProcessor
+{
+    Func&lt;Drink,bool&gt; drinkIsStocked;
+    public void UpdateFavorites(Atom&lt;TeamMember&gt; teamMember, TeamSurvey survey)
+    {
+        teamMember.Update(tm =&gt; WithFavoriteDrink(tm, survey.FavoriteDrink));
+    }
+
+    internal static TeamMember WithFavoriteDrink(TeamMember teamMember, Drink favorite, Func&lt;Drink,bool&gt; drinkIsStocked) =&gt;
+        teamMember
+            .WithFavoriteDrink(favorite)
+            .WithFavoriteBeverageIsStocked(drinkIsStocked(favorite));
+}
+</code></pre>
+
+<p>Wait!  What? C# supports Immutable classes?</p>
+
+<p>Nope, sorry, C# isn&#39;t that cool <a href="https://github.com/dotnet/roslyn/blob/master/docs/designNotes/2015-02-04%20C%23%20Design%20Meeting.md#builder-pattern"  target="_blank" title="" rel="noopener" class="external">yet (see proposed Builder Pattern)</a>.  I&#39;m just trying to paint a picture.</p>
+
+<h3 id="toc_15">Immutability</h3>
+
+<p>Today, there isn&#39;t a great story for immutability in C#.  We have to <a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9"  target="_blank" title="" rel="noopener" class="external">roll our own</a> immutable &quot;values,&quot; but I hope that will change soon.</p>
+
+<p>State of immutability in .Net in 2016:</p>
+
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/system.collections.immutable(v=vs.111"  target="_blank" title="" rel="noopener" class="external">System.Collections.Immutable</a>.aspx)</li>
+<li>Structs with <code>MemberwiseClone</code>
+
+<ul>
+<li>In C#, structs implement <a href="https://msdn.microsoft.com/en-us/library/2dts52z7(v=vs.110"  target="_blank" title="" rel="noopener" class="external">shallow structural equality</a>.aspx) (by default, but you can override the implementation), so you can compare them for equality based on their field values.  See next section for more on structural equality and why it can be a beautiful thing.</li>
+</ul></li>
+<li><a href="https://github.com/jeremyrsellars/Valuable/blob/b4f04dbb2a4aefd5dc356dc9ebe30d66f06b61ba/ConsoleApplication1/MailingAddress.cs#L9"  target="_blank" title="" rel="noopener" class="external">Roll your own</a> immutable &quot;values.&quot;</li>
+</ul>
+
+<h2 id="toc_16">Structural Equality</h2>
+
+<p>Structural equality means considering the structure of the things being compared.  For example, two different mathematical sets are equal if their contents are the same, regardless of the order they happen to be stored in.  For example <code>x = new HashSet{3,1,2}; Assert(x == x.ToSortedSet());</code>.  Also, theoretically, two different objects are structurally equal if they have the same fields, however this may be an expensive operation to compare, so .Net hasn&#39;t usually implemented structural equality for objects.</p>
+
+<h3 id="toc_17">Example</h3>
+
+<pre><code class="csharp">var lookup = new Dictionary&lt;string,SomethingAwesome&gt;();
+lookup[&quot;A&quot;] = new SomethingAwesome();
+lookup[&quot;ABC&quot;.Substring(0,1)] // yields that same instance because of value semantics - two different strings instances representing &quot;A&quot;.
+
+// But, most .Net things don&#39;t have value semantics or structural equality.
+var lookup = new Dictionary&lt;HashSet&lt;string&gt;,SomethingAwesome&gt;();
+lookup[new HashSet&lt;string&gt;{&quot;A&quot;}] = new SomethingAwesome();
+lookup[new HashSet&lt;string&gt;{&quot;ABC&quot;.Substring(0,1)}] // throws exception (not found)
+// because the reference is different and HashSet doesn&#39;t check for structural equality.
+</code></pre>
+
+<p>Clojure&#39;s collections implement structural equality, which is really nice.  This allows sets or dictionaries to be keys in other dictionaries.  Then, whether or not the key is the same reference or a different reference (perhaps from a database), the hash and equality is the same.</p>
+
+<p>In .Net, the situation is not quite as nice, though it can be implemented with <a href="https://msdn.microsoft.com/en-us/library/system.collections.structuralcomparisons(v=vs.110"  target="_blank" title="" rel="noopener" class="external">System.Collections.StructuralComparisons</a>.aspx).</p>
+
+<h2 id="toc_18">Putting it all together</h2>
+
+<p>Functional state transitions where &quot;state&quot; is an immutable &quot;value&quot; offer some nice wins:</p>
+
+<ul>
+<li>No fear of deadlocks as one might expect from multi-lock scenarios like reader/writer locks.</li>
+<li>The &quot;types&quot; guide future maintainers in appropriate ways of transitioning state.  They <em>must</em> follow the established actor/atom approach because otherwise it won&#39;t compile. </li>
+<li>Reduce complexity
+
+<ul>
+<li>By constraining assignment, each state transition is testable - the new state is a function of the old state.</li>
+<li>Only certain state transitions are allowed.  State transitions are constrained so that the new state is a function of the previous state. With imperative mutation, sequence of events is critical.</li>
+<li>Any thread that is using an old copy of the state can continue safely, (no more &quot;InvalidOperationException: An element in the collection has been modified&quot;).  When done, the thread can look up the new state value instantly.</li>
+</ul></li>
+<li>Performance win around critical sections.
+
+<ul>
+<li>As an alternative to reader/writer locks, Atoms allow consistent, non-blocking reads (super-fast).  It doesn&#39;t matter to readers if the writer takes a while to create a new immutable state value because readers are not blocked.</li>
+</ul></li>
+</ul>
+
+<h2 id="toc_19">Conclusion</h2>
+
+<p>Functional approaches to state management, combined with immutable values provide some big wins:</p>
+
+<ul>
+<li>It eliminates whole classes of bugs and maintenance problems</li>
+<li>Reduced complexity - actors and CSP make state transitions explicit.  Fewer things can go wrong with immutable values.</li>
+<li>Easier maintenance - the state is harder to misuse when it is an immutable value stored in an atom.  The type of the state reference (atom, Mailbox, etc.) enforces proper usage.</li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>4</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>7</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#fp-ref">fp <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#atoms-ref">atoms <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#actor-model-ref">actor-model <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#structural-equality-ref">structural-equality <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#communicating-sequential-processes-ref">communicating-sequential-processes <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#state-management-ref">state-management <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#concurrency-ref">concurrency <span>1</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2015-11-01-review-of-software-ninja-class-hierarchy" title="Review &#39;Software Ninja Class Hierarchy&#39;">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next"><a href="/no-new-legacy/posts/2016-10-21-concurrentdictionary-and-the-pit-of-success" title="ConcurrentDictionary and the Pit of Success">Next &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>
