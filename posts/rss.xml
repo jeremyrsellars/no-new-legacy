@@ -6,12 +6,6 @@
     <link>https://jeremyrsellars.github.io/no-new-legacy</link>
     <pubDate>2018-09-14</pubDate>
     <item>
-      <title>Generative Testing Part 3 &#x2013; Generators</title>
-      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-14-generative-testing-generators</link>
-      <pubDate>2018-09-14</pubDate>
-      <description>'Generators' build data used for testing.  We assert that some properties are true of our programs, and the testing library checks those properties hold for many possible inputs.</description>
-    </item>
-    <item>
       <title>Generative Testing Part 2 &#x2013; Properties and Oracles</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-11-generative-testing-properties</link>
       <pubDate>2018-09-11</pubDate>
