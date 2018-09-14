@@ -126,7 +126,7 @@ With unit tests, we may wish to come up with specific examples and test that aga
   [" baa"      "leading space"]
   ["baa "      "trailing space"]])
 
-(deftest Testing_sheep-bleat-with-oracle?
+(deftest Testing_sheep-bleat?_with_oracle
   ; Run the test for each of the examples
   (doseq [[text reason] examples]
     (assert-sheep-bleat text reason)))
