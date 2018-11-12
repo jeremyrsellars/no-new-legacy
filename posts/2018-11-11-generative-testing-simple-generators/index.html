@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2018-11-11 Generative Testing Simple Generators.md 2018-11-11 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Generative Testing Part 3 – Simple Generators - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;, #&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006bd8c78&gt;,">
+    <meta name="description" content="&#39;Generators&#39; build data used for testing.  We assert that some properties are true of our programs, and the testing library checks those properties hold for many possible inputs.">
+    <meta name="date" content="2018-11-11">
+    <meta name="datePublished" content="2018-11-11">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-99924503cd6b5260c2e4d13378bed392.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Generative Testing Part 3 – Simple Generators </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2018-11-11</strong>
+    </div>
+    <div class="content">
+      <p><a href="/no-new-legacy/posts/2018-09-11-generative-testing-properties/" title="">In part 2</a> of this discussion of &quot;generative testing&quot;, we discussed skipped the first word, &quot;generative&quot;, and went straight to &quot;testing.&quot;  This time, we&#39;ll move back to automatic test-case generation.  </p>
+
+<p>Unlike example-based unit tests, we may not already know the &quot;correct&quot; answer for any given input, especially if the data are generated randomly.  If we have an oracle, we can use it to compute the correct answer.  Without the oracle, we can only test facts (properties) that should be true in every case.</p>
+
+<p>From the plain English root verbs of &quot;generative testing&quot;, we can surmise there are at least two actions to explore: &#39;generate&#39; and &#39;test&#39;.  In a nut shell, the actions are:</p>
+
+<ol>
+<li>Generate some test scenarios (data for parameterized tests).
+
+<ul>
+<li>Generate some strings from combinations of &quot;a&quot;, &quot;b&quot;, and &quot;c&quot;.</li>
+</ul></li>
+<li>Run the program with that data, and test that some assumptions (properties) prove true for each scenario.
+
+<ul>
+<li>See if the program produces the same answer as the oracle, or that other properties hold.</li>
+</ul></li>
+</ol>
+
+<h1 id="toc_0">First Generators</h1>
+
+<p>Less talk, more code!</p>
+
+<p>For comparison&#39;s sake, we&#39;ll try 2 libraries in different language ecosystems.</p>
+
+<ul>
+<li>Clojure: <a href="https://clojure.org/guides/spec"  target="_blank" title="" rel="noopener" class="external">Clojure.Spec</a>, which generates data according to a specification using a QuickCheck-inspired property-based testing library called <a href="https://github.com/clojure/test.check"  target="_blank" title="" rel="noopener" class="external">Test.Check</a>.</li>
+<li>C#/.Net: <a href="https://fscheck.github.io/FsCheck"  target="_blank" title="" rel="noopener" class="external">FsCheck</a> is a QuickCheck-inspired property based testing framework implemented in F#.  It has good support for C#, as well.</li>
+</ul>
+
+<p>Let&#39;s demo an integer generator in each library to get a feel for what&#39;s involved.</p>
+
+<h2 id="toc_1">Clojure Test.Check Generators</h2>
+
+<p>We will be using a relatively new part of Clojure, called clojure.spec.  The property-based testing capabilities are powered by a library named <a href="https://github.com/clojure/test.check"  target="_blank" title="" rel="noopener" class="external">test.check</a>.  This article will only call out the distinction when necessary.  Suffice it to say that Clojure.spec is useful for describing data without resorting to strong types.  Most anything that is a description of the data is spec-related, while most things data-generation-related are test.check.</p>
+
+<p>Let&#39;s see how to create and use a generator.  In this case, we&#39;ll ask clojure.spec for an integer generator.  It creates an instance of <code>clojure.test.check.generators.Generator</code>, then generate some examples with it.</p>
+
+<p>Clojure&#39;s REPL program makes it easy to demonstrate small examples.  They idea is that it</p>
+
+<ul>
+<li>Reads an expression that you type after the prompt (like <code>user=&gt;</code>)</li>
+<li>Evaluates the expression, computing the result</li>
+<li>Prints it to the screen</li>
+<li>Loop back to the beginning to read again</li>
+</ul>
+
+<p>So, let&#39;s evaluate a few expressions at the <a href="https://clojure.org/guides/repl/introduction"  target="_blank" title="" rel="noopener" class="external">REPL</a>.  If you want to follow along, you&#39;ll want to <code>require</code> the right namespaces.  See the <code>:require</code> section of <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/d_parameterized_test_with_generators.cljc#L2"  target="_blank" title="" rel="noopener" class="external">sheepish.d-parameterized-test-with-properties</a> or the <a href="https://clojure.org/guides/spec"  target="_blank" title="" rel="noopener" class="external">spec Guide</a>.</p>
+
+<pre><code class="clojure">user=&gt; (s/gen int?)
+#clojure.test.check.generators.Generator{:gen #object[clojure.test.check.generators$such_that$fn__1825 0x633837ae &quot;clojure.test.check.generators$such_that$fn__1825@633837ae&quot;]}
+user=&gt; (gen/generate (s/gen int?))
+123
+user=&gt; (take 3 (repeatedly #(gen/sample (s/gen int?) 3)))
+(60273 -94 -3)
+user=&gt; (gen/sample (s/gen int?) 3))
+(0 -1 1)
+</code></pre>
+
+<p>This generates a new value, or list of values, each time, which already sounds more interesting than example-based unit tests.</p>
+
+<p>So, you may notice that the result from <code>gen/generate</code> seems more surprising than that of <code>gen/sample</code>.  test.check usually starts by generating smaller, more normal values.  We&#39;ll come back to this concept later in the series.</p>
+
+<ol>
+<li>So, one way to make a generator for integer values is <code>(s/gen int?)</code>.  This returns a test.check generator.</li>
+<li>To use that generator, we use <code>(gen/generate (s/gen int?))</code> to generate a value.</li>
+<li>To generate several, we can lazily take a few &quot;bigger&quot; examples from an infinite lazy sequence, or a few simpler examples with <code>gen/sample</code>.</li>
+</ol>
+
+<h2 id="toc_2">FsCheck Generators</h2>
+
+<p>Let&#39;s see how to create and use a generator in FsCheck.  In this case, we&#39;ll ask clojure.spec for a int generator.  It creates a <code>clojure.test.check.generators.Generator</code>, then generate some examples with it.</p>
+
+<p>C#&#39;s type system may help describe what is going on for our type-oriented friends.</p>
+
+<pre><code class="csharp">var size = 42; // ignore for now
+var exampleCount = 3; // Generate 3 random integers.
+Gen&lt;int&gt; generator = Gen.Choose(int.MinValue, int.MaxValue);  // Gen.Choose(low, hi);
+IEnumerable&lt;int&gt; examples = generator.Sample(size, exampleCount);
+</code></pre>
+
+<p>FsCheck generators have a size parameter that can help control the size of data generated, to prevent examples from being too simple to expose errors or too complex to execute quickly, like the size of lists, among other things.  We&#39;ll come back to that later because it&#39;s very dependent on the type of generator being used.  If you can&#39;t wait, here&#39;s the <a href="https://fscheck.github.io/FsCheck/TestData.html#The-size-of-test-data"  target="_blank" title="" rel="noopener" class="external">documentation</a>.</p>
+
+<ol>
+<li>So, one way to make a generator for integer values is <code>var gen = Gen.Choose(low, hi)</code>.  This returns an instance of <code>Gen&lt;int&gt;</code>.</li>
+<li>To generate 3 examples, we use <code>gen.Sample(someSize, 3)</code>.</li>
+</ol>
+
+<h1 id="toc_3">More example generators</h1>
+
+<h2 id="toc_4">Generate null/nil</h2>
+
+<pre><code class="clojure">(s/gen nil?)
+</code></pre>
+
+<p>With FsCheck, you can make a constant generator that always returns the same value that is passed in.</p>
+
+<pre><code class="csharp">Gen.Constant&lt;string&gt;(null);
+</code></pre>
+
+<h2 id="toc_5">Choose between alternatives</h2>
+
+<p>Imagine you have a few values and you want to generate a random choice between those.</p>
+
+<p>The default generate for a set in clojure.spec is a choice of the members.</p>
+
+<pre><code class="clojure">(s/gen #{&quot;bears&quot; &quot;beets&quot; &quot;Battlestar Galactica&quot;})
+</code></pre>
+
+<p>With FsCheck, making the choice between options can be done with a combination of generators, with <code>Gen.OneOf</code>.  In this case, it chooses between &quot;constant&quot; generators which always return the same value.</p>
+
+<pre><code class="csharp">// Equal probability
+Gen&lt;string&gt; gen = Gen.OneOf(
+  Gen.Constant(&quot;bears&quot;),
+  Gen.Constant(&quot;beets&quot;),
+  Gen.Constant(&quot;Battlestar Galactica&quot;));
+// Weighted probability
+Gen&lt;string&gt; wgen = Gen.Frequency(
+  Tuple.Create(2, Gen.Constant(&quot;bears&quot;)),
+  Tuple.Create(1, Gen.Constant(&quot;beets&quot;)),
+  Tuple.Create(1, Gen.Constant(&quot;Battlestar Galactica&quot;)));
+</code></pre>
+
+<p>A lot of the data generation capabilities of these libraries comes from combining simpler generators to create more capable generators.</p>
+
+<h1 id="toc_6">Next time</h1>
+
+<p>Next time, we&#39;ll build some more interesting generators.</p>
+
+<h1 id="toc_7">Source code</h1>
+
+<p>If you want to follow along, the source code is here:</p>
+
+<ul>
+<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/d_parameterized_test_with_generators.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/d_parameterized_test_with_generators.cljc</a></li>
+<li>C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/D_Parameterized_Test_With_Generators.cs"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/D_Parameterized_Test_With_Generators.cs</a></li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>7</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>3</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>2</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>1</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2018-09-11-generative-testing-properties" title="Generative Testing Part 2 – Properties and Oracles">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>
