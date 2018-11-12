@@ -99,4 +99,6 @@ Thumbs.db
 x86/
 *.ide
 
+*.vssettings
+
 *.sublime-workspace
