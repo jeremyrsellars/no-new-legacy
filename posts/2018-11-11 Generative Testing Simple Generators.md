@@ -6,7 +6,7 @@ tags: ["testing", "generative testing", "clojure.spec", "nUnit", "FsCheck"]
 categories : ["Programming", "Craft"]
 ---
 
-[In part 2]({{urls.base_path}}posts/2018-09-11-generative-testing-properties-and-oracles/) of this discussion of "generative testing", we discussed skipped the first word, "generative", and went straight to "testing."  This time, we'll move back to automatic test-case generation.  
+[In part 2]({{urls.base_path}}posts/2018-09-11-generative-testing-properties/) of this discussion of "generative testing", we discussed skipped the first word, "generative", and went straight to "testing."  This time, we'll move back to automatic test-case generation.  
 
 Unlike example-based unit tests, we may not already know the "correct" answer for any given input, especially if the data are generated randomly.  If we have an oracle, we can use it to compute the correct answer.  Without the oracle, we can only test facts (properties) that should be true in every case.
 
