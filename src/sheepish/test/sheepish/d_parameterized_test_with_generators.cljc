@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
             [clojure.string :as string]
-            [clojure.test :refer [deftest testing is]]
+            [clojure.test :as test :refer [deftest testing is]]
             clojure.test.check.generators #_ "This is necessary at runtime"))
 
 ;; Make a generator for int values
@@ -31,6 +31,14 @@
 (s/def ::a-or-b #{"a" "b"})
 (generate-examples ::a-or-b 20)
 
+(generate-examples ;(s/coll-of #{"a" "b"})
+  (s/with-gen string?
+    #(gen/fmap string/join (s/gen (s/coll-of #{"a" "b"}))))
+  20)
+
+(gen/sample
+  (gen/fmap string/join (s/gen (s/coll-of #{"a" "b"})))
+  20)
 
 (defn sheep-bleat?
   [s]
@@ -54,15 +62,16 @@
         "Bleat only contains `a` and `b` characters"))))
 
 (def examples
- [["b"         "Too short"]
-  ["ba"        "Too short"]
-  ["baa"       "2+ 'a' s"]
-  ["baaa"      "2+ 'a' s"]
-  ["baaad"     "invalid 'd'"]
-  [" baa"      "leading space"]
-  ["baa "      "trailing space"]])
+ (->>
+  (gen/sample
+    (gen/fmap string/join (s/gen (s/coll-of #{"a" "b"})))
+    20)
+  distinct
+  (map #(vector % "generated"))))
 
 (deftest Testing_sheep-bleat?_with_properties
   ; Run the test for each of the examples
   (doseq [[text reason] examples]
     (assert-sheep-bleat text reason)))
+
+; (test/test-ns *ns*)

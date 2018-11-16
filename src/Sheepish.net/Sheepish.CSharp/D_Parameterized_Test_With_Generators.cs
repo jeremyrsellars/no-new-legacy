@@ -77,14 +77,12 @@ namespace Sheepish.CSharp
             return examples;
         }
 
-        static Gen<char> ab =>
-            Gen.OneOf(Gen.Constant('a'), Gen.Constant('b'));
-
         static IEnumerable<SheepishTestCase> SheepishExamples =>
-            Gen.NonEmptyListOf(ab)
-                .Select(chars => new string(chars.ToArray()))
-                .Select(text => new SheepishTestCase(text, "random"))
-            .Sample(4, 100);
+            Gen.OneOf(Gen.Constant('a'), Gen.Constant('b'))    // Choose beetween a and b
+                .ListOf()                                      // Make a list like [a, b, a]
+                .Select(chars => new string(chars.ToArray()))  // Convert to string;
+                .Select(text => new SheepishTestCase(text, "random")) // To test case
+                .Sample(4, 100);                               // take 100 examples
 
         public class SheepishTestCase
         {
