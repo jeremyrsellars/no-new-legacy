@@ -7,9 +7,7 @@ tags: ["domain design", "code smell"]
 categories: ["Programming"]
 ---
 
-#### Summary
-
-In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.
+Summary: In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.
 
 ### The Problem
 
