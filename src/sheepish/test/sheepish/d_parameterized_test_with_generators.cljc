@@ -42,7 +42,8 @@
 
 (defn sheep-bleat?
   [s]
-  true) ; obvious bug here!
+  ;(boolean (re-matches #"baa+" s)))
+  false) ; obvious bug here!
 
 (defn assert-sheep-bleat
   [text reason]
@@ -73,5 +74,6 @@
   ; Run the test for each of the examples
   (doseq [[text reason] examples]
     (assert-sheep-bleat text reason)))
+
 
 ; (test/test-ns *ns*)
