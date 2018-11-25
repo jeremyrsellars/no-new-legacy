@@ -89,3 +89,10 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
+
+.before-alternating-table + table tbody td {
+    vertical-align: top;
+}
+.before-alternating-table + table tbody tr:nth-child(even) td {
+    background-color: #fcfcfc;
+}

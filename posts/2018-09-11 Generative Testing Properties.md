@@ -22,6 +22,8 @@ Let's start with a simple test about the contents of a string: does a string loo
 
 So a function signature might look like `bool isSheepBleat(string s){return false;}` or `(defn sheep-bleat? [s] false)`.
 
+<style id='sheep-bleat' class='before-alternating-table'></style>
+
 |Text      |Sheep Bleat?|Reason        |
 |----------|------------|--------------|
 |`b`       |false       |Too short     |
@@ -29,8 +31,8 @@ So a function signature might look like `bool isSheepBleat(string s){return fals
 |`baa`     |true        |2+ `a`s       |
 |`baaa`    |true        |2+ `a`s       |
 |`baaad`   |false       |invalid `d`   |
-|` baa`    |false       |leading space |
-|`baa `    |false       |trailing space|
+|`·baa`    |false       |leading space |
+|`baa·`    |false       |trailing space|
 
 #### Parameterized Tests
 
