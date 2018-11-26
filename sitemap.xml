@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/assets/stylesheets/manifest-960b22b23ba8d69f8af4e30d0ecc7f07.json</loc>
+    <lastmod>2018-11-25</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-11-25-generative-testing-composing-generators</loc>
     <lastmod>2018-11-25</lastmod>
     <priority>0.7</priority>
