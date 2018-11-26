@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Generative Testing Part 2 – Properties and Oracles - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;, #&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005cafaf8&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;, #&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;,#&lt;Ruhoh::Views::MasterView:0x000000064b6f58&gt;,">
     <meta name="description" content="&#39;Properties&#39; are the facts checked by generative testing.  We assert that some properties are true of our programs, and the testing library checks it for us.">
     <meta name="date" content="2018-09-11">
     <meta name="datePublished" content="2018-09-11">
@@ -15,7 +15,7 @@
     <meta name="geo.region" content="US-MO" />
 
 <link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
-<link href='/no-new-legacy/assets/stylesheets/style-99924503cd6b5260c2e4d13378bed392.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
   <!-- http://www.favicon-generator.org/ -->
@@ -115,6 +115,8 @@
 
 <p>So a function signature might look like <code>bool isSheepBleat(string s){return false;}</code> or <code>(defn sheep-bleat? [s] false)</code>.</p>
 
+<style id='sheep-bleat' class='before-alternating-table'></style>
+
 <table><thead>
 <tr>
 <th>Text</th>
@@ -148,12 +150,12 @@
 <td>invalid <code>d</code></td>
 </tr>
 <tr>
-<td><code>baa</code></td>
+<td><code>·baa</code></td>
 <td>false</td>
 <td>leading space</td>
 </tr>
 <tr>
-<td><code>baa</code></td>
+<td><code>baa·</code></td>
 <td>false</td>
 <td>trailing space</td>
 </tr>
@@ -358,25 +360,25 @@
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>7</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>8</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>3</span></a>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>4</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
       <li><i class="icon-tags"></i></li>
       <li>
-        <a href="/no-new-legacy/tags#testing-ref">testing <span>3</span></a>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>3</span></a>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>3</span></a>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>2</span></a>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>3</span></a>
       </li>
     </ul>
     <hr>

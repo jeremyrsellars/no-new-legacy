@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2018-11-25 Generative Testing Composing Generators.md 2018-11-25 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Generative Testing Part 4 – Composing Generators - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,#&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,#&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,#&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,#&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;, #&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,#&lt;Ruhoh::Views::MasterView:0x000000063bea38&gt;,">
+    <meta name="description" content="&#39;Generators&#39; build data used for testing.  We assert that some properties are true of our programs, and the testing library checks those properties hold for many possible inputs.">
+    <meta name="date" content="2018-11-25">
+    <meta name="datePublished" content="2018-11-25">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Generative Testing Part 4 – Composing Generators </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2018-11-25</strong>
+    </div>
+    <div class="content">
+      <p><a href="/no-new-legacy/posts/2018-11-11-generative-testing-simple-generators" title="">In part 3</a> of this discussion of &quot;generative testing&quot;, we started generating a simple types of data, integers and constants, but in order generate data useful for complicated applications, we&#39;ll need to assemble these generators to do much more powerful tasks.</p>
+
+<h1 id="toc_0">Transforming Generators</h1>
+
+<p>We know sheepish has only <code>a</code> and <code>b</code> characters, so let&#39;s take a list of random choices of these and convert them to a string.  In both examples, we&#39;ll build a generator that applies a function to the output of another generator.</p>
+
+<ol>
+<li>Gen1: Choose between <code>a</code> and <code>b</code>.</li>
+<li>Gen2: Make a list of outputs of Gen1.</li>
+<li>Gen3: Apply a function to the output of Gen2 (convert to string).</li>
+<li>Take a sample.</li>
+</ol>
+
+<p>With FsCheck, the Gen class offers extension methods, much like LINQ&#39;s <code>.ToList()</code>, like <code>.NonEmptyListOf()</code>, or just <code>.ListOf()</code> which return a generator that can generate a list.  It is important to note that this returns a generator, not a list.  Also, FsCheck provides its own <code>Gen.Select</code> extension method that creates a generator that applies a function to the output of another generator.  Let&#39;s see how it reads.</p>
+
+<pre><code class="csharp">        static IEnumerable&lt;string&gt; SheepishAlphabetExamples =&gt;
+            Gen.OneOf(Gen.Constant(&#39;a&#39;),
+                      Gen.Constant(&#39;b&#39;))    // Choose beetween a and b
+                .ListOf()                   // Make a list like [a, b, a]
+                                            // Convert to string;
+                .Select(chars =&gt; new string(chars.ToArray()))  
+                                            // To test case
+                .Sample(4, 7);              // take 7 examples
+</code></pre>
+
+<p>In Clojure, to specify a list of a spec, use <code>(s/coll-of some-spec)</code>.  To apply a function to the output of a generator, use <code>(gen/fmap your-fn your-gen)</code>.</p>
+
+<pre><code class="clojure">(gen/sample
+  (gen/fmap string/join
+    (s/gen (s/coll-of #{&quot;a&quot; &quot;b&quot;})))
+  7)
+; produces something like:
+; (&quot;bb&quot; &quot;aaaaaba&quot; &quot;bbbbbaabaaabbbaab&quot; &quot;baaabbab&quot; &quot;abbabaabbbbababbabba&quot; &quot;aaaaabbbbbbbb&quot; &quot;abbaaabababbabb&quot;)
+</code></pre>
+
+<h1 id="toc_1">Combining Generators</h1>
+
+<p>We have already used an example of combining generators:</p>
+
+<pre><code class="csharp">            Gen.OneOf(Gen.Constant(&#39;a&#39;),
+                      Gen.Constant(&#39;b&#39;))    // Choose beetween a and b
+</code></pre>
+
+<p>In order to generate composite data for non-trivial applications, we&#39;ll need to use more powerful generators.  These are built up from single-responsibility functions provided by the libraries.</p>
+
+<p>Here are some generators for testing the card game of &quot;Hearts,&quot; which uses a standard 52-card deck of playing cards.  Some of the generators listed below are built from random card generator, <code>Gen&lt;Card&gt; cardGen</code> in C# or <code>(s/gen ::card)</code>.</p>
+
+<style id='combinators' class='before-alternating-table'></style>
+
+<table><thead>
+<tr>
+<th>Description</th>
+<th>FsCheck (C#)</th>
+<th>Clojure <code>(s/gen …)</code></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>alternative generators</td>
+<td><code>Gen.OneOf(heartGen, queenSpadeGen, cardGen)</code></td>
+<td><code>(s/or :heart ::heart-card</code><br><code>:queen-spade ::queen-of-spades</code><br><code>:zero-point-card ::card)</code></td>
+</tr>
+<tr>
+<td>exact-length list</td>
+<td><code>cardGen.ListOf(5)</code></td>
+<td><code>(s/coll-of ::card :count 5)</code></td>
+</tr>
+<tr>
+<td>homogeneous pair tuple</td>
+<td><code>cardGen.Two()</code></td>
+<td><code>(s/coll-of ::card :count 2)</code></td>
+</tr>
+<tr>
+<td>homogeneous triple tuple</td>
+<td><code>cardGen.Three()</code></td>
+<td><code>(s/coll-of ::card :count 3)</code></td>
+</tr>
+<tr>
+<td>homogeneous quadruple tuple</td>
+<td><code>cardGen.Four()</code></td>
+<td><code>(s/coll-of ::card :count 4)</code></td>
+</tr>
+<tr>
+<td>heterogeneous tuple</td>
+<td><code>Gen.zip(suitGen, rankGen)</code></td>
+<td><code>(s/cat :suit ::suit, :rank ::rank)</code><br><code>(gen/tuple (s/gen int?) (s/gen string?))</code></td>
+</tr>
+<tr>
+<td>element from list</td>
+<td><code>Gen.Elements(new Card[]{exampleCard1,exampleCard2})</code></td>
+<td><code>(gen/elements [example-card-1 example-card-2])</code></td>
+</tr>
+<tr>
+<td>size-driven single</td>
+<td><code>Gen.GrowingElements(new Card[]{exampleCard1,exampleCard2})</code></td>
+<td></td>
+</tr>
+<tr>
+<td>size-driven list</td>
+<td><code>cardGen.ListOf()</code></td>
+<td><code>(s/coll-of ::card)</code><br><code>(s/* ::card)</code></td>
+</tr>
+<tr>
+<td>size-driven list, non-empty</td>
+<td><code>cardGen.NonEmptyListOf(size)</code></td>
+<td><code>(s/coll-of ::card :min-count 1)</code><br><code>(s/+ ::card)</code></td>
+</tr>
+<tr>
+<td>constant</td>
+<td><code>Gen.Constant(queenOfSpades)</code></td>
+<td><code>#{some-value}</code></td>
+</tr>
+<tr>
+<td>satisfying constraint</td>
+<td><code>cardGen.Where(c =&gt; c.Suit == Suit.Hearts)</code></td>
+<td><code>(s/and ::card is-heart?)</code></td>
+</tr>
+<tr>
+<td>satisfying constraint<br>(without throwing)</td>
+<td><code>cardGen.Where(c =&gt; c.Suit == Suit.Hearts</code><br><code>&amp;&amp; c.Suit == Suit.Clubs)</code><br><code>// impossible or improbable</code></td>
+<td><code>Use a custom generator</code></td>
+</tr>
+<tr>
+<td>random permutations</td>
+<td><code>Gen.Shuffle(new Card[]{exampleCard1,exampleCard2})</code></td>
+<td><code>(gen/shuffle xs)</code></td>
+</tr>
+</tbody></table>
+
+<p>This list is a good place to start along the path to transforming and combining generators.  Further description of the above, from the FsCheck perspective, can be found in <a href="https://fscheck.github.io/FsCheck/TestData.html#Useful-Generator-Combinators"  target="_blank" title="" rel="noopener" class="external">FsCheck Test Data: Useful-Generator-Combinators</a>.</p>
+
+<p>You may note several similarities and differences between the .Net and Clojure versions.</p>
+
+<ul>
+<li>List types: <code>Tuple&lt;T1,...&gt;</code> and <code>IList&lt;T&gt;</code> (.Net) vs. arbitrary types of sequence (Clojure)
+
+<ul>
+<li>The FsCheck library sometimes use .Net&#39;s <code>System.Tuple</code> type, which provide constant <code>O(1)</code> access time, or <code>IList&lt;T&gt;</code> for variable-length/longer lists.  The type of the data structure is encoded into the type signature of the extension methods like <code>ListOf</code>, <code>Two</code>, <code>Three</code>, <code>Four</code>.</li>
+<li>In contrast, Clojure specs may specify the type of container, with different characteristics (like vectors, lists, and sets).  Clojure usually mimics Tuples with vectors, which also offer constant time access in these use cases.  In this example, a vector is generated: <code>(s/coll-of int? :into [])</code>.  In fact, the default collection type for <code>s/coll-of</code> is a vector, so <code>:into []</code> is optional.  But, it could just as easily be generated as a sorted-set with <code>:into (sorted-set)</code>.  In FsCheck, this would require two steps: generating a collection, then transforming the result type with <code>.Select</code>, as in <code>intGen.ListOf(5).Select(lst =&gt; new SortedSet&lt;int&gt;(lst))</code>.  For more, optional parameters of <a href="https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/coll-of"  target="_blank" title="" rel="noopener" class="external"><code>s/coll-of</code></a>, see <a href="https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every"  target="_blank" title="" rel="noopener" class="external"><code>s/every</code></a> for a detailed description of the options for how to customize collection-data generation.</li>
+</ul></li>
+<li>Labeled tuples and conformance (Clojure spec) vs Anonymous tuples (.Net): To generate a random value from 2 generators, FsCheck&#39;s <code>Gen.OneOf</code> takes 2 parameters, while Clojure spec <code>s/or</code> takes 4 – twice as many parameters.  This is also true of homogeneous tuples with <code>s/cat</code>.  Both produce similar unlabeled data, but in Clojure the values can be run &#39;backwards&#39; through a spec to produce labeled data.  This is called conformance.
+
+<ul>
+<li>Since FsCheck uses <code>System.Tuple</code>, which doesn&#39;t support &quot;naming&quot; the ordinals, it uses anonymous labels like <code>tuple.Item1</code>, <code>.Item2</code>, etc. so the semantic meaning of <code>Item2</code> may not be obvious in the code or during runtime introspection.  Often the generic type serves to label the data, but when a tuple is used to model <code>float heightCm</code> and <code>float weightKg</code>, this can be confusing, since the use is embedded in the type.  Consider using <a href="/no-new-legacy/posts/2017-08-08-domain-identifiers-instead-of-primitive-obsession" title="">Domain Identifiers</a> for some better ways to model with types.</li>
+<li>The Clojure &quot;alternative&quot; generator, i.e. <code>(s/or :a-number int?, :a-string string?)</code>, where a single value is returned that matches one spec <code>1</code> or another <code>&quot;a&quot;</code>. The &quot;extra&quot; parameters provide labels for conforming a value, a process similar to destructuring.  This is out of scope for data generation (and this blog), but can sure come in handy to switch behavior based on which spec matches.</li>
+<li>For the heterogeneous tuple example, in <code>(s/cat :a-number int?, :a-string string?)</code> where a vector tuple like <code>[1 &quot;a&quot;]</code> is returned containing a value matching each spec in order, the &quot;extra&quot; parameters also provide labels when conforming a value for destructuring or runtime introspection.</li>
+</ul></li>
+</ul>
+
+<h1 id="toc_2">Pulling it all together</h1>
+
+<h2 id="toc_3">C#</h2>
+
+<p>Now, let&#39;s build a card generator.  A card will be modeled with a type and enums in C# (like <code>new Card{Suit=Suit.Diamonds, Rank=Rank.Ten})</code>:</p>
+
+<pre><code class="csharp">    public struct Card
+    {
+        public Suit Suit;
+        public Rank Rank;
+    }
+    public enum Suit
+    {
+        Clubs, Hearts, Spades, Diamonds
+    }
+    public enum Rank
+    {
+        King, Queen, Jack, Ten, Nine, Eight, Seven, Six, Five, Four, Three, Two, Ace
+    }
+</code></pre>
+
+<p>Generate example cards by defining and combining some generators with some of the functions described above.  <code>.Elements</code> chooses from a list of suits or ranks.  <code>Gen.zip</code> and <code>.Select</code> are used to create a Tuple, and then map a Tuple to a card.</p>
+
+<pre><code class="csharp">    class E_Hearts_Card_Generators
+    {
+        static Gen&lt;Suit&gt; suitGen =
+            Gen.Elements((Suit[])Enum.GetValues(typeof(Suit)));
+        static Gen&lt;Rank&gt; rankGen =
+            Gen.Elements((Rank[])Enum.GetValues(typeof(Rank)));
+
+        static Gen&lt;Card&gt; heartGen =
+            rankGen
+            .Select(rank =&gt; new Card { Rank = rank, Suit = Suit.Hearts });
+
+        static Gen&lt;Card&gt; cardGen =
+            Gen.zip(rankGen, suitGen)
+            .Select(c =&gt; new Card { Rank = c.Item1, Suit = c.Item2 });
+
+        static IReadOnlyList&lt;Card&gt; CreateRandomCards(int count) =&gt;
+            cardGen.Sample(100, count);
+    }
+</code></pre>
+
+<h3 id="toc_4">Clojure</h3>
+
+<p>In Clojure, we might model a card as map and keywords in Clojure, like <code>{:suit :diamonds, :rank :ten}</code>.</p>
+
+<p>These specs might similarly describe card data.</p>
+
+<pre><code class="clojure">(s/def ::suit #{:clubs :hearts :spades :diamonds})
+(s/def ::rank #{:king :queen :jack :ten :nine :eight :seven :six :five :four :three :two :ace})
+(s/def ::card (s/keys :req-un [::suit ::rank]))
+</code></pre>
+
+<p>Let&#39;s see them in action:</p>
+
+<pre><code class="clojure">(defn generate-examples
+  &quot;Simple function to generate some example values that satisfy a spec.&quot;
+  [spec example-count]
+  (let [generator (s/gen spec)
+        generate-example #(gen/generate generator)
+        examples (repeatedly generate-example)]
+    (take example-count examples)))
+
+; user=&gt; (generate-examples ::suit 8)   ; Generate 8 suits
+(:clubs :diamonds :hearts :clubs :clubs :diamonds :diamonds :hearts)
+; user=&gt; (generate-examples ::rank 8)   ; 8 ranks
+(:five :nine :six :three :seven :nine :ace :six)
+; user=&gt; (generate-examples ::card 3)   ; 3 cards
+({:suit :diamonds, :rank :ten}
+ {:suit :hearts,   :rank :three}
+ {:suit :diamonds, :rank :queen})
+</code></pre>
+
+<h1 id="toc_5">Back to the sheep pen</h1>
+
+<p>So, to generate more tricky sheepish and sheepish-like data, we may want to combine several generators.</p>
+
+<p>Next time, we&#39;ll compose better sheepish-like strings in an attempt to trick the <code>sheep-bleat?</code> function.</p>
+
+<h1 id="toc_6">Source code</h1>
+
+<p>If you want to follow along, the source code is here:</p>
+
+<ul>
+<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/e_hearts_card_generators.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/e_hearts_card_generators.cljc</a></li>
+<li>C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/E_Example_Generators.cs"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/E_Example_Generators.cs</a></li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>8</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>4</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>4</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>4</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>4</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>3</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>2</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2018-11-11-generative-testing-simple-generators" title="Generative Testing Part 3 – Simple Generators">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>

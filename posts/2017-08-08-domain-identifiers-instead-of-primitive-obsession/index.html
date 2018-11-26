@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Domain Identifiers instead of &#39;Primitive Obsession&#39; - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000006646210&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006646210&gt;, #&lt;Ruhoh::Views::MasterView:0x00000006646210&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000068b3318&gt;,#&lt;Ruhoh::Views::MasterView:0x000000068b3318&gt;, #&lt;Ruhoh::Views::MasterView:0x000000068b3318&gt;,">
     <meta name="description" content="In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.">
     <meta name="date" content="2017-08-08">
     <meta name="datePublished" content="2017-08-08">
@@ -15,7 +15,7 @@
     <meta name="geo.region" content="US-MO" />
 
 <link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
-<link href='/no-new-legacy/assets/stylesheets/style-99924503cd6b5260c2e4d13378bed392.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
   <!-- http://www.favicon-generator.org/ -->
@@ -98,11 +98,9 @@
       <span>2017-08-08</strong>
     </div>
     <div class="content">
-      <h4 id="toc_0">Summary</h4>
+      <p>Summary: In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.</p>
 
-<p>In strongly-typed programming paradigms, consider introducing domain identifier types instead of using primitives like strings.</p>
-
-<h3 id="toc_1">The Problem</h3>
+<h3 id="toc_0">The Problem</h3>
 
 <blockquote>
 <p><a href="http://wiki.c2.com/?PrimitiveObsession"  target="_blank" title="" rel="noopener" class="external">Primitive Obsession</a> is using primitive data types to represent domain ideas.</p>
@@ -114,13 +112,13 @@
 
 <p>There are some reasons to consider avoiding the use of primitive types, but first, what&#39;s a primitive type?</p>
 
-<h3 id="toc_2">What is a primitive type?</h3>
+<h3 id="toc_1">What is a primitive type?</h3>
 
 <p>A &quot;primitive&quot; is one of the building blocks your language provides.  This is mostly just the &quot;language&quot; (C#, Java), not the libraries, or even the standard library.  So primitives are things like <code>Integer</code>, <code>long</code>, <code>float</code>, <code>string</code>, etc..  Data structures, like maps and sets from a library might be called &quot;primitives&quot; for the purpose of this discussion if they are used to <em>represent</em> a domain object (instead of using a class).</p>
 
 <p>To be clear, these primitives are essential for building software; the issue is using them to describe or model the domain or API.</p>
 
-<h3 id="toc_3">Quick Example</h3>
+<h3 id="toc_2">Quick Example</h3>
 
 <pre><code class="c-sharp">    var bodyMassIndex = CalculateBMI(36,   // Is that kg or pounds?
                                      300); // Inches, feet, centimeters?
@@ -154,7 +152,7 @@
     var bmi = CalculateBMI(weight, height); // doesn&#39;t compile! Yeah!
 </code></pre>
 
-<h3 id="toc_4">Further Up and Further In</h3>
+<h3 id="toc_3">Further Up and Further In</h3>
 
 <p>So, what if we went further down the road of Object Oriented and make an BMICalculator object instead of a function.</p>
 
@@ -167,7 +165,7 @@
 
 <p>Well, it&#39;s not pretty, but it works.</p>
 
-<h3 id="toc_5">A Common Example: Entity Identifiers</h3>
+<h3 id="toc_4">A Common Example: Entity Identifiers</h3>
 
 <p>One of the consistent violators that I see quite often is the use of a primitive to identify an entity in the business model.  For example, a string like <code>Domain.Name=&quot;example.com&quot;</code>.  By using a primitive, you are left with the primitive type&#39;s equality semantics, hashcode calculation, and string representation.  So, while internet treats <code>&quot;example.com&quot; == &quot;EXAMPLE.COM&quot;</code> as the same, <code>System.String</code> does not.</p>
 
@@ -181,7 +179,7 @@
 
 <p>So, this is can become a big issue.</p>
 
-<h2 id="toc_6">Identity</h2>
+<h2 id="toc_5">Identity</h2>
 
 <p>Here&#39;s a class that can make it easy to make Domain Identifiers instead of having &quot;<a href="http://wiki.c2.com/?PrimitiveObsession"  target="_blank" title="" rel="noopener" class="external">Primitive Obsession</a>&quot;</p>
 
@@ -272,7 +270,7 @@
 <li><p>The inheritor gets to pick the name of the members (identity is protected, not public).</p></li>
 </ol>
 
-<h1 id="toc_7">Full Source</h1>
+<h1 id="toc_6">Full Source</h1>
 
 <p><a id="identity.cs"/></p>
 
@@ -367,7 +365,7 @@
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>7</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>8</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
