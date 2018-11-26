@@ -31,14 +31,14 @@ namespace Sheepish.CSharp
             Card exampleCard2 = new Card { Rank = Rank.Two };
             Gen<Card> queenSpadeGen = Gen.Constant(Cards.QueenOfSpades);
             Gen<Card> trickyCardGen = Gen.OneOf(heartGen, queenSpadeGen, cardGen);
-            Gen<IReadOnlyList<Card>> handGen = cardGen.ListOf(5);
+            Gen<IList<Card>> handGen = cardGen.ListOf(5);
             Gen<Tuple<Card, Card>> twoGen = cardGen.Two();
             Gen<Tuple<Card, Card, Card>> threeGen = cardGen.Three();
             Gen<Tuple<Card, Card, Card, Card>> fourGen = cardGen.Four();
             Gen<Card> exampleCardGen = Gen.Elements(new Card[] { exampleCard1, exampleCard2 });
             Gen<Card> exampleCardGen2 = Gen.GrowingElements(new Card[] { exampleCard1, exampleCard2 });
-            Gen<IReadOnlyList<Card>> cardsGen = cardGen.ListOf(size);
-            Gen<IReadOnlyList<Card>> wildGen = cardGen.NonEmptyListOf();
+            Gen<IList<Card>> cardsGen = cardGen.ListOf(size);
+            Gen<IList<Card>> wildGen = cardGen.NonEmptyListOf();
             Gen<Card> heartFilterGen = cardGen.Where(c => c.Suit == Suit.Hearts);
             Gen<Card> twoSuitedCardGen = cardGen.Where(c => c.Suit == Suit.Hearts && c.Suit == Suit.Clubs); // impossible or improbable
             Gen<Card[]> shuffledExampleCards = Gen.Shuffle(new Card[] { exampleCard1, exampleCard2 });
@@ -59,13 +59,22 @@ namespace Sheepish.CSharp
 
         static IReadOnlyList<Card> CreateRandomCards(int count) =>
             cardGen.Sample(100, count);
+
+        //public class CardGenerators {
+        //    public static Arbitrary<Suit> Suit() => Arb.From(suitGen);
+        //    public static Arbitrary<Rank> Rank() => Arb.From(rankGen);
+        //    public static Arbitrary<Card> Card() => Arb.From(cardGen);
+        //}
+
+        //// This can be registered for FsCheck with:
+        //static Array registrations = new[] { Arb.Register<CardGenerators>() };
     }
 
     public struct Card
     {
         public Suit Suit;
         public Rank Rank;
-        public override string ToString() => "{Rank} of {Suit}";
+        public override string ToString() => $"{Rank} of {Suit}";
     }
     public static class Cards
     {

@@ -65,7 +65,7 @@ Here are some generators for testing the card game of "Hearts," which uses a sta
 |homogeneous quadruple tuple| `cardGen.Four()`| `(s/coll-of ::card :count 4)`|
 |heterogeneous tuple| `Gen.zip(suitGen, rankGen)`|`(s/cat :suit ::suit, :rank ::rank)`<br>`(gen/tuple (s/gen int?) (s/gen string?))`|
 |element from list| `Gen.Elements(new Card[]{exampleCard1,exampleCard2})`| `(gen/elements [example-card-1 example-card-2])`|
-|size-driven single| `Gen.GrowingElements(new Card[]{exampleCard1,exampleCard2})`| ``|
+|size-driven single| `Gen.GrowingElements(new Card[]{exampleCard1,exampleCard2})`| |
 |size-driven list| `cardGen.ListOf()`| `(s/coll-of ::card)`<br>`(s/* ::card)`|
 |size-driven list, non-empty| `cardGen.NonEmptyListOf(size)`| `(s/coll-of ::card :min-count 1)`<br>`(s/+ ::card)`|
 |constant| `Gen.Constant(queenOfSpades)`| `#{some-value}`|
@@ -73,13 +73,14 @@ Here are some generators for testing the card game of "Hearts," which uses a sta
 |satisfying constraint<br>(without throwing)| `cardGen.Where(c => c.Suit == Suit.Hearts`<br>`                  && c.Suit == Suit.Clubs)`<br>`// impossible or improbable`| `Use a custom generator`|
 |random permutations| `Gen.Shuffle(new Card[]{exampleCard1,exampleCard2})`| `(gen/shuffle xs)`|
 
+
 This list is a good place to start along the path to transforming and combining generators.  Further description of the above, from the FsCheck perspective, can be found in [FsCheck Test Data: Useful-Generator-Combinators](https://fscheck.github.io/FsCheck/TestData.html#Useful-Generator-Combinators).
 
 You may note several similarities and differences between the .Net and Clojure versions.
 
 * List types: `Tuple<T1,...>` and `IList<T>` (.Net) vs. arbitrary types of sequence (Clojure)
 	* The FsCheck library sometimes use .Net's `System.Tuple` type, which provide constant `O(1)` access time, or `IList<T>` for variable-length/longer lists.  The type of the data structure is encoded into the type signature of the extension methods like `ListOf`, `Two`, `Three`, `Four`.
-	* In contrast, Clojure specs may specify the type of container, with different characteristics (like vectors, lists, and sets).  Clojure usually mimics Tuples with vectors, which also offer constant time access in these use cases.  In this example, a vector is generated: `(s/coll-of int? :into [])`.  In fact, the default collection type for `s/coll-of` is a vector, so `:into []` is optional.  But, it could just as easily be generated as a sorted-set with `:into (sorted-set)`.  In FsCheck, this would require two steps: generating a collection, then transforming the result type with `.Select`, as in `intGen.ListOf(5).Select(lst => new SortedSet<int>(lst))`.  For more, options to [`s/coll-of`](https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/coll-of), see [`s/every`](https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every) for a detailed description of the options for how to customize collection-data generation.
+	* In contrast, Clojure specs may specify the type of container, with different characteristics (like vectors, lists, and sets).  Clojure usually mimics Tuples with vectors, which also offer constant time access in these use cases.  In this example, a vector is generated: `(s/coll-of int? :into [])`.  In fact, the default collection type for `s/coll-of` is a vector, so `:into []` is optional.  But, it could just as easily be generated as a sorted-set with `:into (sorted-set)`.  In FsCheck, this would require two steps: generating a collection, then transforming the result type with `.Select`, as in `intGen.ListOf(5).Select(lst => new SortedSet<int>(lst))`.  For more, optional parameters of [`s/coll-of`](https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/coll-of), see [`s/every`](https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every) for a detailed description of the options for how to customize collection-data generation.
 * Labeled tuples and conformance (Clojure spec) vs Anonymous tuples (.Net): To generate a random value from 2 generators, FsCheck's `Gen.OneOf` takes 2 parameters, while Clojure spec `s/or` takes 4 – twice as many parameters.  This is also true of homogeneous tuples with `s/cat`.  Both produce similar unlabeled data, but in Clojure the values can be run 'backwards' through a spec to produce labeled data.  This is called conformance.
     * Since FsCheck uses `System.Tuple`, which doesn't support "naming" the ordinals, it uses anonymous labels like `tuple.Item1`, `.Item2`, etc. so the semantic meaning of `Item2` may not be obvious in the code or during runtime introspection.  Often the generic type serves to label the data, but when a tuple is used to model `float heightCm` and `float weightKg`, this can be confusing, since the use is embedded in the type.  Consider using [Domain Identifiers]({{urls.base_path}}posts/2017-08-08-domain-identifiers-instead-of-primitive-obsession) for some better ways to model with types.
     * The Clojure "alternative" generator, i.e. `(s/or :a-number int?, :a-string string?)`, where a single value is returned that matches one spec `1` or another `"a"`. The "extra" parameters provide labels for conforming a value, a process similar to destructuring.  This is out of scope for data generation (and this blog), but can sure come in handy to switch behavior based on which spec matches.
@@ -87,7 +88,8 @@ You may note several similarities and differences between the .Net and Clojure v
 
 # Pulling it all together
 
-### C#
+C#
+---------
 
 Now, let's build a card generator.  A card will be modeled with a type and enums in C# (like `new Card{Suit=Suit.Diamonds, Rank=Rank.Ten})`:
 
@@ -163,3 +165,15 @@ Let's see them in action:
  {:suit :diamonds, :rank :queen})
 ```
 
+# Back to the sheep pen
+
+So, to generate more tricky sheepish and sheepish-like data, we may want to combine several generators.
+
+Next time, we'll compose better sheepish-like strings in an attempt to trick the `sheep-bleat?` function.
+
+# Source code
+
+If you want to follow along, the source code is here:
+
+* Clojure: https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/e_hearts_card_generators.cljc
+* C#: https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/E_Example_Generators.cs
