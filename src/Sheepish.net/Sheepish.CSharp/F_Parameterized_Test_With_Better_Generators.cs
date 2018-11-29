@@ -8,6 +8,7 @@ namespace Sheepish.CSharp
 {
     [TestFixture]
     [TestFixtureSource(nameof(SheepishExamples))]
+    [TestFixtureSource(nameof(SheepishExamples2))]
     public class F_Parameterized_Test_With_Better_Generators
     {
         readonly SheepishTestCase testCase;
@@ -99,6 +100,72 @@ namespace Sheepish.CSharp
                          StringOfA))
             .Select(t => t.Item1.Item1 + t.Item1.Item2 + t.Item1.Item3
                        + t.Item2.Item1 + t.Item2.Item2 + t.Item2.Item3)  // That's confusing!
+            .Select(text => new SheepishTestCase(text, "random")) // To test case
+            .Sample(4, 100);                                      // take 100 examples
+
+        /// <summary>
+        /// A class to represent a "better" sheepish generation.
+        /// </summary>
+        public class SheepishParts
+        {
+            // FsCheck can use reflection to find such a constructor,
+            // https://github.com/fscheck/FsCheck/blob/8fd6dd7/src/FsCheck/Reflect.fs#L21-L27
+            public SheepishParts(UsuallyEmptyString S0, StringOfBs B1, UsuallyEmptyString S2, StringOfAs A3, UsuallyEmptyString S4, StringOfAs A5)
+            {
+                this.S0 = S0;
+                this.B1 = B1;
+                this.S2 = S2;
+                this.A3 = A3;
+                this.S4 = S4;
+                this.A5 = A5;
+            }
+            public UsuallyEmptyString S0 { get; }
+            public StringOfBs B1 { get; }
+            public UsuallyEmptyString S2 { get; }
+            public StringOfAs A3 { get; }
+            public UsuallyEmptyString S4 { get; }
+            public StringOfAs A5 { get; }
+
+            public override string ToString() => "" + S0 + B1 + S2 + A3 + S4 + A5;
+
+            public class UsuallyEmptyString : Wrapper<string> { }
+            public class StringOfAs : Wrapper<string> { }
+            public class StringOfBs : Wrapper<string> { }
+        }
+
+        public class SheepishPartsGenerators
+        {
+            public static Arbitrary<T> FromStringGen<T>(Gen<string> gen)
+                where T : Wrapper<string>, new() =>
+                gen.Select(s => new T{ Value = s }).ToArbitrary();
+            public static Arbitrary<SheepishParts.UsuallyEmptyString> UsuallyEmptyString() => FromStringGen<SheepishParts.UsuallyEmptyString>(F_Parameterized_Test_With_Better_Generators.UsuallyEmptyString);
+            public static Arbitrary<SheepishParts.StringOfAs> StringOfAs() => FromStringGen<SheepishParts.StringOfAs>(F_Parameterized_Test_With_Better_Generators.StringOfA);
+            public static Arbitrary<SheepishParts.StringOfBs> StringOfBs() => FromStringGen<SheepishParts.StringOfBs>(F_Parameterized_Test_With_Better_Generators.StringOfB);
+        }
+
+        public class Wrapper<T>
+        {
+            public Wrapper() => Value = default(T);
+            public Wrapper(T value) => Value = value;
+            public T Value;
+            public override string ToString() => Value?.ToString();
+        }
+
+        static F_Parameterized_Test_With_Better_Generators()
+        {
+            try
+            {
+                Arb.Register<SheepishPartsGenerators>();
+            }
+            catch(Exception e)
+            {
+                e.ToString();
+            }
+        }
+
+        static IEnumerable<SheepishTestCase> SheepishExamples2 =>
+            Arb.Default.Derive<SheepishParts>().Generator
+            .Select(parts => parts.ToString())
             .Select(text => new SheepishTestCase(text, "random")) // To test case
             .Sample(4, 100);                                      // take 100 examples
 
