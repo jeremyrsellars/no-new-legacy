@@ -22,7 +22,7 @@ namespace Sheepish.CSharp
         public void ToStringContainsRank() =>
             StringAssert.Contains(card.Rank.ToString(), card.ToString());
 
-        static IEnumerable<Card> ExampleCards => CreateRandomCards(52);
+        static IEnumerable<Card> ExampleCards => CreateRandomCards(5);
 
         void Examples()
         {
