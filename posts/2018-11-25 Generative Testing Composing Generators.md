@@ -132,7 +132,8 @@ Generate example cards by defining and combining some generators with some of th
     }
 ```
 
-### Clojure
+Clojure
+---------
 
 In Clojure, we might model a card as map and keywords in Clojure, like `{:suit :diamonds, :rank :ten}`.
 

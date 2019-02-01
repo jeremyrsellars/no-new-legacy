@@ -6,7 +6,7 @@ tags: ["testing", "generative testing", "clojure.spec", "nUnit", "FsCheck"]
 categories : ["Programming", "Craft"]
 ---
 
-[In part 2]({{urls.base_path}}posts/2018-09-11-generative-testing-properties/) of this discussion of "generative testing", we discussed skipped the first word, "generative", and went straight to "testing."  This time, we'll move back to automatic test-case generation.  
+[In part 2]({{urls.base_path}}posts/2018-09-11-generative-testing-properties/) of this discussion of "generative testing", we skipped the first word, "generative", and went straight to "testing."  This time, we'll move back to automatic test-case generation.  
 
 Unlike example-based unit tests, we may not already know the "correct" answer for any given input, especially if the data are generated randomly.  If we have an oracle, we can use it to compute the correct answer.  Without the oracle, we can only test facts (properties) that should be true in every case.
 
@@ -47,7 +47,7 @@ user=> (s/gen int?)
 #clojure.test.check.generators.Generator{:gen #object[clojure.test.check.generators$such_that$fn__1825 0x633837ae "clojure.test.check.generators$such_that$fn__1825@633837ae"]}
 user=> (gen/generate (s/gen int?))
 123
-user=> (take 3 (repeatedly #(gen/sample (s/gen int?) 3)))
+user=> (take 3 (repeatedly #(gen/generate (s/gen int?) 3)))
 (60273 -94 -3)
 user=> (gen/sample (s/gen int?) 3))
 (0 -1 1)
@@ -55,7 +55,7 @@ user=> (gen/sample (s/gen int?) 3))
 
 This generates a new value, or list of values, each time, which already sounds more interesting than example-based unit tests.
 
-So, you may notice that the result from `gen/generate` seems more surprising than that of `gen/sample`.  test.check usually starts by generating smaller, more normal values.  We'll come back to this concept later in the series.
+So, you may notice that the result from `gen/generate` seems more surprising than that of `gen/sample`.  test.check usually starts by generating smaller, more normal values.  We'll come back to this concept of `size` later in the series.
 
 1. So, one way to make a generator for integer values is `(s/gen int?)`.  This returns a test.check generator.
 2. To use that generator, we use `(gen/generate (s/gen int?))` to generate a value.
@@ -63,7 +63,7 @@ So, you may notice that the result from `gen/generate` seems more surprising tha
 
 ## FsCheck Generators
 
-Let's see how to create and use a generator in FsCheck.  In this case, we'll ask clojure.spec for a int generator.  It creates a `clojure.test.check.generators.Generator`, then generate some examples with it.
+Let's see how to create and use a generator in FsCheck.  Again, we'll ask for an int generator.  It creates an instance of a .Net class called `FsCheck.Gen`.
 
 C#'s type system may help describe what is going on for our type-oriented friends.
 
@@ -74,7 +74,7 @@ Gen<int> generator = Gen.Choose(int.MinValue, int.MaxValue);  // Gen.Choose(low,
 IEnumerable<int> examples = generator.Sample(size, exampleCount);
 ```
 
-FsCheck generators have a size parameter that can help control the size of data generated, to prevent examples from being too simple to expose errors or too complex to execute quickly, like the size of lists, among other things.  We'll come back to that later because it's very dependent on the type of generator being used.  If you can't wait, here's the [documentation](https://fscheck.github.io/FsCheck/TestData.html#The-size-of-test-data).
+FsCheck generators have a `size` parameter that can help control the size of data generated, to prevent examples from being too simple to expose errors or too complex to execute quickly, like the size of lists, among other things.  We'll come back to that later because it's very dependent on the type of generator being used.  If you can't wait, here's the [documentation](https://fscheck.github.io/FsCheck/TestData.html#The-size-of-test-data).
 
 1. So, one way to make a generator for integer values is `var gen = Gen.Choose(low, hi)`.  This returns an instance of `Gen<int>`.
 2. To generate 3 examples, we use `gen.Sample(someSize, 3)`.

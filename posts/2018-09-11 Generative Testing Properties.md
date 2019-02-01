@@ -7,9 +7,9 @@ tags: ["testing", "generative testing", "clojure.spec", "nUnit"]
 categories : ["Programming", "Craft"]
 ---
 
-From the plain English root verbs of "generative testing", we can surmise there are at least two actions to explore: 'generate' and 'test'.  In a nut shell, the actions are
+From the plain English root verbs of "generative testing", we can surmise there are at least two actions to explore: 'generate' and 'test'.  In a nutshell, the actions are
 
-1. Generate some random test cases
+1. Generate some random test cases.
 2. Check that the software works.
 
 For this post, let's start with the more familiar part: _testing_.
