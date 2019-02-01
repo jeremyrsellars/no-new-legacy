@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using NUnit.Framework;
@@ -15,14 +12,10 @@ namespace StructuralComparison.Tests
     public class ExampleTest
     {
         [Property]
-        public bool RevRev(int[] xs) =>
-            xs.Reverse().Reverse().SequenceEqual(xs);
-
-        [Property]
-        public bool NotStructurablyEquatable(int[] xs)
+        public bool NotStructurablyEquatable(FsCheck.NonEmptyArray<int> xs)
         {
-            var set = new[] { xs.ToImmutableArray() }.ToHashSet();
-            return xs.Length == 0 || !set.Contains(xs.ToImmutableArray());
+            var set = new[] { xs.Item.ToImmutableArray() }.ToHashSet();
+            return !set.Contains(xs.Item.ToImmutableArray());
         }
 
         [Property]
@@ -45,7 +38,7 @@ namespace StructuralComparison.Tests
         {
             var a = xs.ToImmutableHashSet().ToStructural().Intersect(Enumerable.Repeat(ys, extraTimes + 1).SelectMany(ys1 => ys1));
             var b = xs.ToImmutableHashSet().ToStructural().Intersect(ys);
-            Assert.That(a, Is.EquivalentTo(xs.Union(ys)));
+            Assert.That(a, Is.EquivalentTo(xs.Intersect(ys)));
             Assert.That(a.SymmetricExcept(b), Is.Empty);
             Assert.That(a, Is.EquivalentTo(b));
         }
