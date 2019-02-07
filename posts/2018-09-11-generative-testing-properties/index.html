@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Generative Testing Part 2 – Properties and Oracles - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;, #&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;,#&lt;Ruhoh::Views::MasterView:0x00000005c60a70&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;, #&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000043997f8&gt;,">
     <meta name="description" content="&#39;Properties&#39; are the facts checked by generative testing.  We assert that some properties are true of our programs, and the testing library checks it for us.">
     <meta name="date" content="2018-09-11">
     <meta name="datePublished" content="2018-09-11">
@@ -98,10 +98,10 @@
       <span>2018-09-11</strong>
     </div>
     <div class="content">
-      <p>From the plain English root verbs of &quot;generative testing&quot;, we can surmise there are at least two actions to explore: &#39;generate&#39; and &#39;test&#39;.  In a nut shell, the actions are</p>
+      <p>From the plain English root verbs of &quot;generative testing&quot;, we can surmise there are at least two actions to explore: &#39;generate&#39; and &#39;test&#39;.  In a nutshell, the actions are</p>
 
 <ol>
-<li>Generate some random test cases</li>
+<li>Generate some random test cases.</li>
 <li>Check that the software works.</li>
 </ol>
 
@@ -230,6 +230,8 @@
 </code></pre>
 
 <h4 id="toc_2">Parameterized Test (with an oracle)</h4>
+
+<p><a id='parameterized_test_oracle'></a></p>
 
 <p>With unit tests, we may wish to come up with specific examples and test that against a known-correct answer, but with generative testing we don&#39;t have the opportunity to think through the correct answer (examples are generated randomly, after all).  We will want a way to compute the expected answer.  This is sometimes called an &quot;oracle&quot; (think the deity that heroes from mythology consult to answer a question).  For this contrived example, we have a ready-made oracle that would provide the correct answer for any string: the regular expression <code>^baa+$</code></p>
 
@@ -360,25 +362,25 @@
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>8</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>9</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>4</span></a>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>5</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
       <li><i class="icon-tags"></i></li>
       <li>
-        <a href="/no-new-legacy/tags#testing-ref">testing <span>4</span></a>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>4</span></a>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>4</span></a>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>3</span></a>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>4</span></a>
       </li>
     </ul>
     <hr>

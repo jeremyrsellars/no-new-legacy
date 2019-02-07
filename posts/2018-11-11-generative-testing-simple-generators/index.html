@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Generative Testing Part 3 – Simple Generators - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;, #&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,#&lt;Ruhoh::Views::MasterView:0x00000006781738&gt;,">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;, #&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,#&lt;Ruhoh::Views::MasterView:0x000000062161b8&gt;,">
     <meta name="description" content="&#39;Generators&#39; build data used for testing.  We assert that some properties are true of our programs, and the testing library checks those properties hold for many possible inputs.">
     <meta name="date" content="2018-11-11">
     <meta name="datePublished" content="2018-11-11">
@@ -97,7 +97,7 @@
       <span>2018-11-11</strong>
     </div>
     <div class="content">
-      <p><a href="/no-new-legacy/posts/2018-09-11-generative-testing-properties/" title="">In part 2</a> of this discussion of &quot;generative testing&quot;, we discussed skipped the first word, &quot;generative&quot;, and went straight to &quot;testing.&quot;  This time, we&#39;ll move back to automatic test-case generation.  </p>
+      <p><a href="/no-new-legacy/posts/2018-09-11-generative-testing-properties/" title="">In part 2</a> of this discussion of &quot;generative testing&quot;, we skipped the first word, &quot;generative&quot;, and went straight to &quot;testing.&quot;  This time, we&#39;ll move back to automatic test-case generation.  </p>
 
 <p>Unlike example-based unit tests, we may not already know the &quot;correct&quot; answer for any given input, especially if the data are generated randomly.  If we have an oracle, we can use it to compute the correct answer.  Without the oracle, we can only test facts (properties) that should be true in every case.</p>
 
@@ -150,7 +150,7 @@
 #clojure.test.check.generators.Generator{:gen #object[clojure.test.check.generators$such_that$fn__1825 0x633837ae &quot;clojure.test.check.generators$such_that$fn__1825@633837ae&quot;]}
 user=&gt; (gen/generate (s/gen int?))
 123
-user=&gt; (take 3 (repeatedly #(gen/sample (s/gen int?) 3)))
+user=&gt; (take 3 (repeatedly #(gen/generate (s/gen int?) 3)))
 (60273 -94 -3)
 user=&gt; (gen/sample (s/gen int?) 3))
 (0 -1 1)
@@ -158,7 +158,7 @@ user=&gt; (gen/sample (s/gen int?) 3))
 
 <p>This generates a new value, or list of values, each time, which already sounds more interesting than example-based unit tests.</p>
 
-<p>So, you may notice that the result from <code>gen/generate</code> seems more surprising than that of <code>gen/sample</code>.  test.check usually starts by generating smaller, more normal values.  We&#39;ll come back to this concept later in the series.</p>
+<p>So, you may notice that the result from <code>gen/generate</code> seems more surprising than that of <code>gen/sample</code>.  test.check usually starts by generating smaller, more normal values.  We&#39;ll come back to this concept of <code>size</code> later in the series.</p>
 
 <ol>
 <li>So, one way to make a generator for integer values is <code>(s/gen int?)</code>.  This returns a test.check generator.</li>
@@ -168,7 +168,7 @@ user=&gt; (gen/sample (s/gen int?) 3))
 
 <h2 id="toc_2">FsCheck Generators</h2>
 
-<p>Let&#39;s see how to create and use a generator in FsCheck.  In this case, we&#39;ll ask clojure.spec for a int generator.  It creates a <code>clojure.test.check.generators.Generator</code>, then generate some examples with it.</p>
+<p>Let&#39;s see how to create and use a generator in FsCheck.  Again, we&#39;ll ask for an int generator.  It creates an instance of a .Net class called <code>FsCheck.Gen</code>.</p>
 
 <p>C#&#39;s type system may help describe what is going on for our type-oriented friends.</p>
 
@@ -178,7 +178,7 @@ Gen&lt;int&gt; generator = Gen.Choose(int.MinValue, int.MaxValue);  // Gen.Choos
 IEnumerable&lt;int&gt; examples = generator.Sample(size, exampleCount);
 </code></pre>
 
-<p>FsCheck generators have a size parameter that can help control the size of data generated, to prevent examples from being too simple to expose errors or too complex to execute quickly, like the size of lists, among other things.  We&#39;ll come back to that later because it&#39;s very dependent on the type of generator being used.  If you can&#39;t wait, here&#39;s the <a href="https://fscheck.github.io/FsCheck/TestData.html#The-size-of-test-data"  target="_blank" title="" rel="noopener" class="external">documentation</a>.</p>
+<p>FsCheck generators have a <code>size</code> parameter that can help control the size of data generated, to prevent examples from being too simple to expose errors or too complex to execute quickly, like the size of lists, among other things.  We&#39;ll come back to that later because it&#39;s very dependent on the type of generator being used.  If you can&#39;t wait, here&#39;s the <a href="https://fscheck.github.io/FsCheck/TestData.html#The-size-of-test-data"  target="_blank" title="" rel="noopener" class="external">documentation</a>.</p>
 
 <ol>
 <li>So, one way to make a generator for integer values is <code>var gen = Gen.Choose(low, hi)</code>.  This returns an instance of <code>Gen&lt;int&gt;</code>.</li>
@@ -239,28 +239,28 @@ Gen&lt;string&gt; wgen = Gen.Frequency(
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>8</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>9</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>4</span></a>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>5</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
       <li><i class="icon-tags"></i></li>
       <li>
-        <a href="/no-new-legacy/tags#testing-ref">testing <span>4</span></a>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>4</span></a>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>4</span></a>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>5</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>3</span></a>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>2</span></a>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>3</span></a>
       </li>
     </ul>
     <hr>

@@ -4,7 +4,13 @@
     <title>No New Legacy Code</title>
     <description>No New Legacy Code</description>
     <link>https://jeremyrsellars.github.io/no-new-legacy</link>
-    <pubDate>2018-11-25</pubDate>
+    <pubDate>2019-02-07</pubDate>
+    <item>
+      <title>Generative Testing Part 5 &#x2013; The hard way</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way</link>
+      <pubDate>2019-02-07</pubDate>
+      <description>Combining several generators to produce nearly-to-spec strings to trick the system under test.</description>
+    </item>
     <item>
       <title>Generative Testing Part 4 &#x2013; Composing Generators</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-11-25-generative-testing-composing-generators</link>

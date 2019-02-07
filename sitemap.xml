@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/assets/stylesheets/manifest-960b22b23ba8d69f8af4e30d0ecc7f07.json</loc>
-    <lastmod>2018-11-25</lastmod>
+    <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way</loc>
+    <lastmod>2019-02-07</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-11-25-generative-testing-composing-generators</loc>
-    <lastmod>2018-11-25</lastmod>
+    <lastmod>2019-02-07</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-11-11-generative-testing-simple-generators</loc>
-    <lastmod>2018-11-25</lastmod>
+    <lastmod>2019-02-07</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/no-new-legacy/posts/2018-09-11-generative-testing-properties</loc>
-    <lastmod>2018-11-25</lastmod>
+    <lastmod>2019-02-07</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>

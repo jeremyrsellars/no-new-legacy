@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2019-02-06 Generative Testing The Hard Way.md 2019-02-07 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Generative Testing Part 5 – The hard way - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;, #&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,">
+    <meta name="description" content="Combining several generators to produce nearly-to-spec strings to trick the system under test.">
+    <meta name="date" content="2019-02-07">
+    <meta name="datePublished" content="2019-02-07">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Generative Testing Part 5 – The hard way </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2019-02-07</strong>
+    </div>
+    <div class="content">
+      <p><a href="/no-new-legacy/posts/2018-11-25-generative-testing-composing-generators" title="">In part 4</a> of this discussion of &quot;generative testing&quot;, we began transforming and assembling these generators to do much more powerful tasks.  This time we will compose better sheepish-like strings in an attempt to trick the <code>sheep-bleat?</code> function with our unit tests.</p>
+
+<h1 id="toc_0">Building examples with more control</h1>
+
+<p>We know sheepish has only <code>a</code> and <code>b</code> characters, but we want to try some other characters and sequences, so that we test invalid output as well.  For this discussion, let&#39;s communicate using a nearly ideal metaphor, the regex-style repetition specifiers: <code>*</code> (0 or more), <code>+</code> (1 or more).</p>
+
+<p>Let us say we want to compose the test string into 1: (before), 2: the <code>b</code>, 3: intermediate characters, 4: <code>a</code> characters, 5: more intermediate characters, 6: more <code>a</code> characters.  Here is how we might compose a generator that would be matched by the regex <code>.*b*.*a*.*a*</code>.  Of course regex matching is logical (it either matches or it does not).  When generating data probabalistically, there is an additional dimension of probability distribution that we cannot express in regex.  Here are the generators we&#39;ll use:</p>
+
+<ol>
+<li>UsuallyEmptyString: <code>.*</code> – Usually empty string (0 or more of any character, but usually empty)</li>
+<li>StringOfB: <code>b*</code> – String of b characters (0 to 3)</li>
+<li>StringOfA: <code>a*</code> – String of a characters (0 to 3), usually 0.</li>
+<li>SheepishExamples: Test case built from concatenating the values generated by <code>UsuallyEmptyString + StringOfB + UsuallyEmptyString + StringOfA + UsuallyEmptyStringTake + StringOfA</code>.</li>
+</ol>
+
+<h3 id="toc_1">Testing with clojure.test</h3>
+
+<p>Let&#39;s start with Clojure again because we can see the generated strings in Clojure&#39;s concise literal data representation.</p>
+
+<p>I&#39;ve included the </p>
+
+<pre><code class="clojure">;; 1. UsuallyEmptyString: `.*` – Usually empty string (0 or more of any character, but usually empty)
+(s/def ::usually-empty-string
+  (s/with-gen string?
+   #(gen/frequency [[9 (gen/return &quot;&quot;)]
+                    [1 (s/gen string?)]])))
+
+; (generate-examples ::usually-empty-string 20)
+; yields (&quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;Uzjbma783HTsxptQa8ZkY5fDkc68&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;)
+
+;; 2. StringOfB: `b*` – String of b characters (0 to 3)
+(s/def ::string-of-a
+  (s/with-gen string?
+    #(gen/fmap
+      (fn [n] (string/join (repeat (max n 0) \a)))
+      (s/gen (s/int-in -3 4)))))
+
+;; 3. StringOfA: `a*` – String of a characters (0 to 3), usually 0.
+(s/def ::string-of-b
+  (s/with-gen string?
+    #(gen/fmap
+      (fn [n] (string/join (repeat (max n 0) \b)))
+      (s/gen (s/int-in 0 3)))))
+
+; (generate-examples ::string-of-a 20)
+; yields (&quot;aa&quot; &quot;&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;aa&quot; &quot;aaa&quot; &quot;aa&quot; &quot;aaa&quot; &quot;aa&quot; &quot;&quot;)
+
+;; 4. SheepishExamples: Test case built from concatenating the values generated by
+;;    `UsuallyEmptyString + StringOfB + UsuallyEmptyString + StringOfA + UsuallyEmptyStringTake + StringOfA`.
+(s/def ::sheepish-like-substrings
+  (s/with-gen
+    (s/coll-of any?)
+    #(gen/tuple (s/gen ::usually-empty-string)
+                (s/gen ::string-of-b)
+                (s/gen ::usually-empty-string)
+                (s/gen ::string-of-a)
+                (s/gen ::usually-empty-string)
+                (s/gen ::string-of-a))))
+
+; (generate-examples ::sheepish-like-substrings 4)
+; yields ([&quot;&quot; &quot;b&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;aa&quot;] [&quot;&quot; &quot;bb&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;aaa&quot;] [&quot;&quot; &quot;bb&quot; &quot;&quot; &quot;aa&quot; &quot;&quot; &quot;&quot;] [&quot;&quot; &quot;b&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;aaa&quot;])
+
+(s/def ::sheepish-like-string
+  (s/with-gen
+    string?
+    #(gen/fmap string/join (s/gen ::sheepish-like-substrings))))
+
+; (generate-examples ::sheepish-like-string 4)
+; yields (&quot;bbaaaa&quot; &quot;b1oYCjf3tRz5S65oT8Ux8bpZHkxp49Ghaa&quot; &quot;bbaa&quot; &quot;baaavLEjQBNj2I2Kr4Vc6z6OLb7aaaa&quot; &quot;baa&quot; &quot;70E7l6Q27vYt6Er50Ehbbaa&quot;)
+</code></pre>
+
+<p>Now, let&#39;s plug it into the test framework, and test against the regex oracle, as we did in <a href="/no-new-legacy/posts/2018-09-11-generative-testing-properties/#parameterized_test_oracle" title="">in part 2</a>.</p>
+
+<pre><code class="clojure">(deftest Testing_sheep-bleat?_with_oracle
+  ; Run the test for each of the generated examples
+  (doseq [text (generate-examples ::sheepish-like-string 4)]
+    (is (= (some? (re-find #&quot;^baa+$&quot; text))  ; true when a match is found, false when nil is returned.
+           (sheep-bleat? text))
+      (str &quot;Does the regex oracle agree about `&quot; text &quot;`?&quot;))))
+
+; (clojure.test/run-tests)
+; prints:
+
+;  Testing sheepish.f-better-sheepish-examples
+;  
+;  FAIL in (Testing_sheep-bleat?_with_oracle) (form-init3243900215441859027.clj:4)
+;  Does the regex oracle agree about `baa`?
+;  expected: (= (some? (re-find #&quot;^baa+$&quot; text)) (sheep-bleat? text))
+;    actual: (not (= true false))
+;  
+;  Ran 1 tests containing 4 assertions.
+;  1 failures, 0 errors.
+;  {:test 1, :pass 3, :fail 1, :error 0, :type :summary}
+
+</code></pre>
+
+<h3 id="toc_2">Testing with nUnit TestFixtureSource attribute (the hard way)</h3>
+
+<p>This example uses nUnit&#39;s <code>[TestFixtureSource(nameof(SheepishExamples))]</code> attribute to use examples from a property called <code>SheepishExamples</code> which uses FsCheck generators to build example strings.</p>
+
+<pre><code class="csharp">    [TestFixtureSource(nameof(SheepishExamples))]
+    public class F_Parameterized_Test_With_Better_Generators
+    {
+        // nUnit creates instances of the class
+        public F_Parameterized_Test_With_Better_Generators(SheepishTestCase testCase)
+        {
+            this.testCase = testCase;
+            isSheepBleat = Sheepish.IsSheepBleat(testCase.Text);
+        }
+
+        [Test]
+        public void SheepishIsAtLeast3CharactersLong()
+        {
+            if (isSheepBleat)
+                Assert.GreaterOrEqual(testCase.Text.Length, 3,
+                    &quot;Sheep bleat is at least 3 characters&quot;);
+        }
+
+        static Gen&lt;string&gt; UsuallyEmptyString =&gt;
+            Gen.Frequency(
+                Tuple.Create(9, Gen.Constant(&quot;&quot;)),
+                Tuple.Create(1, Arb.Default.NonEmptyString().Generator.Select(s =&gt; s.Item)));
+
+        static Gen&lt;string&gt; StringOfA =&gt;
+            Gen.Choose(-3, 3).Select(n =&gt; new string(&#39;a&#39;, Math.Max(n, 0)));
+        static Gen&lt;string&gt; StringOfB =&gt;
+            Gen.Choose(0, 3).Select(n =&gt; new string(&#39;b&#39;, Math.Max(n, 0)));
+
+        static IEnumerable&lt;SheepishTestCase&gt; SheepishExamples =&gt;
+            Gen.zip(
+                Gen.zip3(UsuallyEmptyString,
+                         StringOfB,
+                         UsuallyEmptyString),
+                Gen.zip3(StringOfA,
+                         UsuallyEmptyString,
+                         StringOfA))
+            .Select(t =&gt; t.Item1.Item1 + t.Item1.Item2 + t.Item1.Item3
+                       + t.Item2.Item1 + t.Item2.Item2 + t.Item2.Item3)  // That&#39;s confusing!
+            .Select(text =&gt; new SheepishTestCase(text, &quot;random&quot;)) // To test case
+            .Sample(4, 100);                                      // take 100 examples
+</code></pre>
+
+<p>Here is an alternative way of generating similar data that constructs instances of <code>SheepishParts</code> using reflection to infer which data types to generate.  FsCheck then uses either the default generators and shrinkers (together known as <code>Arb</code> (as in &quot;Arb-itrary data type generator&quot;).  These may be registered by <code>Arb.Register&lt;SheepishPartsGenerators&gt;();</code>.  See <a href="https://github.com/fscheck/FsCheck/blob/8fd6dd7/src/FsCheck/Reflect.fs#L21-L27"  target="_blank" title="" rel="noopener" class="external">FsCheck</a> for more.</p>
+
+<pre><code class="csharp">    [TestFixtureSource(nameof(SheepishExamples2))]
+    public class F_Parameterized_Test_With_Better_Generators
+    {
+        static IEnumerable&lt;SheepishTestCase&gt; SheepishExamples2 =&gt;
+            Arb.Default.Derive&lt;SheepishParts&gt;().Generator
+            .Select(parts =&gt; parts.ToString())
+            .Select(text =&gt; new SheepishTestCase(text, &quot;random&quot;)) // To test case
+            .Sample(4, 100);                                      // take 100 examples
+
+        /// &lt;summary&gt;
+        /// A class to represent a &quot;better&quot; sheepish generation.
+        /// &lt;/summary&gt;
+        public class SheepishParts
+        {
+            // FsCheck can call this constructor with reflection.
+            public SheepishParts(UsuallyEmptyString S0, StringOfBs B1, UsuallyEmptyString S2, StringOfAs A3, UsuallyEmptyString S4, StringOfAs A5)
+            {
+                this.S0 = S0;
+                this.B1 = B1;
+                this.S2 = S2;
+                this.A3 = A3;
+                this.S4 = S4;
+                this.A5 = A5;
+            }
+            public UsuallyEmptyString S0 { get; }
+            public StringOfBs B1 { get; }
+            public UsuallyEmptyString S2 { get; }
+            public StringOfAs A3 { get; }
+            public UsuallyEmptyString S4 { get; }
+            public StringOfAs A5 { get; }
+
+            public override string ToString() =&gt; &quot;&quot; + S0 + B1 + S2 + A3 + S4 + A5;
+
+            public class UsuallyEmptyString : Wrapper&lt;string&gt; { }
+            public class StringOfAs : Wrapper&lt;string&gt; { }
+            public class StringOfBs : Wrapper&lt;string&gt; { }
+        }
+
+        public class SheepishPartsGenerators
+        {
+            public static Arbitrary&lt;T&gt; FromStringGen&lt;T&gt;(Gen&lt;string&gt; gen)
+                where T : Wrapper&lt;string&gt;, new() =&gt;
+                gen.Select(s =&gt; new T{ Value = s }).ToArbitrary();
+            public static Arbitrary&lt;SheepishParts.UsuallyEmptyString&gt; UsuallyEmptyString() =&gt;
+                FromStringGen&lt;SheepishParts.UsuallyEmptyString&gt;(F_Parameterized_Test_With_Better_Generators.UsuallyEmptyString);
+            public static Arbitrary&lt;SheepishParts.StringOfAs&gt; StringOfAs() =&gt;
+                FromStringGen&lt;SheepishParts.StringOfAs&gt;(F_Parameterized_Test_With_Better_Generators.StringOfA);
+            public static Arbitrary&lt;SheepishParts.StringOfBs&gt; StringOfBs() =&gt;
+                FromStringGen&lt;SheepishParts.StringOfBs&gt;(F_Parameterized_Test_With_Better_Generators.StringOfB);
+        }
+
+        public class Wrapper&lt;T&gt;
+        {
+            public Wrapper() =&gt; Value = default(T);
+            public Wrapper(T value) =&gt; Value = value;
+            public T Value;
+            public override string ToString() =&gt; Value?.ToString();
+        }
+
+        static F_Parameterized_Test_With_Better_Generators()
+        {
+            try
+            {
+                Arb.Register&lt;SheepishPartsGenerators&gt;();
+            }
+            catch(Exception e)
+            {
+                e.ToString();
+            }
+        }
+</code></pre>
+
+<p>If that code looks a bit more involved, like we&#39;ve jumped from &quot;simple enough&quot; to &quot;complicated,&quot; that&#39;s because we did just issue a seemingly magical incantation to generate data and use reflection to create particular classes.  FsCheck offers a somewhat involved way of registering generators so you can do it once and for all (for the rest of the life of the process).  While this can be convenient and less repetitive, it comes with its challenges, like making sure the <code>Arb</code>itraries are registered before the test data is generated.  In this case, I used a static constructor to accomplish this: <code>static F_Parameterized_Test_With_Better_Generators()</code>.  In the next post, we will see a way of selecting the <code>Arb</code>itrary generators to use for particular tests, rather than once per process.  This will be a bit less magical and make the intent perfectly clear, as we are able to override the default generators.</p>
+
+<h1 id="toc_3">The trouble with doing it half-way</h1>
+
+<p>So here are how the tests appear in Visual Studio&#39;s test runner.</p>
+
+<p><img src="/no-new-legacy/assets/media/F_Parameterized_Test_With_Better_Generators.PNG" alt="F_Parameterized_Test_With_Better_Generators 509 373"></p>
+
+<p>It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then nUnit can&#39;t find the test.</p>
+
+<p>Next time we&#39;ll let the generative testing framework decide how to generate the examples and witness the power of this fully-operational <del>battle station</del> test suite.</p>
+
+<h1 id="toc_4">Source code</h1>
+
+<p>If you want to follow along, the source code is here:</p>
+
+<ul>
+<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/f_better_sheepish_examples.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/f_better_sheepish_examples.cljc</a></li>
+<li>C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs</a></li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>9</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>5</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>5</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>5</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>5</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>4</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>3</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2018-11-25-generative-testing-composing-generators" title="Generative Testing Part 4 – Composing Generators">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>
