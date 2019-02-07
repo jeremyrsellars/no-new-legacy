@@ -107,6 +107,8 @@ Here is C# with nUnit.
 
 #### Parameterized Test (with an oracle)
 
+<a id='parameterized_test_oracle'></a>
+
 With unit tests, we may wish to come up with specific examples and test that against a known-correct answer, but with generative testing we don't have the opportunity to think through the correct answer (examples are generated randomly, after all).  We will want a way to compute the expected answer.  This is sometimes called an "oracle" (think the deity that heroes from mythology consult to answer a question).  For this contrived example, we have a ready-made oracle that would provide the correct answer for any string: the regular expression `^baa+$`
 
 ```clojure
