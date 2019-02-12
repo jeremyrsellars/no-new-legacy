@@ -119,6 +119,7 @@ h3{
 	font-weight: 900;
 	margin: 0;
 	padding: 0;
+	margin-top: 1em;
 	color: $dark_slate;
 }
 
@@ -741,6 +742,8 @@ img.tb-logo {
 	margin-left: auto;
 	margin-right: 0;
 	padding-top: 1em;
+	padding-left: 1em;
+	padding-right: 1em;
 	// padding: 2em 1em;
 	background-color: white;
 	// background-color: transparentize(white, .05);
