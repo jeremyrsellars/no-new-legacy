@@ -10,7 +10,7 @@
             [sheepish.core :refer [sheep-bleat?]]
             [sheepish.f-better-sheepish-examples :as f]))
 
-(defspec Testing_sheep-bleat?_with_framework
+(defspec sheep-bleat?_matches_oracle
   ; Run the test for each of generated examples
   (prop/for-all [text (s/gen ::f/sheepish-like-string 4)]
     (= (some? (re-find #"^baa+$" text))  ; true when a match is found, false when nil is returned.
@@ -18,6 +18,6 @@
 
 ; (clojure.test/run-tests)
 ; -or-
-; (Testing_sheep-bleat?_with_framework
+; (sheep-bleat?_matches_oracle)
 ; -or-
-; (Testing_sheep-bleat?_with_framework 10 :seed 1549940595432)
+; (sheep-bleat?_matches_oracle 12 :seed 1549979449257)
