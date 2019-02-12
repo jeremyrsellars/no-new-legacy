@@ -1,6 +1,7 @@
 ---
 title: "Generative Testing Part 5 – The hard way"
 date: "2019-02-07"
+revision: "2019-02-12"
 description: "Combining several generators to produce nearly-to-spec strings to trick the system under test."
 tags: ["testing", "generative testing", "clojure.spec", "nUnit", "FsCheck"]
 categories : ["Programming", "Craft"]
@@ -22,8 +23,6 @@ Let us say we want to compose the test string into 1: (before), 2: the `b`, 3: i
 ### Testing with clojure.test
 
 Let's start with Clojure again because we can see the generated strings in Clojure's concise literal data representation.
-
-I've included the 
 
 ```clojure
 ;; 1. UsuallyEmptyString: `.*` – Usually empty string (0 or more of any character, but usually empty)
