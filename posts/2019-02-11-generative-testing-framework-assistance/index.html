@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2019-02-11 Generative Testing Framework Assistance.md 2019-02-11 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Generative Testing Part 6 – The DNA of Test Framework Assistance - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code">
+    <meta name="description" content="Combining several generators to produce nearly-to-spec strings to trick the system under test.">
+    <meta name="date" content="2019-02-11">
+    <meta name="datePublished" content="2019-02-11">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-27a257c1cb2dad1c42ae18e7d60e7232.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Generative Testing Part 6 – The DNA of Test Framework Assistance </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2019-02-11</strong>
+    </div>
+    <div class="content">
+      <ul>
+<li><a href="/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way" title="">In part 5</a> of this discussion of &quot;generative testing&quot;, we began to see areas where the unit testing way of doing things just didn&#39;t quite fit with generated data.
+
+<ul>
+<li>It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then the testing framework can&#39;t find the test.  What do generative testing frameworks do to help?</li>
+<li>Tests need to be extensible, so it often isn&#39;t sufficient to merely provide one set of generators for use in all tests. We will look at ways of selecting arbitrary generators to use for particular tests.</li>
+</ul></li>
+</ul>
+
+<p><img src="/no-new-legacy/assets/media/F_Parameterized_Test_With_Better_Generators.PNG" alt="F_Parameterized_Test_With_Better_Generators 509 373"></p>
+
+<h1 id="toc_0">The DNA of property-based testing</h1>
+
+<p>As &quot;DNA&quot; is composed of 4 nucleotides, adenine (A), thymine (T), guanine (G) and cytosine (C), property-based testing frameworks do 4 things for you.</p>
+
+<p>The testing libraries have functions register the property-based tests with the testing framework, so different randomly-generated tests may be run each time.</p>
+
+<ul>
+<li>*A*dd test to framework
+
+<ul>
+<li>Register property tests for execution with an identifiable test name.</li>
+</ul></li>
+<li>*T*est properties you define
+
+<ul>
+<li>These functions often take the input and return true when the test passes and false otherwise.</li>
+</ul></li>
+<li>*G*enerate reproducible data
+
+<ul>
+<li>Specify which generators will provide the random data for the property tests.</li>
+<li>Provide a way to reproduce a test when a failing test is discovered, to see if an attempted code fix had the desired effect.  (This is usually by way of a random seed that can reproduce the same sequence of random values consistently over time and on different machines.)</li>
+</ul></li>
+<li>*C*ollapse to the minimal failing case using shrinking.</li>
+</ul>
+
+<p>The specific ways in which programmers may plug into the different testing frameworks help really start to diverge here in this post, but by looking for these 4 parts, you&#39;ll see the commonalities between the different libraries.  If you choose a different library for your platform, you can still look for these and use them in a similar manner.</p>
+
+<h2 id="toc_1">Clojure.test &amp; test.check</h2>
+
+<p>The same principals apply in Clojure&#39;s test.check as many other QuickCheck-inspired libraries.  Clojure&#39;s easy-to-visualize data results will help us see what is going on.  Watch for the DNA of the property-based tests as we go over each part of this test definition.</p>
+
+<pre><code class="clojure">(defspec sheep-bleat?_matches_oracle                         ; `A`dd named test                         
+  (prop/for-all [text (s/gen ::f/sheepish-like-string 4)]    ; Specify `G`enerator(s)
+    (= (some? (re-find #&quot;^baa+$&quot; text))                      ; Define property to `T`est
+       (sheep-bleat? text))))
+
+user=&gt; (sheep-bleat?_matches_oracle)
+{:result         false,
+ :seed           1549979449257,
+ :failing-size   12,
+ :num-tests      13,
+ :fail           [&quot;baaaaaa&quot;],                                ; `C`ollapsed from &quot;baaaaaa&quot; to
+ :shrunk                                                     ; shrunken test: &quot;baa&quot;
+                 {:total-nodes-visited 8, :depth 2, :result false, :smallest [&quot;baa&quot;]}}
+</code></pre>
+
+<ul>
+<li>*A*dd test – It registers a test with <code>clojure.test</code> witha a descriptive name, so the tests are runable with commands like <code>lein test</code> or <code>(clojure.test/run-tests)</code>.</li>
+<li>*G*enerate reproducible data – <code>clojure.test.check.properties/for-all</code> is like the <code>clojure.core/for</code> list comprehension, in that it evaluates its expression body for each value generated by the generator.</li>
+<li>*T*est properties – The property is modeled as an expression that compares the &quot;actual&quot; value generated by <code>(sheep-bleat? text)</code> to the &quot;expected&quot; value produced by our oracle.</li>
+<li>*C*ollapse – shrink to a smaller failing case to make it easier to troubleshoot.</li>
+</ul>
+
+<p>Let&#39;s analyze the output, key by key.</p>
+
+<ul>
+<li><code>:result false</code> – The test failed</li>
+<li><code>:seed 1549979449257</code> – The random seed that generated the cases, and can be used to reproduce the test.</li>
+<li><code>:failing-size 12</code> – The size/interestingness that generated the test.</li>
+<li><code>:num-tests 13</code> – The number of tests executed.</li>
+<li><code>:fail [&quot;baaaaaa&quot;]</code> – The initial value that caused the test to fail. This is where the shrinking starts.</li>
+<li><code>:shrunk</code>  – Details of the shrinking process.
+
+<ul>
+<li><code>:total-nodes-visited 8</code> – The count of distinct variation nodes visit while shrinking.</li>
+<li><code>:depth 2</code> – The number of shrinking operations performed before getting to the smallest.  Depth is always less-than or equal to total-nodes-visited.</li>
+<li><code>:result false</code> – <code>false</code> means the test failed.</li>
+<li><code>:smallest [&quot;baa&quot;]</code> – The smallest case that failed.  This is where the shrinking stops.</li>
+</ul></li>
+</ul>
+
+<h3 id="toc_2">Reproducing a test with <code>:seed</code></h3>
+
+<p>After fixing the bug, if we want to run with the same random number generator to reproduce a formerly-failing scenario, we can specify the seed and the number of tests to execute again in an attempt to find a example that disproves the assertion.</p>
+
+<pre><code class="clojure">user=&gt; (sheep-bleat?_matches_oracle 100 :seed 1549979449257)
+{:result false, :seed 1549979449257, :failing-size 12, :num-tests 13, :fail [&quot;baaaaaa&quot;], :shrunk {:total-nodes-visited 8, :depth 2, :result false, :smallest [&quot;baa&quot;]}}
+</code></pre>
+
+<h1 id="toc_3">Source code</h1>
+
+<p>If you want to follow along, the source code is here:</p>
+
+<ul>
+<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc</a>
+--* C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs--"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs--</a></li>
+</ul>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>10</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>6</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>6</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>6</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>6</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#NUnit-ref">NUnit <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>4</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way" title="Generative Testing Part 5 – The hard way">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>

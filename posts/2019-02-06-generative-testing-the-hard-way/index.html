@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Generative Testing Part 5 – The hard way - No New Legacy Code Blog - Jeremy Sellars</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
-    <meta name="keywords" content="No New Legacy Code, #&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;, #&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,#&lt;Ruhoh::Views::MasterView:0x000000061cca40&gt;,">
+    <meta name="keywords" content="No New Legacy Code">
     <meta name="description" content="Combining several generators to produce nearly-to-spec strings to trick the system under test.">
     <meta name="date" content="2019-02-07">
     <meta name="datePublished" content="2019-02-07">
@@ -16,7 +16,7 @@
 <link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
-<link href='/no-new-legacy/assets/stylesheets/application-e3642abd8348ea2b5f7b414c30786006.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-27a257c1cb2dad1c42ae18e7d60e7232.css' type='text/css' rel='stylesheet' media='all'>
   <!-- http://www.favicon-generator.org/ -->
   <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
@@ -115,8 +115,6 @@
 <h3 id="toc_1">Testing with clojure.test</h3>
 
 <p>Let&#39;s start with Clojure again because we can see the generated strings in Clojure&#39;s concise literal data representation.</p>
-
-<p>I&#39;ve included the </p>
 
 <pre><code class="clojure">;; 1. UsuallyEmptyString: `.*` – Usually empty string (0 or more of any character, but usually empty)
 (s/def ::usually-empty-string
@@ -338,28 +336,28 @@
     <ul class="tag_box inline">
       <li><i class="icon-folder-open"></i></li>
       <li>
-        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>9</span></a>
+        <a href="/no-new-legacy/categories#Programming-ref">Programming <span>10</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>5</span></a>
+        <a href="/no-new-legacy/categories#Craft-ref">Craft <span>6</span></a>
       </li>
     </ul>
     <ul class="tag_box inline">
       <li><i class="icon-tags"></i></li>
       <li>
-        <a href="/no-new-legacy/tags#testing-ref">testing <span>5</span></a>
+        <a href="/no-new-legacy/tags#testing-ref">testing <span>6</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>5</span></a>
+        <a href="/no-new-legacy/tags#generative testing-ref">generative testing <span>6</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>5</span></a>
+        <a href="/no-new-legacy/tags#clojure.spec-ref">clojure.spec <span>6</span></a>
       </li>
       <li>
         <a href="/no-new-legacy/tags#nUnit-ref">nUnit <span>4</span></a>
       </li>
       <li>
-        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>3</span></a>
+        <a href="/no-new-legacy/tags#FsCheck-ref">FsCheck <span>4</span></a>
       </li>
     </ul>
     <hr>
@@ -369,7 +367,7 @@
 
           <li><a href="/no-new-legacy/archive">Archive</a></li>
 
-          <li class="next disabled"><a>Next &rarr;</a>
+          <li class="next"><a href="/no-new-legacy/posts/2019-02-11-generative-testing-framework-assistance" title="Generative Testing Part 6 – The DNA of Test Framework Assistance">Next &rarr;</a></li>
       </ul>
     </div>
     <hr>
