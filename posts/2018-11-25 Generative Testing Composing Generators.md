@@ -1,7 +1,7 @@
 ---
 title: "Generative Testing Part 4 – Composing Generators"
 date: "2018-11-25"
-description: "'Generators' build data used for testing.  We assert that some properties are true of our programs, and the testing library checks those properties hold for many possible inputs."
+description: "Combining several generators to build data used for testing."
 tags: ["testing", "generative testing", "clojure.spec", "nUnit", "FsCheck"]
 categories : ["Programming", "Craft"]
 ---
