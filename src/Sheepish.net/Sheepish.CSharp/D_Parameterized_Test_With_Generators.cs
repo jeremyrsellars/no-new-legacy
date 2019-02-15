@@ -71,9 +71,8 @@ namespace Sheepish.CSharp
 
         static IEnumerable<int> ExampleOfGenerators(int exampleCount)
         {
-            var size = 42;
             Gen<int> generator = Gen.Choose(int.MinValue, int.MaxValue);
-            IEnumerable<int> examples = generator.Sample(size, exampleCount);
+            IEnumerable<int> examples = generator.Sample(exampleCount);
             return examples;
         }
 
@@ -82,7 +81,7 @@ namespace Sheepish.CSharp
                 .ListOf()                                      // Make a list like [a, b, a]
                 .Select(chars => new string(chars.ToArray()))  // Convert to string;
                 .Select(text => new SheepishTestCase(text, "random")) // To test case
-                .Sample(4, 100);                               // take 100 examples
+                .Sample(100);                               // take 100 examples
 
         public class SheepishTestCase
         {

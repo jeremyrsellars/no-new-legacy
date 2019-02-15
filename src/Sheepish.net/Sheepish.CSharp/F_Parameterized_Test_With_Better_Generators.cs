@@ -74,9 +74,8 @@ namespace Sheepish.CSharp
 
         static IEnumerable<int> ExampleOfGenerators(int exampleCount)
         {
-            var size = 42;
             Gen<int> generator = Gen.Choose(int.MinValue, int.MaxValue);
-            IEnumerable<int> examples = generator.Sample(size, exampleCount);
+            IEnumerable<int> examples = generator.Sample(exampleCount);
             return examples;
         }
 
@@ -101,7 +100,7 @@ namespace Sheepish.CSharp
             .Select(t => t.Item1.Item1 + t.Item1.Item2 + t.Item1.Item3
                        + t.Item2.Item1 + t.Item2.Item2 + t.Item2.Item3)  // That's confusing!
             .Select(text => new SheepishTestCase(text, "random")) // To test case
-            .Sample(4, 100);                                      // take 100 examples
+            .Sample(100);                                         // take 100 examples
 
         /// <summary>
         /// A class to represent a "better" sheepish generation.
@@ -167,7 +166,7 @@ namespace Sheepish.CSharp
             Arb.Default.Derive<SheepishParts>().Generator
             .Select(parts => parts.ToString())
             .Select(text => new SheepishTestCase(text, "random")) // To test case
-            .Sample(4, 100);                                      // take 100 examples
+            .Sample(100);                                         // take 100 examples
 
         public class SheepishTestCase
         {

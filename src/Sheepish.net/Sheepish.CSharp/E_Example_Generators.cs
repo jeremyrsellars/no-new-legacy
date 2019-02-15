@@ -58,7 +58,7 @@ namespace Sheepish.CSharp
             .Select(c => new Card { Rank = c.Item1, Suit = c.Item2 });
 
         static IReadOnlyList<Card> CreateRandomCards(int count) =>
-            cardGen.Sample(100, count);
+            cardGen.Sample(count);
 
         //public class CardGenerators {
         //    public static Arbitrary<Suit> Suit() => Arb.From(suitGen);
