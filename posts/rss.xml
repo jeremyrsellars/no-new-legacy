@@ -4,7 +4,13 @@
     <title>No New Legacy Code</title>
     <description>No New Legacy Code</description>
     <link>https://jeremyrsellars.github.io</link>
-    <pubDate>2019-02-12</pubDate>
+    <pubDate>2019-02-15</pubDate>
+    <item>
+      <title>Decisions are always in context</title>
+      <link>https://jeremyrsellars.github.io/no-new-legacy/posts/2019-02-14-decisions-are-always-in-context</link>
+      <pubDate>2019-02-14</pubDate>
+      <description>Long before writing code, there are many decisions to make.  Each decision can have a profound and lasting effect, whether thoughtfully considered or not.  When teams share a common vocabulary for decisions and the context in which decisions are made, decisions can be made more effectively.</description>
+    </item>
     <item>
       <title>Generative Testing Part 6 &#x2013; The DNA of Test Framework Assistance</title>
       <link>https://jeremyrsellars.github.io/no-new-legacy/posts/2019-02-11-generative-testing-framework-assistance</link>

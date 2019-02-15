@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!-- 2019-02-14 Decisions are always in context.md 2019-02-14 -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <title>Decisions are always in context - No New Legacy Code Blog - Jeremy Sellars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0">
+    <meta name="keywords" content="No New Legacy Code">
+    <meta name="description" content="Long before writing code, there are many decisions to make.  Each decision can have a profound and lasting effect, whether thoughtfully considered or not.  When teams share a common vocabulary for decisions and the context in which decisions are made, decisions can be made more effectively.">
+    <meta name="date" content="2019-02-14">
+    <meta name="datePublished" content="2019-02-14">
+    <meta name="author" content="Jeremy Sellars">
+    <meta name="geo.region" content="US-MO" />
+
+<link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-3223cf66a5f033d0c670f622bee31c12.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-7455e22643f330d883d7c0fe96668c1b.css' type='text/css' rel='stylesheet' media='all'>
+  <!-- http://www.favicon-generator.org/ -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/no-new-legacy/assets/media/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/no-new-legacy/assets/media/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/no-new-legacy/assets/media/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/no-new-legacy/assets/media/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/no-new-legacy/assets/media/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/no-new-legacy/assets/media/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/no-new-legacy/assets/media/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/no-new-legacy/assets/media/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/no-new-legacy/assets/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/no-new-legacy/assets/media/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/no-new-legacy/assets/media/favicon-16x16.png">
+  <link rel="manifest" href="/no-new-legacy/assets/media/manifest.json">
+  <meta name="msapplication-TileColor" content="#753636">
+  <meta name="msapplication-TileImage" content="/no-new-legacy/assets/media/ms-icon-144x144.png">
+  <meta name="theme-color" content="#753636">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+  <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-85077174-2']);
+  _gaq.push(['_trackPageview']);
+  
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</head>
+<body itemscope="" itemtype="http://schema.org/WebPage">
+<div id="header" tabindex="0" hidefocus="true">
+  <div class="container">
+    <div id="logo">
+      <h1><a href="/no-new-legacy/">No New Legacy Code</a></h1>
+    </div>
+    <div id="menu">
+      <ul class="nav">
+          
+            <li><a href="/no-new-legacy/archive">Archive</a></li>
+          
+          
+            <li><a href="/no-new-legacy/tags">Tags</a></li>
+          
+          
+            <li><a href="/no-new-legacy/categories">Categories</a></li>
+          
+          
+            <li><a href="/no-new-legacy/pages">Pages</a></li>
+          
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="page" class="container">
+    <div id="content" itemprop="mainContentOfPage">
+      
+<div class="page-header">
+  <div class="span12">
+    <h1>Decisions are always in context </h1>
+  </div>
+</div>
+
+<div class="post-full">
+  <div class="span12">
+    <div class="date">
+      <span>2019-02-14</strong>
+    </div>
+    <div class="content">
+      <p>Summary: Long before writing code, there are many decisions to make.  Each decision can have a profound and lasting effect (you might even say a legacy!), whether thoughtfully considered or not.  When teams share a common vocabulary for decisions and the context in which decisions are made, decisions can be made more effectively.</p>
+
+<h2 id="toc_0">Decisions</h2>
+
+<p>There are many kinds of decisions, which is obvious to most anyone over the age of 3.</p>
+
+<style>
+.label_box {
+  padding: 3px 6px;
+  margin-left: 2em;
+  margin-top: 3px;
+  background: #eee;
+  color:#555;
+  border-radius: 3px;
+  text-decoration:none;
+  border:1px solid #ccc;
+  display: inline-block;
+}
+</style>
+
+<ul>
+<li>What should I eat today? <span class='label_box'>Personal</span></li>
+<li>Should I use an <code>if</code> statement or a <code>switch</code> statement? <span class='label_box'>Programming</span></li>
+<li>Should I use Rust or Python for this task?  <span class='label_box'>Tech</span></li>
+<li>Should I use Lucene or roll my own search capabilities?  <span class='label_box'>Tech</span></li>
+<li>How should I test that this part of the system works?  <span class='label_box'>Programming</span></li>
+<li>Should I write this part of the system for Linux or AWS Lambdas?  <span class='label_box'>Tech</span></li>
+<li>Should we offer our software as pay-per-version or use a subscription SaaS model?  <span class='label_box'>Business</span></li>
+</ul>
+
+<p>There are probably many ways of categorizing questions and here are a few categories:</p>
+
+<ul>
+<li>Technology choices – platform, language, libraries &amp; frameworks</li>
+<li>Business model – pricing model, target business sector, project scope vs. budget vs. calendar time</li>
+<li>Personal decisions – ongoing education and edification, professional development, time spent with friends and family, dessert vs. the gym</li>
+<li>Programming/task decisions – coding style, what to do first, PowerShell vs. C#</li>
+<li>And more!</li>
+</ul>
+
+<h2 id="toc_1">Context</h2>
+
+<p>There are few choices that can be made universally without an understanding of the situation or place or time.</p>
+
+<p>Let&#39;s take an example from everyday life.</p>
+
+<p><strong>Should I have dessert or go work out?</strong></p>
+
+<ul>
+<li>Did your doctor tell you to avoid sugar at all cost?
+
+<ul>
+<li>Maybe go to the gym.</li>
+</ul></li>
+<li>Are you on a Valentine&#39;s Day date?
+
+<ul>
+<li>Maybe go have a romantic sweat together at the gym. (J/K ;-)</li>
+</ul></li>
+<li>Are you on vacation?
+
+<ul>
+<li>Maybe let your mouth have some fun, too.</li>
+</ul></li>
+<li>Is your mission in life getting out of credit card debt?
+
+<ul>
+<li>Maybe skip the restaurant and make dessert at home.</li>
+<li>Or, go get a second job at the gym.</li>
+</ul></li>
+</ul>
+
+<p>If healthy choices are always on your mind, you may naturally gravitate to the healthier options and not even consider other factors.  Similarly, if financial goals are at the front of your mind, it&#39;s easy to miss the other considerations.</p>
+
+<h2 id="toc_2">&quot;Priming&quot; the brain</h2>
+
+<p>This reminds me of a story I heard somewhere (probably on a podcast, but I can&#39;t remember the source).  Here is a recounting similar to what I remember hearing, but I haven&#39;t read the book or the original study.</p>
+
+<blockquote>
+<p>John Bargh and his colleagues carried out a marvelous experiment of this sort. The participants had a test of their language proficiency in which they had to make up sentences from lists of words. For example, they had to use four of these words to make a sentence: &quot;be will sweat lonely they.&quot;</p>
+
+<p>Hence, they might respond: &quot;They will be lonely.&quot;</p>
+
+<p>The participants made up a series of thirty sentences in this way. And that, for them, was the end of the experiment. The lists of words, however, contained many words that suggest the stereotype of elderly individuals, e.g., &quot;lonely&quot; the list above, and other words such as, &quot;old&quot; and &quot;gray&quot;. As psychologists say, these words prime the stereotype, that is, make it more active even if the participants are not aware of its activity. After the experiment was over, the participants walked down the corridor to the elevator. Those who had received the primes to old age walked at a slower pace than those who had carried out a similar sentence-making test that did not prime old age. Yet, the slow walkers were neither aware of the primes to old age, which contained no words referring to slowness, nor of the effects of these primes on their behavior. And, as a subsequent study showed, the primes did not affect their emotions, at least not in a conscious way. You might say that they haven&#39;t made a proper inference, but an unconscious association.</p>
+
+<p>From <u>How We Reason</u> by Philip Nicholas Johnson-Laird (pp. 61-62).</p>
+</blockquote>
+
+<p>My point in referencing this obscure topic is that there are influences, both subjective and objective, both conscious and unconscious, that may affect our thoughts on some subject.</p>
+
+<h3 id="toc_3">Case Study</h3>
+
+<p>Let me try to illustrate how this could work in a real world situation I encountered recently:</p>
+
+<h4 id="toc_4">Problem description</h4>
+
+<p>What we <em>think we know</em> and some of what we <em>know we don&#39;t yet know</em>:</p>
+
+<ul>
+<li>Users responsible for diagnosing problems in communication between 2 systems want to see the contents of messages passed between them. </li>
+<li>Our product already offers similar functionality for a different data format.</li>
+<li>Because the domain of the new data is related to medical insurance and similar functionality is related to clinical data, it is less likely that there will be overlap in persons viewing the clinical data will also view the insurance data.</li>
+<li>The most natural place to put the new functionality is right next to the old functionality, even on the same screen.</li>
+<li>If you squint, some of the new data looks like the old data, but the new data may have far richer metadata.  We don&#39;t know if users would benefit from the richer metadata.</li>
+</ul>
+
+<h4 id="toc_5">Possible influences</h4>
+
+<p>Putting on my &quot;meta hat,&quot; I identified some of what might have influenced my thinking about how to proceed.  Here is what I came up with:</p>
+
+<ul>
+<li>Unconscious:
+
+<ul>
+<li>The existing implementation used some tech that I am not super familiar with and don&#39;t especially want to learn because it isn&#39;t likely to be very helpful in my future.</li>
+<li>An associate recently gave a technical talk about a new technique that I&#39;ve been wanting to try – a way allocate less memory.  (If you are curious, it&#39;s <code>ReadOnlyMemory&lt;T&gt;</code> from .Net&#39;s System.Memory Nuget package.)</li>
+<li>At first glance, the problem description seems well suited to my favorite programming language (because almost everything is well-suited to my favorite programming language! Why do you think it&#39;s my favorite ;-)</li>
+</ul></li>
+<li>Conscious:
+
+<ul>
+<li>&quot;Partially because the relevant screen is buried behind a login page and many clicks, the quickest way to explore the possibilities is <em>not</em> to jump into the code and add it to the product, instead it&#39;s to write a prototype.&quot;</li>
+<li>&quot;My prototype code is in ClojureScript, so I guess it would be quicker to polish that up and put it in with the C#.&quot;</li>
+</ul></li>
+</ul>
+
+<p>Here are some contrived examples that didn&#39;t apply in my situation, but I can easily imagine:</p>
+
+<ul>
+<li>&quot;I&#39;m most fluent in this language.&quot;  <span class='label_box'>Personal</span></li>
+<li>&quot;In last week&#39;s meeting, the UX team reminded everyone of the goal for all click handlers to finish in 10ms or show a progress indicator, but the existing code was implemented before that goal took effect and is still slow.&quot; <span class='label_box'>Programming</span></li>
+<li>&quot;In the last formal review of my code, Readable Code Rule #18 was mentioned and I want to make sure to practice doing that right. The existing code also violates that, so if I rewrite it, it will look good in the review.&quot; <span class='label_box'>Team</span></li>
+<li>&quot;I&#39;m in the mood to write something from scratch.&quot; <span class='label_box'>Personal</span></li>
+<li>&quot;I recently received feedback suggesting my work is slower than average. I think rewriting this in a cleaner way would be best, it will take longer and I don&#39;t want to be seen as slow.&quot; <span class='label_box'>Personal</span></li>
+<li>&quot;I have vacation next week and I want to finish before then, so I&#39;ll go with the quicker option.&quot; <span class='label_box'>Personal</span></li>
+<li>&quot;My team encourages cross-training, so if I use this other technology, I can work with someone on another team.&quot; <span class='label_box'>Team</span></li>
+<li>&quot;The annual patient privacy meeting reminded me of the fines associated with accidental leaks of Patient Health Information (PHI).  There is not development environment on the server with access to the data.  The C# compiler is on every modern Windows computer, so I can hop into notepad and start coding without copying PHI onto my less-secure development workstation.&quot; <span class='label_box'>Business</span></li>
+</ul>
+
+<p>I labeled these, but I can&#39;t peer into anyone&#39;s soul to identify any of the real motivations that might be at play.  For example, there could be any number of ways to complete the sentence:</p>
+
+<ul>
+<li>&quot;I am most fluent in this language...
+
+<ul>
+<li>so my best work will be in that language. <span class='label_box'>Personal</span></li>
+<li>and I know it is a great fit for the solution. <span class='label_box'>Programming</span> <span class='label_box'>Tech</span></li>
+<li>so I will probably help people sooner and deliver value to the business/customer quicker. <span class='label_box'>Business</span></li>
+<li>so I can coast. <span class='label_box'>Personal</span></li>
+<li>and my team is depending on my getting done quickly. <span class='label_box'>Team</span></li>
+<li>so I want to get experience in something different. <span class='label_box'>Personal</span></li>
+</ul></li>
+</ul>
+
+<p>Surely there is justified time and place for each of these motivations.  For example, &quot;Coasting&quot; is great after a huge project, during an otherwise crazy season of life, family, or business, or when areas of life are more important.  Since many in our industry are young it can be easy to forget that motivations change as life goes on (children, grandkids, health, retirement).</p>
+
+<h3 id="toc_6">Digging deeper</h3>
+
+<p>As individuals, it can be difficult to look at a problem from all angles.  Teams help address this by bringing several perspectives to the discussion.</p>
+
+<p>So how might we think about solving this problem?  Ask more questions, of course?</p>
+
+<ul>
+<li>What could the data look like?  Are there better ways of visualizing it?  Are there easier/quicker ways of visualizing it? <span class='label_box'>Business</span></li>
+<li>How valuable is the functionality? Since there may be a different user base, would it be worth tailoring the view to that user base and pricing that new functionality separately? <span class='label_box'>Business</span></li>
+<li>Does this project merit months of research to get questions answered or is it an option to get something out there quickly and iterate based on user feedback? <span class='label_box'>Business</span></li>
+<li>How much code can be reused?  Do we like the code that can be reused?  Is now a good opportunity to improve the reused code?  <span class='label_box'>Programming</span></li>
+<li>Is this an appropriate time to try out a novel approach/library/tool that I have wanted to try? <span class='label_box'>Personal</span></li>
+<li>Is this most likely a &quot;write once, extend never&quot; feature or something to be built upon in the future?  Will future enhancements be done by my team and I, or by others?  <span class='label_box'>Team</span></li>
+</ul>
+
+<h2 id="toc_7">More of the same?</h2>
+
+<p>One of the most pervasive unconscious influences is the &quot;recent past&quot;... I haven&#39;t found an adequate word yet, so let me describe this concept in 4 pieces!</p>
+
+<ul>
+<li>The &quot;recent past&quot; – The ideas that we&#39;ve spent the last few weeks thinking about are readily available at the forefront of our minds.  Remember back in school when you had to take the final exam?  Weren&#39;t the recent topics often easier to remember than the ones from the start of class?
+
+<ul>
+<li>This can manifest in all sorts of areas, not just programming techniques and technology choices.  Consider the process of developing a business model for an additional product or service.  &quot;We already have lawyer-approved contracts for subscription-based SaaS and are accustomed to that kind of pricing and support model, so let&#39;s just use that again.  It worked before!&quot;</li>
+</ul></li>
+<li>&quot;Momentum&quot; – You are on a roll and maybe the whole team is running with you.  Don&#39;t forget to pause and think before doing &quot;what we always do&quot; simply because it worked before.
+
+<ul>
+<li>Maybe the team is familiar with REST-based APIs using WebApi which worked great for a desktop app, so that&#39;s the easy choice for the next round of mobile APIs (forgetting about the constraints of download speed, memory usage, slower round-trips, the need for bite-sized views because there is less room to display all that data, etc.).</li>
+<li>Momentum can be good, but sometimes it can make one skip over a better solution.</li>
+</ul></li>
+<li>&quot;Familiarity&quot; – I usually go to the closest grocery store to my house, even though there are other stores with better selection.  It is more convenient and I know where most of the usual suspects are located.  It is both familiar and convenient.
+
+<ul>
+<li>In programming, your team&#39;s choice of languages has a profound impact on what is familiar.  The standard library is probably familiar.  The idioms are familiar (the things the language/framework make easy to express).  Team members and help available from StackOverflow, for example, are likely to already know about the big ideas in the language or tech stack.</li>
+<li>Some of us remember when almost every dialog window had a series of &quot;tabs&quot; where you could select from rows of tabs and find what you were looking for.  These fell out of style but they were familiar.</li>
+<li>Familiar doesn&#39;t mean good.</li>
+</ul></li>
+<li>&quot;At hand&quot; – The tools or ideas that are readily available are convenient to use.  They can be tempting even if a better-suited tool exists.
+
+<ul>
+<li>Maybe the data one wants to report on is on a server that has SQL Server and no other data stores.  It may be tempting to build a partial solution with SQL that can&#39;t easily go all the way because a more functional paradigm would fit the problem better.  Don&#39;t tell me you can build a good intranet search engine with SQL like this: <code>SELECT url, description FROM pages WHERE text LIKE @SearchString</code>.</li>
+<li>Maybe I can turn some screws with the screw driver in the kitchen junk drawer, but if I&#39;m hanging drywall or building a deck, I am going to the store and buying a power drill.</li>
+<li>Sometimes the tools at hand well-suited to the job, but doing a lot of work with the wrong tool is frustrating, slow, error-prone, or generally ineffective.</li>
+</ul></li>
+</ul>
+
+<h2 id="toc_8">Trade-offs depend on context</h2>
+
+<p>A power drill is better. It is the preferred technology, right?  ;-)</p>
+
+<p>Let compare merits of the screwdriver vs. power drill.</p>
+
+<style class="before-alternating-table"></style>
+
+<table><thead>
+<tr>
+<th align="left">Consideration</th>
+<th align="left">Hand screwdriver</th>
+<th align="left">Power drill</th>
+<th align="left">Winner</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Speed</td>
+<td align="left">slow</td>
+<td align="left">variable</td>
+<td align="left">Power drill wins for driving many screws</td>
+</tr>
+<tr>
+<td align="left">Power</td>
+<td align="left">weak</td>
+<td align="left">strong</td>
+<td align="left">Power drill wins for driving long screws</td>
+</tr>
+<tr>
+<td align="left">Size</td>
+<td align="left">small</td>
+<td align="left">large</td>
+<td align="left">screwdriver wins for tight spaces and small drawers</td>
+</tr>
+<tr>
+<td align="left">Weight</td>
+<td align="left">small</td>
+<td align="left">large</td>
+<td align="left">screwdriver wins for backpacking/EDC</td>
+</tr>
+<tr>
+<td align="left">Cost</td>
+<td align="left">$</td>
+<td align="left">$$</td>
+<td align="left">screwdriver wins for cheap gift to nephew</td>
+</tr>
+</tbody></table>
+
+<h2 id="toc_9">Vocabulary</h2>
+
+<p>Here is a starting point for shared team understanding of concepts at play in decision making processes.</p>
+
+<ul>
+<li><strong>Conscious influences</strong> – Ideas, priorities, motivations, people, and pressures that push us in one direction or another... that we are aware of and can reason about.</li>
+<li><strong>Unconscious influences</strong> – Ideas, world view, motivations, and pressures that, until we are aware of them, push us in a direction without our knowledge.</li>
+<li><strong>Priming</strong> – Preparing the mind by thinking about innovative, creative, exemplar, or otherwise inspirational ideas.</li>
+<li><strong>&quot;Known Unknowns&quot; and &quot;Known Unknowns&quot;</strong> – Some things that we don&#39;t know (but wish we did) can be listed (how many customers could benefit from this proposed feature?).  Other things we don&#39;t even know we need to know, like that the author of an open source project was going to quit and no further progress on bugs or features.</li>
+<li><strong>Personal</strong>, <strong>Programming</strong>, <strong>Tech</strong>, <strong>Team</strong>, and <strong>Business</strong> concerns or motivations.</li>
+<li><strong>Trade-off</strong> – a compromise acknowledging the arguments for and against a choice.</li>
+<li><strong>Time box</strong> – the time allocated or available to make the decision.</li>
+<li><strong>Problem statement</strong> – A description of problem that includes the relevant details of the feature or issue to be addressed.  It brings clarity to know &quot;What are we trying to solve?&quot;</li>
+<li><strong>Scope of decision</strong> – When, where, how long, etc. that the decision applies.  This may include a scheduled meeting to revisit the decision and evaluate newly acquired information.</li>
+</ul>
+
+<h2 id="toc_10">Conclusion</h2>
+
+<p>I hope this rambling has illustrated how every decision is made in context and should be treated as such.</p>
+
+    </div>
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      <li>
+        <a href="/no-new-legacy/categories#Professionalism-ref">Professionalism <span>5</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/categories#Team-ref">Team <span>2</span></a>
+      </li>
+    </ul>
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      <li>
+        <a href="/no-new-legacy/tags#decisions-ref">decisions <span>1</span></a>
+      </li>
+      <li>
+        <a href="/no-new-legacy/tags#context-ref">context <span>1</span></a>
+      </li>
+    </ul>
+    <hr>
+    <div class="pagination">
+      <ul>
+          <li class="prev"><a href="/no-new-legacy/posts/2019-02-11-generative-testing-framework-assistance" title="Generative Testing Part 6 – The DNA of Test Framework Assistance">&larr; Previous</a></li>
+
+          <li><a href="/no-new-legacy/archive">Archive</a></li>
+
+          <li class="next disabled"><a>Next &rarr;</a>
+      </ul>
+    </div>
+    <hr>
+    
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" itemscope="" itemtype="http://schema.org/LocalBusiness">
+      <div class="footer">
+        <p>&copy; <a href="https://github.com/jeremyrsellars" itemprop="copyrightHolder">Jeremy Sellars</a> <span itemprop="copyrightYear">2015 - 2018</span>
+          with help from <a href="http://ruhoh.com" target="_blank" title="The Definitive Technical Blogging Framework">ruhoh</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>.
+          <br>Theme based on <a href="https://templated.co/fullstrength" rel="nofollow" target="_blank">FullStrength</a> template from <a href="http://templated.co" rel="nofollow" target="_blank">TEMPLATED</a>
+
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Google Prettify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+<script>
+  var pres = document.getElementsByTagName("pre");
+  for (var i=0; i < pres.length; ++i) {
+    pres[i].className = "prettyprint linenums";
+  }
+  prettyPrint();
+</script>
+<!-- end Google Prettify -->
+
+</body>
+</html>

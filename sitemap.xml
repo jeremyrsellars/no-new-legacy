@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jeremyrsellars.github.io/no-new-legacy/posts/2019-02-14-decisions-are-always-in-context</loc>
+    <lastmod>2019-02-14</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://jeremyrsellars.github.io/no-new-legacy/posts/2019-02-11-generative-testing-framework-assistance</loc>
-    <lastmod>2019-02-11</lastmod>
+    <lastmod>2019-02-15</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>

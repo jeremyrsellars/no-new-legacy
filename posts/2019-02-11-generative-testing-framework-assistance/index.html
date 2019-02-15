@@ -14,9 +14,9 @@
     <meta name="geo.region" content="US-MO" />
 
 <link href='/no-new-legacy/assets/stylesheets/bootstrap.min-82f77a9ca975e3765ed90050b04df670.css' type='text/css' rel='stylesheet' media='all'>
-<link href='/no-new-legacy/assets/stylesheets/style-21784202ff2dd459e98edeb0ab87bf58.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/style-3223cf66a5f033d0c670f622bee31c12.css' type='text/css' rel='stylesheet' media='all'>
 <link href='/no-new-legacy/assets/stylesheets/google_prettify/sons-of-obsidian-1fc7bbae7ece7f100c56fc75a0e333cc.css' type='text/css' rel='stylesheet' media='all'>
-<link href='/no-new-legacy/assets/stylesheets/application-27a257c1cb2dad1c42ae18e7d60e7232.css' type='text/css' rel='stylesheet' media='all'>
+<link href='/no-new-legacy/assets/stylesheets/application-7455e22643f330d883d7c0fe96668c1b.css' type='text/css' rel='stylesheet' media='all'>
   <!-- http://www.favicon-generator.org/ -->
   <link rel="apple-touch-icon" sizes="57x57" href="/no-new-legacy/assets/media/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/no-new-legacy/assets/media/apple-icon-60x60.png">
@@ -98,15 +98,13 @@
     </div>
     <div class="content">
       <ul>
-<li><a href="/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way" title="">In part 5</a> of this discussion of &quot;generative testing&quot;, we began to see areas where the unit testing way of doing things just didn&#39;t quite fit with generated data.
+<li><a href="/no-new-legacy/posts/2019-02-06-generative-testing-the-hard-way" title="">In part 5</a> of this discussion of &quot;generative testing&quot;, we began to see areas where randomly generated data didn&#39;t quite fit into the unit testing way of doing things.
 
 <ul>
-<li>It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then the testing framework can&#39;t find the test.  What do generative testing frameworks do to help?</li>
 <li>Tests need to be extensible, so it often isn&#39;t sufficient to merely provide one set of generators for use in all tests. We will look at ways of selecting arbitrary generators to use for particular tests.</li>
+<li>It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then the testing framework can&#39;t find the test because different tests were generated each time (both a help and a hindrance).  How do generative testing frameworks help?<br><img src="/no-new-legacy/assets/media/F_Parameterized_Test_With_Better_Generators.PNG" alt="F_Parameterized_Test_With_Better_Generators 509 373"></li>
 </ul></li>
 </ul>
-
-<p><img src="/no-new-legacy/assets/media/F_Parameterized_Test_With_Better_Generators.PNG" alt="F_Parameterized_Test_With_Better_Generators 509 373"></p>
 
 <h1 id="toc_0">The DNA of property-based testing</h1>
 
@@ -115,26 +113,26 @@
 <p>The testing libraries have functions register the property-based tests with the testing framework, so different randomly-generated tests may be run each time.</p>
 
 <ul>
-<li>*A*dd test to framework
+<li>A - Add test to framework
 
 <ul>
 <li>Register property tests for execution with an identifiable test name.</li>
 </ul></li>
-<li>*T*est properties you define
+<li>T - Test properties you define
 
 <ul>
 <li>These functions often take the input and return true when the test passes and false otherwise.</li>
 </ul></li>
-<li>*G*enerate reproducible data
+<li>G - Generate reproducible data
 
 <ul>
 <li>Specify which generators will provide the random data for the property tests.</li>
 <li>Provide a way to reproduce a test when a failing test is discovered, to see if an attempted code fix had the desired effect.  (This is usually by way of a random seed that can reproduce the same sequence of random values consistently over time and on different machines.)</li>
 </ul></li>
-<li>*C*ollapse to the minimal failing case using shrinking.</li>
+<li>C - Collapse to the minimal failing case using shrinking.</li>
 </ul>
 
-<p>The specific ways in which programmers may plug into the different testing frameworks help really start to diverge here in this post, but by looking for these 4 parts, you&#39;ll see the commonalities between the different libraries.  If you choose a different library for your platform, you can still look for these and use them in a similar manner.</p>
+<p>The specific ways in which programmers may plug into the different testing frameworks really start to diverge here in this post, but by looking for these 4 parts, you&#39;ll see the commonalities between the different libraries.  If you choose a different library for your platform, you can still look for these and use them in a similar manner.</p>
 
 <h2 id="toc_1">Clojure.test &amp; test.check</h2>
 
@@ -156,7 +154,7 @@ user=&gt; (sheep-bleat?_matches_oracle)
 </code></pre>
 
 <ul>
-<li>*A*dd test – It registers a test with <code>clojure.test</code> witha a descriptive name, so the tests are runable with commands like <code>lein test</code> or <code>(clojure.test/run-tests)</code>.</li>
+<li>*A*dd test – It registers a test with <code>clojure.test</code> with a descriptive name, so the tests are runnable with commands like <code>lein test</code> or <code>(clojure.test/run-tests)</code>.</li>
 <li>*G*enerate reproducible data – <code>clojure.test.check.properties/for-all</code> is like the <code>clojure.core/for</code> list comprehension, in that it evaluates its expression body for each value generated by the generator.</li>
 <li>*T*est properties – The property is modeled as an expression that compares the &quot;actual&quot; value generated by <code>(sheep-bleat? text)</code> to the &quot;expected&quot; value produced by our oracle.</li>
 <li>*C*ollapse – shrink to a smaller failing case to make it easier to troubleshoot.</li>
@@ -182,19 +180,212 @@ user=&gt; (sheep-bleat?_matches_oracle)
 
 <h3 id="toc_2">Reproducing a test with <code>:seed</code></h3>
 
-<p>After fixing the bug, if we want to run with the same random number generator to reproduce a formerly-failing scenario, we can specify the seed and the number of tests to execute again in an attempt to find a example that disproves the assertion.</p>
+<p>After fixing the bug, if we want to run with the same random number generator to reproduce a formerly-failing scenario, we can specify the seed and the number of tests to execute again in an attempt to find an example that disproves the assertion.</p>
 
 <pre><code class="clojure">user=&gt; (sheep-bleat?_matches_oracle 100 :seed 1549979449257)
 {:result false, :seed 1549979449257, :failing-size 12, :num-tests 13, :fail [&quot;baaaaaa&quot;], :shrunk {:total-nodes-visited 8, :depth 2, :result false, :smallest [&quot;baa&quot;]}}
 </code></pre>
 
-<h1 id="toc_3">Source code</h1>
+<h3 id="toc_3">FsCheck &amp; NUnit</h3>
+
+<p>For this example, I&#39;m using NUnit and FsCheck.NUnit (3.0.0-alpha4).</p>
+
+<h4 id="toc_4">Registering properties to test and generators to customize tests</h4>
+
+<p>So in this part, we&#39;ll use <code>FsCheck.Nunit.PropertyAttribute</code> to indicate that a method should be treated as a property-based test.  In one example, it returns true/false, and in the other, it uses an assertion</p>
+
+<pre><code class="csharp">        [Property(Arbitrary = new[] { typeof(A_class_that_defines_a_generator) })]
+        public bool AnExpression(SheepishTestCase nearlySheepish) =&gt; false == &quot;a boolean expression&quot;;
+
+        [Property(Arbitrary = new[] { typeof(A_class_that_defines_a_generator) })]
+        public void AnNUnitAssertion(SheepishTestCase nearlySheepish) =&gt;
+            Assert.AreEqual(true, false, &quot;helpful description&quot;);
+
+        // * FsCheck uses reflection to find all the public Arbitrary functions that this class exposes.
+        public static Arbitrary&lt;SheepishTestCase&gt; NearlySheepish() =&gt;
+            someGenerator.ToArbitrary();
+</code></pre>
+
+<p>Here it is in context.  Watch for the DNA of the property-based tests as we go over each part of this test definition.</p>
+
+<pre><code class="csharp">    using PropertyAttribute = FsCheck.NUnit.PropertyAttribute;
+
+    [TestFixture]
+    public class G_Property_Tests_With_Oracle
+    {
+        [Property( //`A`dd named test
+           Arbitrary = new[] { typeof(G_Property_Tests_With_Oracle) })] // * Specify `G`enerator(s) and shrinkers
+        public bool SheepBleatExpression(SheepishTestCase nearlySheepish) =&gt; // Define property to `T`est
+            Regex.IsMatch(nearlySheepish.Text, @&quot;^baa+$&quot;)
+            == Sheepish.IsSheepBleat(nearlySheepish.Text);
+
+
+        [Property(Arbitrary = new[] { typeof(G_Property_Tests_With_Oracle) })] // * 
+        public void SheepBleatAssertion(SheepishTestCase nearlySheepish) =&gt;
+            Assert.AreEqual(
+                Regex.IsMatch(nearlySheepish.Text, @&quot;^baa+$&quot;),
+                Sheepish.IsSheepBleat(nearlySheepish.Text));
+
+        // * FsCheck uses reflection to find all the public Arbitrary functions that this class exposes.
+        public static Arbitrary&lt;SheepishTestCase&gt; NearlySheepish() =&gt;
+            Gen.zip(
+                Gen.zip3(UsuallyEmptyString,
+                         StringOfB,
+                         UsuallyEmptyString),
+                Gen.zip3(StringOfA,
+                         UsuallyEmptyString,
+                         StringOfA))
+            .Select(t =&gt; new SheepishTestCase
+            {
+                Text = t.Item1.Item1 + t.Item1.Item2 + t.Item1.Item3
+                     + t.Item2.Item1 + t.Item2.Item2 + t.Item2.Item3,
+            })
+            .ToArbitrary();
+
+        static Gen&lt;string&gt; UsuallyEmptyString =&gt;
+            Gen.Frequency(
+                Tuple.Create(9, Gen.Constant(&quot;&quot;)),
+                Tuple.Create(1, Arb.Default.NonEmptyString().Generator.Select(s =&gt; s.Item)));
+
+        static Gen&lt;string&gt; StringOfA =&gt;
+            Gen.Choose(-3, 3).Select(n =&gt; new string(&#39;a&#39;, Math.Max(n, 0)));
+        static Gen&lt;string&gt; StringOfB =&gt;
+            Gen.Choose(0, 3).Select(n =&gt; new string(&#39;b&#39;, Math.Max(n, 0)));
+
+        public class SheepishTestCase
+        {
+            public string Text;
+            public override string ToString() =&gt; Text;
+        }
+    }
+</code></pre>
+
+<p>We will test with an implementation that is <em>mostly right</em>.  (Hint: It is wrong for short strings!)</p>
+
+<pre><code class="csharp">    public class Sheepish
+    {
+        public static bool IsSheepBleat(string text) =&gt;
+            text[0] == &#39;b&#39; &amp;&amp; text.Substring(1).All(&#39;a&#39;.Equals);
+    }
+</code></pre>
+
+<h3 id="toc_5">NUnit test output</h3>
+
+<p>When testing this faulty implementation, the first time it found one of the mistakes (too few &#39;a&#39; characters.)</p>
+
+<p><img src="/no-new-legacy/assets/media/G_Property_Tests_With_Oracle_Fail.PNG" alt="G_Property_Tests_With_Oracle_Fail 443 275"></p>
+
+<p>This randomly generated <code>ba</code> and didn&#39;t need to shrink.  <code>Falsifiable, after 8 tests (0 shrinks)</code></p>
+
+<pre><code>Test Name:  SheepBleatExpression
+Test FullName: Sheepish.CSharp.G_Property_Tests_With_Oracle.SheepBleatExpression
+Test Source:   C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\G_Property_Tests_With_Oracle.cs : line 15
+Test Outcome:  Failed
+Test Duration: 0:00:00.123
+
+Result Message:   
+Falsifiable, after 8 tests (0 shrinks) (8688893743095023968,1720744240272185509)
+Last step was invoked with size of 9 and seed of (870643180446620632,17206338264105658397):
+Original:
+ba
+with exception:
+System.Exception: Expected true, got false.
+</code></pre>
+
+<hr>
+
+<p>This didn&#39;t need to shrink either, since it was already too short. <code>Falsifiable, after 1 test (0 shrinks)</code>.</p>
+
+<pre><code>Test Name:  SheepBleatAssertion
+Test FullName: Sheepish.CSharp.G_Property_Tests_With_Oracle.SheepBleatAssertion
+Test Source:   C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\G_Property_Tests_With_Oracle.cs : line 20
+Test Outcome:  Failed
+Test Duration: 0:00:01.887
+
+Result Message:   
+Falsifiable, after 1 test (0 shrinks)                 (3398291736501447271,14834039787887665769)
+Last step was invoked with size of 2 and seed of (12998797121066964081,9859987255001039891):
+Original:
+b
+with exception:
+NUnit.Framework.AssertionException:   Expected: False
+  But was:  True
+
+   at NUnit.Framework.Assert.ReportFailure(String message) in C:\src\nunit\nunit\src\NUnitFramework\framework\Assert.cs:line 394
+   ... // skipping some stack frames for brevity
+   at Sheepish.CSharp.G_Property_Tests_With_Oracle.SheepBleatAssertion(SheepishTestCase nearlySheepish) in C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\G_Property_Tests_With_Oracle.cs:line 21
+--- End of stack trace from previous location where exception was thrown ---
+   ... // skipping some stack frames for brevity
+</code></pre>
+
+<hr>
+
+<p>I ran it again a couple more times without changing anything and it found the other bug (that empty strings would blow up.)</p>
+
+<pre><code>Test Name:  SheepBleatExpression
+Test FullName:  Sheepish.CSharp.G_Property_Tests_With_Oracle.SheepBleatExpression
+Test Source:    C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\G_Property_Tests_With_Oracle.cs : line 15
+Test Outcome:   Failed
+Test Duration:  0:00:00.031
+
+Result Message: 
+Falsifiable, after 17 tests (0 shrinks) (3733660618497006796,9742222590813313245)
+Last step was invoked with size of 18 and seed of (15948249697227250317,12068873245047634363):
+Original:
+
+with exception:
+System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at System.String.get_Chars(Int32 index)
+   at Sheepish.CSharp.Sheepish.IsSheepBleat(String text) in C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\Sheepish.cs:line 9
+   at Sheepish.CSharp.G_Property_Tests_With_Oracle.SheepBleatExpression(SheepishTestCase nearlySheepish) in C:\path\to\no-new-legacy\src\Sheepish.net\Sheepish.CSharp\G_Property_Tests_With_Oracle.cs:line 16
+   ... // skipping some stack frames for brevity
+</code></pre>
+
+<h4 id="toc_6">Reproducing a test with Replay</h4>
+
+<p>Say we want to reproduce that exact test case in the future.  We don&#39;t have to turn it into data and new up the data bit by bit; we can simply take the random seed tuple from the failed test above and use it again using the <code>Replay</code> property of the attribute.</p>
+
+<pre><code>        // Reproduce an test case that used to fail.
+        [Property(Arbitrary = new[] { typeof(G_Property_Tests_With_Oracle) },
+                  Replay = &quot;(3733660618497006796,9742222590813313245)&quot;)]
+        public bool SheepBleatExpressionThatFailedBefore(SheepishTestCase nearlySheepish) =&gt;
+            SheepBleatExpression(nearlySheepish);
+</code></pre>
+
+<p>It produces the same message as before, (but I am not going to make you read the whole thing twice.  You&#39;re welcome ;-)</p>
+
+<pre><code>Message: Falsifiable, after 17 tests (0 shrinks) (3733660618497006796,9742222590813313245)
+Last step was invoked with size of 18 and seed of (15948249697227250317,12068873245047634363):
+</code></pre>
+
+<p>After fixing the implementation with this:</p>
+
+<pre><code class="csharp">        public static bool IsSheepBleat(string text) =&gt;
+            text.Length &gt;= 3  // This should fix it!
+            &amp;&amp; text[0] == &#39;b&#39; &amp;&amp; text.Substring(1).All(&#39;a&#39;.Equals);
+</code></pre>
+
+<p>It passes with:</p>
+
+<blockquote>
+<p>Ok, passed 100 tests.</p>
+</blockquote>
+
+<p><img src="/no-new-legacy/assets/media/G_Property_Tests_With_Oracle.PNG" alt="G_Property_Tests_With_Oracle 445 298"></p>
+
+<p>Finally, we can refactor to a more optimal implementation without fear of breaking anything, but that&#39;s an exercise for the reader.</p>
+
+<h1 id="toc_7">Conclusion</h1>
+
+<p>This concludes the sheepish examples, but there are still more generative testing concepts to discuss.  In a future post, we&#39;ll come back and discuss more things we can do to make sure the shrinkers can reduce tests to a minimal case.</p>
+
+<h1 id="toc_8">Source code</h1>
 
 <p>If you want to follow along, the source code is here:</p>
 
 <ul>
-<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc</a>
---* C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs--"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/F_Parameterized_Test_With_Better_Generators.cs--</a></li>
+<li>Clojure: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/sheepish/test/sheepish/g_framework_assisted_sheepish_tests.cljc</a></li>
+<li>C#: <a href="https://github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/G_Property_Tests_With_Oracle.cs"  target="_blank" rel="noopener" class="external">github.com/jeremyrsellars/no-new-legacy/blob/master/src/Sheepish.net/Sheepish.CSharp/G_Property_Tests_With_Oracle.cs</a></li>
 </ul>
 
     </div>
@@ -232,7 +423,7 @@ user=&gt; (sheep-bleat?_matches_oracle)
 
           <li><a href="/no-new-legacy/archive">Archive</a></li>
 
-          <li class="next disabled"><a>Next &rarr;</a>
+          <li class="next"><a href="/no-new-legacy/posts/2019-02-14-decisions-are-always-in-context" title="Decisions are always in context">Next &rarr;</a></li>
       </ul>
     </div>
     <hr>
