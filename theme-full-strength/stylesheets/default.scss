@@ -1062,8 +1062,12 @@ blockquote {
 
   quotes: "\201C""\201D""\2018""\2019";
 
-	p {
+	p:first-child {
 	  display: inline;
+	}
+
+	p {
+	  margin-top: 0.5em;
 	}
 	a {
 	  display: block;
