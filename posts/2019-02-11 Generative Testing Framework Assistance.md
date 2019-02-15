@@ -1,16 +1,15 @@
 ---
 title: "Generative Testing Part 6 – The DNA of Test Framework Assistance"
 date: "2019-02-11"
+revision: "2019-02-12"
 description: "Combining several generators to produce nearly-to-spec strings to trick the system under test."
 tags: ["testing", "generative testing", "clojure.spec", "NUnit", "FsCheck"]
 categories : ["Programming", "Craft"]
 ---
 
-* [In part 5]({{urls.base_path}}posts/2019-02-06-generative-testing-the-hard-way) of this discussion of "generative testing", we began to see areas where the unit testing way of doing things just didn't quite fit with generated data.
-    * It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then the testing framework can't find the test.  What do generative testing frameworks do to help?
+* [In part 5]({{urls.base_path}}posts/2019-02-06-generative-testing-the-hard-way) of this discussion of "generative testing", we began to see areas where randomly generated data didn't quite fit into the unit testing way of doing things.
     * Tests need to be extensible, so it often isn't sufficient to merely provide one set of generators for use in all tests. We will look at ways of selecting arbitrary generators to use for particular tests.
-
-![F_Parameterized_Test_With_Better_Generators 509 373]({{urls.base_path}}assets/media/F_Parameterized_Test_With_Better_Generators.PNG)
+    * It is easy to generate a bunch of random tests, but when you try to run a specific test again, that example may not have been generated again, then the testing framework can't find the test because different tests were generated each time (both a help and a hinderance).  How do generative testing frameworks help?<br>![F_Parameterized_Test_With_Better_Generators 509 373]({{urls.base_path}}assets/media/F_Parameterized_Test_With_Better_Generators.PNG)
 
 # The DNA of property-based testing
 
@@ -18,14 +17,14 @@ As "DNA" is composed of 4 nucleotides, adenine (A), thymine (T), guanine (G) and
 
 The testing libraries have functions register the property-based tests with the testing framework, so different randomly-generated tests may be run each time.
 
-* *A*dd test to framework
+* A - Add test to framework
     * Register property tests for execution with an identifiable test name.
-* *T*est properties you define
+* T - Test properties you define
     * These functions often take the input and return true when the test passes and false otherwise.
-* *G*enerate reproducible data
+* G - Generate reproducible data
     * Specify which generators will provide the random data for the property tests.
     * Provide a way to reproduce a test when a failing test is discovered, to see if an attempted code fix had the desired effect.  (This is usually by way of a random seed that can reproduce the same sequence of random values consistently over time and on different machines.)
-* *C*ollapse to the minimal failing case using shrinking.
+* C - Collapse to the minimal failing case using shrinking.
 
 The specific ways in which programmers may plug into the different testing frameworks help really start to diverge here in this post, but by looking for these 4 parts, you'll see the commonalities between the different libraries.  If you choose a different library for your platform, you can still look for these and use them in a similar manner.
 
