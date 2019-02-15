@@ -166,7 +166,7 @@ namespace Sheepish.CSharp
             Arb.Default.Derive<SheepishParts>().Generator
             .Select(parts => parts.ToString())
             .Select(text => new SheepishTestCase(text, "random")) // To test case
-            .Sample(100);                                         // take 100 examples
+            .Sample(5);                                         // take 5 examples
 
         public class SheepishTestCase
         {
