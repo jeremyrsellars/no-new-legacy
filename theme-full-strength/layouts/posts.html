@@ -16,11 +16,28 @@ layout : default
 <div class="post-full">
   <div class="span12">
     <div class="date">
-      <span>{{ page.date }}</strong>
+      <span>Date: {{ page.date }}.
+            {{# page.revision }}
+              <span> Revised:</span>
+              {{ page.revision }}
+            {{/ page.revision }}
+
+      </span>
     </div>
     <div class="content">
       {{{ page.content }}}
+
+      <hr>
+
+      <div>
+        <blockquote class="says jeremy-says">
+        If you liked this content, feel free to share it with anyone you think would benefit.  That kind of encouragement keeps writing good content.
+        <br>- Jeremy Sellars
+        </blockquote>
+      </div>
+
     </div>
+
     <ul class="inline">
       <li><a class="twitter-share-button"
              href="https://twitter.com/intent/tweet?hashtags=no-new-legacy;text={{page.title}};url={{url}}">Tweet</a></li>
